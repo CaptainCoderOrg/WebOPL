@@ -2,7 +2,7 @@
 
 A minimal web-based music tracker with OPL3 (AdLib/Sound Blaster) FM synthesis.
 
-**Current Status:** Part 2 Complete ✅
+**Current Status:** Part 3 Complete ✅
 
 ---
 
@@ -32,13 +32,15 @@ Open http://localhost:5173 and test the audio engine!
 - **5 audio tests** (single, chord, scale, arpeggio, polyphonic)
 - **27 unit tests** (all passing)
 
-### 🚧 Part 3: Tracker UI (Coming Next)
-- SimplePlayer for pattern playback
-- TrackerGrid for note entry
-- Play/stop controls
-- BPM adjustment
+### ✅ Part 3: Tracker UI
+- **SimplePlayer** for pattern playback
+- **TrackerGrid** for note entry (16 rows × 4 tracks)
+- **Play/stop controls** with BPM adjustment
+- **Keyboard navigation** (arrows, enter, tab, delete)
+- **Current row highlighting** during playback
+- **Pattern loading/clearing**
 
-### 🚧 Part 4: Polish
+### 🚧 Part 4: Polish (Coming Next)
 - Pattern validation
 - Keyboard shortcuts
 - Error handling
@@ -56,15 +58,20 @@ minimal-prototype/
 │   │   └── opl.wasm         # OPL3 emulator binary
 │   └── opl-wrapper.js       # Modified wrapper (window.OPL)
 ├── src/
+│   ├── components/
+│   │   ├── TrackerGrid.tsx      # Editable note grid
+│   │   └── TrackerGrid.css      # Grid styling
 │   ├── utils/
 │   │   └── noteConversion.ts    # Note conversion + tests
 │   ├── SimpleSynth.ts           # Core synth engine
-│   ├── App.tsx                  # Test suite UI
-│   ├── App.css                  # Styling
+│   ├── SimplePlayer.ts          # Pattern playback engine
+│   ├── App.tsx                  # Tracker UI
+│   ├── App.css                  # Tracker styling
 │   ├── index.css                # Global styles
 │   └── main.tsx                 # Entry point
 ├── IMPLEMENTATION_NOTES.md      # Detailed implementation docs
 ├── PART2_SUMMARY.md             # Part 2 summary
+├── PART3_SUMMARY.md             # Part 3 summary
 └── package.json
 ```
 
@@ -123,27 +130,39 @@ midiToNoteName(69)  // → 'A-4'
 
 ---
 
-## Testing
+## Using the Tracker
 
-### Run All Tests
+### Run the App
 
 ```bash
 npm run dev
 ```
 
-Open browser console to see:
-- 27 note conversion tests (all ✅)
-- SimpleSynth initialization logs
+Open http://localhost:5173 and you'll see the full tracker interface!
 
-### Audio Tests
+### Quick Tutorial
 
-Click each button in the UI:
+1. **Load Example Pattern**
+   - Click "📝 Load Example" button
+   - Grid fills with a demo pattern
 
-1. **Play Single Note** - 1-second middle C
-2. **Play Chord** - C major harmony (3 notes)
-3. **Play Scale** - C major ascending (8 notes)
-4. **Play Arpeggio** - Fast pattern
-5. **Play Polyphonic** - Melody + bass together
+2. **Play Music**
+   - Click "▶ Play" button
+   - Watch the current row highlight
+   - Hear melody + bass + chords
+
+3. **Edit Notes**
+   - Click any cell in the grid
+   - Type note names: `C-4`, `D#5`, `A-3`
+   - Use `---` for rests
+   - Press Enter to move down, Tab to move right
+
+4. **Change BPM**
+   - Adjust the BPM number (60-240)
+   - Click Play to hear faster/slower tempo
+
+5. **Clear Pattern**
+   - Click "🗑️ Clear" to reset grid
 
 ### Build Test
 
@@ -153,18 +172,26 @@ npm run build
 
 Expected output:
 ```
-✓ built in 1.85s
+✓ built in 1.96s
 dist/index.html                  0.46 kB
-dist/assets/index-*.css          2.32 kB
-dist/assets/index-*.js         299.47 kB
+dist/assets/index-*.css          3.90 kB
+dist/assets/index-*.js         301.64 kB
 ```
 
 ---
 
 ## Key Features
 
+### Full Tracker Interface
+- **16 rows × 4 tracks** editable grid
+- **Keyboard navigation** (arrows, enter, tab, delete)
+- **Real-time playback** with visual row highlighting
+- **BPM control** (60-240)
+- **Pattern loading/clearing**
+
 ### 9-Channel Polyphony
 - Play up to 9 simultaneous notes
+- 4 tracks playing simultaneously
 - Each channel has independent pitch control
 - Automatic instrument setup per channel
 
@@ -173,18 +200,20 @@ dist/assets/index-*.js         299.47 kB
 - Handles rests: `---`, `...`, empty string
 - Validates MIDI range (0-127)
 
-### Clean API
-- Simple note on/off methods
-- Channel management
-- All OPL complexity hidden
+### Clean APIs
+- **SimpleSynth** - Note on/off methods, channel management
+- **SimplePlayer** - Pattern loading, playback control, BPM timing
+- **TrackerGrid** - Editable grid with keyboard navigation
 
 ---
 
 ## Documentation
 
-- **[IMPLEMENTATION_NOTES.md](IMPLEMENTATION_NOTES.md)** - Full technical details
-- **[PART2_SUMMARY.md](PART2_SUMMARY.md)** - Part 2 summary
-- **[../MinimalPrototype/](../MinimalPrototype/)** - Implementation plans
+- **[COMPLETION_SUMMARY.md](COMPLETION_SUMMARY.md)** - 🎉 MVP completion summary
+- **[IMPLEMENTATION_NOTES.md](IMPLEMENTATION_NOTES.md)** - Full technical details (Parts 1-3)
+- **[PART2_SUMMARY.md](PART2_SUMMARY.md)** - Part 2: Core Engine summary
+- **[PART3_SUMMARY.md](PART3_SUMMARY.md)** - Part 3: Tracker UI summary
+- **[../MinimalPrototype.md](../MinimalPrototype.md)** - Original implementation plan
 
 ---
 
@@ -213,12 +242,12 @@ npm run preview      # Preview production build
 
 ## Next Steps
 
-Ready to implement **Part 3: Tracker UI**:
-- [ ] SimplePlayer class for pattern playback
-- [ ] TrackerGrid component for note entry
-- [ ] Play/stop/pause controls
-- [ ] BPM slider (60-240)
-- [ ] Pattern looping
+Ready to implement **Part 4: Polish**:
+- [ ] Pattern validation (highlight invalid notes)
+- [ ] Keyboard shortcuts (Space = play/stop, Escape = stop)
+- [ ] Better error handling and loading states
+- [ ] Visual feedback improvements
+- [ ] Mobile responsiveness
 
 ---
 

@@ -1,237 +1,245 @@
 import { useState, useEffect } from 'react';
 import { SimpleSynth } from './SimpleSynth';
-import { noteNameToMIDI, testNoteConversion } from './utils/noteConversion';
+import { SimplePlayer } from './SimplePlayer';
+import type { TrackerPattern, TrackerNote } from './SimplePlayer';
+import { noteNameToMIDI } from './utils/noteConversion';
+import { TrackerGrid } from './components/TrackerGrid';
 import './App.css';
 
 function App() {
-  const [synth, setSynth] = useState<SimpleSynth | null>(null);
+  const [, setSynth] = useState<SimpleSynth | null>(null);
+  const [player, setPlayer] = useState<SimplePlayer | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentRow, setCurrentRow] = useState(0);
+  const [bpm, setBpm] = useState(120);
 
+  // Pattern state: 16 rows × 4 tracks
+  const [pattern, setPattern] = useState<string[][]>(() =>
+    Array(16)
+      .fill(null)
+      .map(() => Array(4).fill('---'))
+  );
+
+  // Initialize audio engine
   useEffect(() => {
-    const initSynth = async () => {
+    const init = async () => {
       try {
-        console.log('=== Initializing SimpleSynth ===');
-
-        // Run note conversion tests
-        testNoteConversion();
+        console.log('=== Initializing WebOrchestra ===');
 
         // Initialize synthesizer
         const s = new SimpleSynth();
         await s.init();
         setSynth(s);
-        setIsReady(true);
 
-        console.log('=== Ready to Play! ===');
-      } catch (err) {
-        console.error('Failed to initialize:', err);
-        setError(err instanceof Error ? err.message : String(err));
+        // Initialize player
+        const p = new SimplePlayer(s);
+        p.setOnRowChange((row) => {
+          setCurrentRow(row);
+        });
+        setPlayer(p);
+
+        setIsReady(true);
+        console.log('=== Ready! ===');
+      } catch (error) {
+        console.error('Initialization failed:', error);
+        alert('Failed to initialize audio engine. Check console for details.');
       }
     };
 
-    initSynth();
+    init();
   }, []);
 
-  // Test 1: Single note
-  const playSingleNote = () => {
-    if (!synth) return;
+  /**
+   * Play/Stop toggle
+   */
+  const handlePlayStop = () => {
+    if (!player) return;
 
-    console.log('--- Test: Single Note ---');
-    synth.start();
+    if (isPlaying) {
+      // Stop
+      player.stop();
+      setIsPlaying(false);
+      setCurrentRow(0);
+    } else {
+      // Play
+      console.log('--- Converting pattern to tracker format ---');
 
-    // Play middle C for 1 second
-    const midiNote = noteNameToMIDI('C-4')!;
-    synth.noteOn(0, midiNote);
+      // Convert string pattern to TrackerPattern
+      const trackerPattern: TrackerPattern = {
+        bpm: bpm,
+        stepsPerBeat: 4, // 16th notes
+        rows: pattern.map((row) =>
+          row.map((cell) => {
+            const note = noteNameToMIDI(cell);
+            return {
+              note: note,
+              instrument: 0,
+            } as TrackerNote;
+          })
+        ),
+      };
 
-    setTimeout(() => {
-      synth.noteOff(0, midiNote);
-    }, 1000);
+      player.loadPattern(trackerPattern);
+      player.play();
+      setIsPlaying(true);
+    }
   };
 
-  // Test 2: Chord (3 simultaneous notes)
-  const playChord = () => {
-    if (!synth) return;
+  /**
+   * Load example pattern
+   */
+  const loadExample = () => {
+    console.log('Loading example pattern...');
 
-    console.log('--- Test: C Major Chord ---');
-    synth.start();
+    const example: string[][] = Array(16)
+      .fill(null)
+      .map(() => Array(4).fill('---'));
 
-    // C major chord: C E G
-    const notes = ['C-4', 'E-4', 'G-4'];
-    const midiNotes = notes.map(n => noteNameToMIDI(n)!);
+    // Track 0: C major scale
+    example[0][0] = 'C-4';
+    example[1][0] = 'D-4';
+    example[2][0] = 'E-4';
+    example[3][0] = 'F-4';
+    example[4][0] = 'G-4';
+    example[5][0] = 'A-4';
+    example[6][0] = 'B-4';
+    example[7][0] = 'C-5';
 
-    // Play on channels 0, 1, 2
-    midiNotes.forEach((midi, channel) => {
-      synth.noteOn(channel, midi);
-    });
+    // Track 1: Bass notes
+    example[0][1] = 'C-3';
+    example[4][1] = 'G-3';
+    example[8][1] = 'C-3';
+    example[12][1] = 'G-3';
 
-    // Release after 2 seconds
-    setTimeout(() => {
-      midiNotes.forEach((midi, channel) => {
-        synth.noteOff(channel, midi);
-      });
-    }, 2000);
+    // Track 2: Chords (every 4 rows)
+    example[0][2] = 'E-4';
+    example[4][2] = 'G-4';
+    example[8][2] = 'E-4';
+    example[12][2] = 'G-4';
+
+    setPattern(example);
+    console.log('Example pattern loaded!');
   };
 
-  // Test 3: Scale (sequence of notes)
-  const playScale = () => {
-    if (!synth) return;
-
-    console.log('--- Test: C Major Scale ---');
-    synth.start();
-
-    // C major scale
-    const notes = ['C-4', 'D-4', 'E-4', 'F-4', 'G-4', 'A-4', 'B-4', 'C-5'];
-    const midiNotes = notes.map(n => noteNameToMIDI(n)!);
-
-    // Play each note sequentially
-    midiNotes.forEach((midi, i) => {
-      setTimeout(() => {
-        synth.noteOn(0, midi);
-
-        setTimeout(() => {
-          synth.noteOff(0, midi);
-        }, 400); // Note duration
-      }, i * 500); // Delay between notes
-    });
-  };
-
-  // Test 4: Arpeggio (fast sequence)
-  const playArpeggio = () => {
-    if (!synth) return;
-
-    console.log('--- Test: Arpeggio ---');
-    synth.start();
-
-    // C major arpeggio (repeating)
-    const pattern = ['C-4', 'E-4', 'G-4', 'C-5', 'G-4', 'E-4'];
-    const midiNotes = pattern.map(n => noteNameToMIDI(n)!);
-
-    midiNotes.forEach((midi, i) => {
-      setTimeout(() => {
-        synth.noteOn(0, midi);
-
-        setTimeout(() => {
-          synth.noteOff(0, midi);
-        }, 180); // Short note
-      }, i * 200); // Fast tempo
-    });
-  };
-
-  // Test 5: Polyphonic (multiple tracks)
-  const playPolyphonic = () => {
-    if (!synth) return;
-
-    console.log('--- Test: Polyphonic Sequence ---');
-    synth.start();
-
-    // Track 1: Melody
-    const melody = ['C-4', 'E-4', 'G-4', 'E-4'];
-    const melodyMidi = melody.map(n => noteNameToMIDI(n)!);
-
-    melodyMidi.forEach((midi, i) => {
-      setTimeout(() => {
-        synth.noteOn(0, midi);
-        setTimeout(() => synth.noteOff(0, midi), 400);
-      }, i * 500);
-    });
-
-    // Track 2: Bass (plays simultaneously)
-    const bass = ['C-3', 'C-3', 'G-3', 'G-3'];
-    const bassMidi = bass.map(n => noteNameToMIDI(n)!);
-
-    bassMidi.forEach((midi, i) => {
-      setTimeout(() => {
-        synth.noteOn(1, midi);
-        setTimeout(() => synth.noteOff(1, midi), 400);
-      }, i * 500);
-    });
+  /**
+   * Clear pattern
+   */
+  const clearPattern = () => {
+    setPattern(
+      Array(16)
+        .fill(null)
+        .map(() => Array(4).fill('---'))
+    );
+    console.log('Pattern cleared');
   };
 
   return (
     <div className="app">
-      <h1>🎵 SimpleSynth Test Suite</h1>
-
-      <div className="status-section">
+      <header className="header">
+        <div className="header-left">
+          <h1>🎵 WebOrchestra</h1>
+          <div className="subtitle">Minimal Tracker Prototype</div>
+        </div>
         <div className="status">
-          <strong>Status:</strong>{' '}
-          {error ? (
-            <span style={{ color: '#ff4444' }}>❌ Error</span>
-          ) : isReady ? (
-            <span style={{ color: '#44ff44' }}>✅ Ready</span>
-          ) : (
-            <span style={{ color: '#ffaa00' }}>⏳ Initializing...</span>
-          )}
+          {isReady ? '✅ Ready' : '⏳ Initializing...'}
+        </div>
+      </header>
+
+      <div className="controls">
+        <div className="control-group">
+          <button
+            onClick={handlePlayStop}
+            disabled={!isReady}
+            className={isPlaying ? 'btn-stop' : 'btn-play'}
+          >
+            {isPlaying ? '⏹ Stop' : '▶ Play'}
+          </button>
+
+          <label className="control-label">
+            BPM:
+            <input
+              type="number"
+              value={bpm}
+              onChange={(e) => setBpm(parseInt(e.target.value) || 120)}
+              onBlur={() => {
+                // Clamp to valid range
+                if (bpm < 60) setBpm(60);
+                if (bpm > 240) setBpm(240);
+              }}
+              min={60}
+              max={240}
+              disabled={isPlaying}
+              className="bpm-input"
+            />
+          </label>
+
+          <div className="position-display">
+            Row: {currentRow.toString().padStart(2, '0')} / 16
+          </div>
         </div>
 
-        {error && (
-          <div className="error-message">
-            <strong>Error:</strong> {error}
-          </div>
-        )}
-      </div>
-
-      <div className="test-section">
-        <h3>Audio Tests:</h3>
-
-        <div className="test-grid">
-          <div className="test-card">
-            <h4>Test 1: Single Note</h4>
-            <p>Plays middle C for 1 second</p>
-            <button onClick={playSingleNote} disabled={!isReady}>
-              Play Single Note
-            </button>
-          </div>
-
-          <div className="test-card">
-            <h4>Test 2: Chord</h4>
-            <p>C major chord (3 simultaneous notes)</p>
-            <button onClick={playChord} disabled={!isReady}>
-              Play Chord
-            </button>
-          </div>
-
-          <div className="test-card">
-            <h4>Test 3: Scale</h4>
-            <p>C major scale (8 notes)</p>
-            <button onClick={playScale} disabled={!isReady}>
-              Play Scale
-            </button>
-          </div>
-
-          <div className="test-card">
-            <h4>Test 4: Arpeggio</h4>
-            <p>Fast repeating pattern</p>
-            <button onClick={playArpeggio} disabled={!isReady}>
-              Play Arpeggio
-            </button>
-          </div>
-
-          <div className="test-card">
-            <h4>Test 5: Polyphonic</h4>
-            <p>Melody + Bass simultaneously</p>
-            <button onClick={playPolyphonic} disabled={!isReady}>
-              Play Polyphonic
-            </button>
-          </div>
+        <div className="control-group">
+          <button onClick={loadExample} disabled={isPlaying}>
+            📝 Load Example
+          </button>
+          <button onClick={clearPattern} disabled={isPlaying}>
+            🗑️ Clear
+          </button>
         </div>
       </div>
 
-      <div className="instructions">
-        <h3>Instructions:</h3>
-        <ol>
-          <li>Wait for ✅ Ready status</li>
-          <li>Click any test button to hear audio</li>
-          <li>Check browser console (F12) for detailed logs</li>
-        </ol>
+      <div className="tracker-section">
+        <TrackerGrid
+          rows={16}
+          tracks={4}
+          pattern={pattern}
+          onUpdate={setPattern}
+          currentRow={isPlaying ? currentRow : undefined}
+        />
+      </div>
 
-        <h4>What each test proves:</h4>
-        <ul>
-          <li><strong>Single Note:</strong> Basic note on/off works</li>
-          <li><strong>Chord:</strong> Multiple simultaneous voices work</li>
-          <li><strong>Scale:</strong> Sequential notes work</li>
-          <li><strong>Arpeggio:</strong> Fast timing works</li>
-          <li><strong>Polyphonic:</strong> Multiple tracks work</li>
-        </ul>
+      <div className="help-section">
+        <h3>How to use:</h3>
+        <div className="help-columns">
+          <div>
+            <h4>Note Entry:</h4>
+            <ul>
+              <li>
+                <strong>Format:</strong> C-4, D-4, E-4, F-4, G-4, A-4, B-4
+              </li>
+              <li>
+                <strong>Sharps:</strong> C#4, D#4, F#4, G#4, A#4
+              </li>
+              <li>
+                <strong>Rest:</strong> --- (or leave empty)
+              </li>
+              <li>
+                <strong>Middle C:</strong> C-4 = MIDI 60
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4>Navigation:</h4>
+            <ul>
+              <li>
+                <strong>Arrow keys:</strong> Move between cells
+              </li>
+              <li>
+                <strong>Enter:</strong> Move down
+              </li>
+              <li>
+                <strong>Tab:</strong> Move right
+              </li>
+              <li>
+                <strong>Delete:</strong> Clear cell
+              </li>
+              <li>
+                <strong>Click cell:</strong> Select for editing
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

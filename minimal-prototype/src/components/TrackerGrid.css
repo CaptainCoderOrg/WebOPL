@@ -1,0 +1,113 @@
+.tracker-grid-container {
+  overflow: auto;
+  max-height: 600px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #0a0a0a;
+}
+
+.tracker-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  background-color: #1a1a1a;
+  color: #00ff00;
+}
+
+/* Sticky header */
+.tracker-grid thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #2a2a2a;
+}
+
+.tracker-grid th {
+  padding: 10px;
+  border: 1px solid #444;
+  font-weight: bold;
+  text-align: center;
+}
+
+.row-header {
+  width: 60px;
+  background-color: #2a2a2a;
+  color: #888;
+}
+
+.track-header {
+  background-color: #2a2a2a;
+  color: #ffaa00;
+  min-width: 80px;
+}
+
+/* Row styling */
+.tracker-row {
+  transition: background-color 0.1s;
+}
+
+.tracker-row:hover {
+  background-color: #252525;
+}
+
+.tracker-row.current-row {
+  background-color: #2a3a2a !important;
+}
+
+.tracker-row.current-row .row-number {
+  background-color: #3a4a3a;
+  color: #00ff00;
+  font-weight: bold;
+}
+
+/* Cell styling */
+.tracker-grid td {
+  border: 1px solid #333;
+  padding: 0;
+}
+
+.row-number {
+  background-color: #1f1f1f;
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+  padding: 6px 8px;
+  user-select: none;
+  border-right: 2px solid #444;
+}
+
+.note-cell {
+  padding: 2px;
+}
+
+/* Input field */
+.note-input {
+  width: 100%;
+  min-width: 70px;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  color: #00ff00;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: center;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.note-input:focus {
+  background-color: #2a2a2a;
+  outline: 2px solid #00ff00;
+  outline-offset: -2px;
+}
+
+.note-input::placeholder {
+  color: #444;
+}
+
+/* Invalid note styling (can add validation later) */
+.note-input.invalid {
+  color: #ff4444 !important;
+  background-color: #3a0000 !important;
+}
