@@ -1,6 +1,6 @@
 # Dual-Voice Instrument Support Implementation Plan
 
-**Status:** Planning - Approach A (Full Dual-Voice)
+**Status:** In Progress - Phase 1 Complete ✅
 **Created:** 2025-01-03
 **Updated:** 2025-01-03
 **Complexity:** High
@@ -234,21 +234,21 @@ interface OPLPatch {
 ### Phase 1: Data Format Updates (2-3 hours)
 
 #### 1.1 Update Converter Script
-- [ ] Parse second voice operators (offset 20-32)
-- [ ] Parse second feedback byte
-- [ ] Extract second baseNote value
-- [ ] Output both voices to JSON with full structure
+- [x] Parse second voice operators (offset 20-32)
+- [x] Parse second feedback byte
+- [x] Extract second baseNote value
+- [x] Output both voices to JSON with full structure
 
 #### 1.2 Update TypeScript Interfaces
-- [ ] Create `OPLVoice` interface (modulator, carrier, feedback, connection)
-- [ ] Update `OPLPatch` to include `voice1` and `voice2`
-- [ ] Add `dualVoiceEnabled: boolean` field (per-instrument toggle)
-- [ ] Maintain backward compatibility during transition
+- [x] Create `OPLVoice` interface (modulator, carrier, feedback, connection)
+- [x] Update `OPLPatch` to include `voice1` and `voice2`
+- [x] Add `dualVoiceEnabled: boolean` field (per-instrument toggle)
+- [x] Maintain backward compatibility during transition
 
 #### 1.3 Regenerate GENMIDI.json
-- [ ] Run updated converter
-- [ ] Verify JSON structure (both voices present)
-- [ ] Check file size (should be ~150KB instead of 83KB)
+- [x] Run updated converter
+- [x] Verify JSON structure (both voices present)
+- [x] Check file size (should be ~150KB instead of 83KB - actual: ~183KB)
 
 **Success Criteria:**
 - ✅ Converter parses all 36 bytes per instrument
