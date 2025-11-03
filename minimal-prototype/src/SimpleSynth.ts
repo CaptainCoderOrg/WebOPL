@@ -11,6 +11,7 @@
 
 import type { OPLPatch, OPLOperator } from './types/OPLPatch';
 import { defaultPatches } from './data/defaultPatches';
+import { getOPLParams } from './constants/midiToOPL';
 
 // Feature flag: Toggle between AudioWorklet and ScriptProcessorNode
 const USE_AUDIO_WORKLET = true;
@@ -457,8 +458,8 @@ export class SimpleSynth {
       return;
     }
 
-    const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
-    const { fnum, block } = this.calculateFNum(freq);
+    // Use pre-calculated lookup table for accurate OPL3 parameters
+    const { freq, fnum, block } = getOPLParams(midiNote);
 
     console.log(`[SimpleSynth] Note ON: ch=${channel}, midi=${midiNote}, freq=${freq.toFixed(2)}Hz, fnum=${fnum}, block=${block}`);
 
@@ -494,22 +495,6 @@ export class SimpleSynth {
     }
 
     this.activeChannels.clear();
-  }
-
-  /**
-   * Calculate F-number and block for a frequency
-   */
-  private calculateFNum(freq: number): { fnum: number; block: number } {
-    for (let block = 0; block < 8; block++) {
-      const fnum = Math.round((freq * Math.pow(2, 20 - block)) / 49716);
-
-      if (fnum >= 0 && fnum < 1024) {
-        return { fnum, block };
-      }
-    }
-
-    console.warn('[SimpleSynth] Could not calculate F-number for frequency:', freq);
-    return { fnum: 0, block: 0 };
   }
 
   /**
