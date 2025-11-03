@@ -99,8 +99,37 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
       // Create OPL instance
       this.opl = await globalThis.OPL.create(sampleRate, 2); // stereo
 
-      // Enable waveform selection
+      // Proper OPL3 initialization sequence
+      console.log('[OPLWorkletProcessor] Starting OPL3 initialization sequence...');
+
+      // Step 1: Reset Timer 1 and Timer 2
+      this.opl.write(0x04, 0x60);
+
+      // Step 2: Reset IRQ
+      this.opl.write(0x04, 0x80);
+
+      // Step 3: Turn off CSW mode and enable waveform select
       this.opl.write(0x01, 0x20);
+
+      // Step 4: Set melodic mode (disable rhythm mode)
+      this.opl.write(0xBD, 0x00);
+
+      // Step 5: Enable OPL3 mode
+      console.log('[OPLWorkletProcessor] Enabling OPL3 mode (register 0x105)...');
+      this.opl.write(0x105, 0x01);
+
+      // Step 6: Disable 4-operator mode (all channels in 2-op mode)
+      console.log('[OPLWorkletProcessor] Disabling 4-op mode (register 0x104)...');
+      this.opl.write(0x104, 0x00);
+
+      // Step 7: Write to feedback/connection registers to activate the 4-op change
+      // (DOSBox bug workaround: register 0x104 changes ignored until 0xC0-0xC8 written)
+      for (let ch = 0; ch < 9; ch++) {
+        this.opl.write(0xC0 + ch, 0x00);        // Bank 0 channels 0-8
+        this.opl.write(0x100 + 0xC0 + ch, 0x00); // Bank 1 channels 9-17
+      }
+
+      console.log('[OPLWorkletProcessor] ✅ OPL3 mode enabled with all channels in 2-op mode');
 
       this.isReady = true;
 

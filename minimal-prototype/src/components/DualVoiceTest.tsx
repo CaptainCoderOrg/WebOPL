@@ -190,14 +190,14 @@ export function DualVoiceTest({ synth, patches }: DualVoiceTestProps) {
           <div className="stat-item">
             <div className="stat-label">Free Channels</div>
             <div className="stat-value" style={{
-              color: channelStats.free > 3 ? '#00ff00' : channelStats.free > 0 ? '#ffaa00' : '#ff4444'
+              color: channelStats.free > 6 ? '#00ff00' : channelStats.free > 0 ? '#ffaa00' : '#ff4444'
             }}>
-              {channelStats.free}/9
+              {channelStats.free}/18
             </div>
           </div>
           <div className="stat-item">
             <div className="stat-label">Allocated Channels</div>
-            <div className="stat-value">{channelStats.allocated}/9</div>
+            <div className="stat-value">{channelStats.allocated}/18</div>
           </div>
           <div className="stat-item">
             <div className="stat-label">Dual-Voice Notes</div>
@@ -213,7 +213,7 @@ export function DualVoiceTest({ synth, patches }: DualVoiceTestProps) {
         <div className="channel-visualization">
           <h4>OPL3 Hardware Channels:</h4>
           <div className="channels">
-            {Array.from({ length: 9 }, (_, i) => {
+            {Array.from({ length: 18 }, (_, i) => {
               const isFree = channelStats.free > 0 && channelStats.allocated <= i;
               return (
                 <div

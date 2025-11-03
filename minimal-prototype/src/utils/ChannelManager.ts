@@ -1,7 +1,7 @@
 /**
  * Channel Manager for OPL3 Hardware Channel Allocation
  *
- * Manages the 9 OPL3 hardware channels (0-8) for:
+ * Manages the 18 OPL3 hardware channels (0-17) for:
  * - Single-voice instruments (1 channel)
  * - Dual-voice instruments (2 channels)
  * - Voice stealing (LRU algorithm)
@@ -15,18 +15,18 @@ export interface ChannelAllocation {
 }
 
 export class ChannelManager {
-  private readonly MAX_CHANNELS = 9; // OPL3 hardware channels 0-8
+  private readonly MAX_CHANNELS = 18; // OPL3 hardware channels 0-17
   private allocations: Map<string, ChannelAllocation>; // noteId -> allocation
   private freeChannels: Set<number>; // Available channels
 
   constructor() {
     this.allocations = new Map();
-    this.freeChannels = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    this.freeChannels = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
   }
 
   /**
    * Allocate 1 channel for single-voice instrument
-   * @returns Hardware channel number (0-8) or null if failed
+   * @returns Hardware channel number (0-17) or null if failed
    */
   allocateChannel(noteId: string): number | null {
     // If already allocated, return existing
@@ -177,7 +177,7 @@ export class ChannelManager {
    */
   reset(): void {
     this.allocations.clear();
-    this.freeChannels = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    this.freeChannels = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
   }
 
   // ===== Private Helper Methods =====

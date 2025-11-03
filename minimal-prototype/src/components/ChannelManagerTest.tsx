@@ -130,13 +130,13 @@ export function ChannelManagerTest() {
         <div className="stats-grid">
           <div className="stat-item">
             <div className="stat-label">Free Channels</div>
-            <div className="stat-value" style={{ color: stats.free > 3 ? '#00ff00' : stats.free > 0 ? '#ffaa00' : '#ff4444' }}>
-              {stats.free}/9
+            <div className="stat-value" style={{ color: stats.free > 6 ? '#00ff00' : stats.free > 0 ? '#ffaa00' : '#ff4444' }}>
+              {stats.free}/18
             </div>
           </div>
           <div className="stat-item">
             <div className="stat-label">Allocated Channels</div>
-            <div className="stat-value">{stats.allocated}/9</div>
+            <div className="stat-value">{stats.allocated}/18</div>
           </div>
           <div className="stat-item">
             <div className="stat-label">Dual-Voice Notes</div>
@@ -147,7 +147,7 @@ export function ChannelManagerTest() {
         <div className="channel-visualization">
           <h4>Channel Status:</h4>
           <div className="channels">
-            {Array.from({ length: 9 }, (_, i) => {
+            {Array.from({ length: 18 }, (_, i) => {
               const isFree = stats.free > 0 && stats.allocated <= i;
               return (
                 <div
@@ -222,16 +222,16 @@ export function ChannelManagerTest() {
         <h3>ℹ️ Test Descriptions</h3>
         <div className="test-descriptions">
           <div className="test-desc">
-            <strong>Test 1:</strong> Allocates 9 single-voice notes to fill all channels (0-8)
+            <strong>Test 1:</strong> Allocates 9 single-voice notes (9/18 channels used)
           </div>
           <div className="test-desc">
-            <strong>Test 2:</strong> Attempts 10th allocation, triggering LRU voice stealing
+            <strong>Test 2:</strong> Attempts 10th allocation (no voice stealing needed with 18 channels)
           </div>
           <div className="test-desc">
-            <strong>Test 3:</strong> Allocates 4 dual-voice notes (8 channels used, 1 free)
+            <strong>Test 3:</strong> Allocates 4 dual-voice notes (8 channels used, 10 free)
           </div>
           <div className="test-desc">
-            <strong>Test 4:</strong> Attempts 5th dual-voice allocation with insufficient channels
+            <strong>Test 4:</strong> Attempts 5th dual-voice allocation (no degradation needed)
           </div>
           <div className="test-desc">
             <strong>Test 5:</strong> Mixed allocation of single and dual-voice notes

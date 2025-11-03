@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPL3 Chip Test (Pure JS)</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+            padding: 2rem;
+        }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        button:hover {
+            background: #0d0;
+        }
+        #log {
+            background: #111;
+            border: 2px solid #0f0;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>OPL3 Chip Test (Pure JavaScript)</h1>
+    <p>Testing the `opl3` npm package (Robson Cozendey's emulator) in browser</p>
+
+    <button onclick="testBasic()">Test 1: Basic Initialization</button>
+    <button onclick="testOPL3Mode()">Test 2: Enable OPL3 Mode</button>
+    <button onclick="testTone()">Test 3: Generate Tone</button>
+    <button onclick="playTone()">Test 4: Play Tone (Audio)</button>
+    <button onclick="playChromaticScale()">Test 5: Chromatic Scale C4-C5</button>
+
+    <div id="log"></div>
+
+    <!-- Load OPL3 browser bundle (exposes window.OPL3) -->
+    <script src="/node_modules/opl3/dist/opl3.js"></script>
+
+    <script>
+        // OPL3 library loaded as window.OPL3.OPL3 from browser bundle
+        window.chip = null;
+        window.audioContext = null;
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        window.testBasic = function() {
+            log('=== Test 1: Basic Initialization ===');
+            try {
+                window.chip = new window.OPL3.OPL3();
+                log('✅ OPL3 chip created successfully');
+                log(`Chip object: ${Object.keys(window.chip).slice(0, 5).join(', ')}...`);
+                log(`Initial _new flag: ${window.chip._new} (0=OPL2, 1=OPL3)`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        };
+
+        window.testOPL3Mode = function() {
+            log('=== Test 2: Enable OPL3 Mode ===');
+            if (!window.chip) {
+                log('❌ Chip not initialized. Run Test 1 first.');
+                return;
+            }
+
+            try {
+                // Reset sequence
+                log('Writing reset sequence...');
+                window.chip.write(0, 0x04, 0x60); // Reset timers
+                window.chip.write(0, 0x04, 0x80); // Reset IRQ
+                window.chip.write(0, 0x01, 0x20); // Waveform select
+                window.chip.write(0, 0xBD, 0x00); // Melodic mode
+
+                log(`_new flag before 0x105: ${window.chip._new}`);
+
+                // Enable OPL3 mode
+                window.chip.write(1, 0x05, 0x01); // Register 0x105
+                log(`✅ Wrote to register 0x105 (array=1, address=0x05, value=0x01)`);
+                log(`_new flag after 0x105: ${window.chip._new}`);
+
+                // Disable 4-op mode
+                window.chip.write(1, 0x04, 0x00); // Register 0x104
+                log('✅ Disabled 4-op mode (register 0x104)');
+
+                // Write to C0-C8 registers (DOSBox bug workaround)
+                for (let ch = 0; ch < 9; ch++) {
+                    window.chip.write(0, 0xC0 + ch, 0x00);
+                    window.chip.write(1, 0xC0 + ch, 0x00);
+                }
+                log('✅ Wrote to feedback/connection registers (0xC0-0xC8)');
+
+                log(`🎉 OPL3 mode ${window.chip._new === 1 ? 'ENABLED' : 'FAILED'}`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        };
+
+        window.testTone = function() {
+            log('=== Test 3: Generate Tone ===');
+            if (!window.chip) {
+                log('❌ Chip not initialized. Run Test 1 first.');
+                return;
+            }
+
+            try {
+                // Program a simple sine wave on channel 0
+                // Operator offsets for channel 0: modulator=0x00, carrier=0x03
+
+                // Modulator (operator 0x00)
+                window.chip.write(0, 0x20, 0x01); // AM=0, VIB=0, EGT=0, KSR=0, MULT=1
+                window.chip.write(0, 0x40, 0x10); // KSL=0, TL=16
+                window.chip.write(0, 0x60, 0xF0); // AR=15, DR=0
+                window.chip.write(0, 0x80, 0x77); // SL=7, RR=7
+                window.chip.write(0, 0xE0, 0x00); // Waveform=0 (sine)
+
+                // Carrier (operator 0x03)
+                window.chip.write(0, 0x23, 0x01); // AM=0, VIB=0, EGT=0, KSR=0, MULT=1
+                window.chip.write(0, 0x43, 0x00); // KSL=0, TL=0 (max volume)
+                window.chip.write(0, 0x63, 0xF0); // AR=15, DR=0
+                window.chip.write(0, 0x83, 0x77); // SL=7, RR=7
+                window.chip.write(0, 0xE3, 0x00); // Waveform=0 (sine)
+
+                // Channel 0 settings
+                // 0xC0: FB=0, FM mode, Left+Right output
+                // Bits: 0b00110000 = 0x30 (CHA=1, CHB=1 for stereo)
+                window.chip.write(0, 0xC0, 0x30);
+
+                // Set frequency (A440)
+                const fnum = 0x16B; // F-number for A4
+                const block = 4;    // Octave
+                window.chip.write(0, 0xA0, fnum & 0xFF);
+                window.chip.write(0, 0xB0, (block << 2) | ((fnum >> 8) & 0x03) | 0x20); // Key ON
+
+                log('✅ Programmed tone on channel 0 (A440)');
+
+                // Generate samples
+                const output = new Int16Array(2);
+                window.chip.read(output);
+                log(`Sample generated: [${output[0]}, ${output[1]}]`);
+
+                // Turn off
+                window.chip.write(0, 0xB0, (block << 2) | ((fnum >> 8) & 0x03));
+                log('✅ Key OFF');
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        };
+
+        window.playTone = async function() {
+            log('=== Test 4: Play Tone (Audio) ===');
+            if (!window.chip) {
+                log('❌ Chip not initialized. Run Test 1 and 2 first.');
+                return;
+            }
+
+            try {
+                // Initialize audio context
+                if (!window.audioContext) {
+                    window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    log(`✅ AudioContext created (sample rate: ${window.audioContext.sampleRate})`);
+                }
+
+                // Program a simple tone
+                const fnum = 0x16B; // A440
+                const block = 4;
+
+                // Modulator
+                window.chip.write(0, 0x20, 0x01);
+                window.chip.write(0, 0x40, 0x10);
+                window.chip.write(0, 0x60, 0xF0);
+                window.chip.write(0, 0x80, 0x77);
+                window.chip.write(0, 0xE0, 0x00);
+
+                // Carrier
+                window.chip.write(0, 0x23, 0x01);
+                window.chip.write(0, 0x43, 0x00);
+                window.chip.write(0, 0x63, 0xF0);
+                window.chip.write(0, 0x83, 0x77);
+                window.chip.write(0, 0xE3, 0x00);
+
+                // Channel 0
+                window.chip.write(0, 0xC0, 0x30); // Stereo output enabled
+
+                // Key ON
+                window.chip.write(0, 0xA0, fnum & 0xFF);
+                window.chip.write(0, 0xB0, (block << 2) | ((fnum >> 8) & 0x03) | 0x20);
+
+                log('✅ Note ON');
+
+                // Generate audio buffer
+                const duration = 1; // 1 second
+                const sampleRate = 49716;
+                const numSamples = sampleRate * duration;
+                const buffer = window.audioContext.createBuffer(2, numSamples, sampleRate);
+
+                const leftChannel = buffer.getChannelData(0);
+                const rightChannel = buffer.getChannelData(1);
+
+                // Generate samples
+                const tempBuffer = new Int16Array(2);
+                for (let i = 0; i < numSamples; i++) {
+                    window.chip.read(tempBuffer);
+                    leftChannel[i] = tempBuffer[0] / 32768.0;
+                    rightChannel[i] = tempBuffer[1] / 32768.0;
+                }
+
+                log(`✅ Generated ${numSamples} samples`);
+
+                // Play the buffer
+                const source = window.audioContext.createBufferSource();
+                source.buffer = buffer;
+                source.connect(window.audioContext.destination);
+                source.start();
+
+                log('🔊 Playing tone...');
+
+                // Turn off after 1 second
+                setTimeout(() => {
+                    window.chip.write(0, 0xB0, (block << 2) | ((fnum >> 8) & 0x03));
+                    log('✅ Note OFF');
+                }, 1000);
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        };
+
+        // Helper: Calculate F-number and block from MIDI note
+        function midiNoteToFnumBlock(midiNote) {
+            // OPL3 uses 9 octaves (blocks 0-8)
+            // Each block doubles the frequency
+            // F-number controls fine frequency within each octave
+
+            // A4 (MIDI 69) = 440 Hz
+            // Calculate frequency for the MIDI note
+            const freq = 440.0 * Math.pow(2, (midiNote - 69) / 12.0);
+
+            // OPL3 sample rate is 49716 Hz
+            const sampleRate = 49716;
+
+            // Find the best block (octave)
+            let block = 0;
+            let fnum = 0;
+
+            for (let b = 0; b <= 7; b++) {
+                const divisor = Math.pow(2, 20 - b);
+                fnum = Math.round((freq * divisor) / sampleRate);
+
+                if (fnum < 1024) {
+                    block = b;
+                    break;
+                }
+            }
+
+            // Clamp fnum to valid range
+            fnum = Math.min(1023, Math.max(0, fnum));
+
+            return { fnum, block };
+        }
+
+        // Helper: Get note name from MIDI number
+        function midiToNoteName(midiNote) {
+            const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            const octave = Math.floor(midiNote / 12) - 1;
+            const note = noteNames[midiNote % 12];
+            return `${note}${octave}`;
+        }
+
+        // Test 5: Play chromatic scale C4 to C5
+        window.playChromaticScale = async function() {
+            log('=== Test 5: Chromatic Scale C4-C5 ===');
+            if (!window.chip) {
+                log('❌ Chip not initialized. Run Test 1 and 2 first.');
+                return;
+            }
+
+            try {
+                // Initialize audio context
+                if (!window.audioContext) {
+                    window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    log(`✅ AudioContext created (sample rate: ${window.audioContext.sampleRate})`);
+                }
+
+                // Program the instrument (same as Test 4)
+                window.chip.write(0, 0x20, 0x01);
+                window.chip.write(0, 0x40, 0x10);
+                window.chip.write(0, 0x60, 0xF0);
+                window.chip.write(0, 0x80, 0x77);
+                window.chip.write(0, 0xE0, 0x00);
+                window.chip.write(0, 0x23, 0x01);
+                window.chip.write(0, 0x43, 0x00);
+                window.chip.write(0, 0x63, 0xF0);
+                window.chip.write(0, 0x83, 0x77);
+                window.chip.write(0, 0xE3, 0x00);
+                window.chip.write(0, 0xC0, 0x30);
+
+                // Chromatic scale: C4 (60) to C5 (72)
+                const notes = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72];
+                const noteDuration = 0.3; // seconds per note
+                const sampleRate = 49716;
+                const samplesPerNote = Math.floor(sampleRate * noteDuration);
+                const totalSamples = samplesPerNote * notes.length;
+
+                log(`Playing ${notes.length} notes (${noteDuration}s each)...`);
+
+                // Create audio buffer
+                const buffer = window.audioContext.createBuffer(2, totalSamples, sampleRate);
+                const leftChannel = buffer.getChannelData(0);
+                const rightChannel = buffer.getChannelData(1);
+
+                let sampleOffset = 0;
+                const tempBuffer = new Int16Array(2);
+
+                // Generate each note
+                for (const midiNote of notes) {
+                    const noteName = midiToNoteName(midiNote);
+                    const { fnum, block } = midiNoteToFnumBlock(midiNote);
+
+                    log(`  ${noteName} (MIDI ${midiNote}): fnum=${fnum}, block=${block}`);
+
+                    // Key ON
+                    window.chip.write(0, 0xA0, fnum & 0xFF);
+                    window.chip.write(0, 0xB0, (block << 2) | ((fnum >> 8) & 0x03) | 0x20);
+
+                    // Generate samples for this note
+                    for (let i = 0; i < samplesPerNote; i++) {
+                        window.chip.read(tempBuffer);
+                        leftChannel[sampleOffset] = tempBuffer[0] / 32768.0;
+                        rightChannel[sampleOffset] = tempBuffer[1] / 32768.0;
+                        sampleOffset++;
+                    }
+
+                    // Key OFF
+                    window.chip.write(0, 0xB0, (block << 2) | ((fnum >> 8) & 0x03));
+                }
+
+                log(`✅ Generated ${totalSamples} samples`);
+
+                // Play the buffer
+                const source = window.audioContext.createBufferSource();
+                source.buffer = buffer;
+                source.connect(window.audioContext.destination);
+                source.start();
+
+                log('🔊 Playing chromatic scale...');
+
+                setTimeout(() => {
+                    log('✅ Scale complete');
+                }, notes.length * noteDuration * 1000);
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        };
+
+        log('Test page loaded. Click buttons to run tests.');
+    </script>
+</body>
+</html>

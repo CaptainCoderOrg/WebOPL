@@ -227,8 +227,37 @@ export class SimpleSynth {
     this.opl = await window.OPL.create(this.audioContext.sampleRate, 2);
     console.log('[SimpleSynth] ✅ OPL instance created');
 
-    // Enable waveform selection
+    // Proper OPL3 initialization sequence
+    console.log('[SimpleSynth] Starting OPL3 initialization sequence...');
+
+    // Step 1: Reset Timer 1 and Timer 2
+    this.opl.write(0x04, 0x60);
+
+    // Step 2: Reset IRQ
+    this.opl.write(0x04, 0x80);
+
+    // Step 3: Turn off CSW mode and enable waveform select
     this.opl.write(0x01, 0x20);
+
+    // Step 4: Set melodic mode (disable rhythm mode)
+    this.opl.write(0xBD, 0x00);
+
+    // Step 5: Enable OPL3 mode
+    console.log('[SimpleSynth] Enabling OPL3 mode (register 0x105)...');
+    this.opl.write(0x105, 0x01);
+
+    // Step 6: Disable 4-operator mode (all channels in 2-op mode)
+    console.log('[SimpleSynth] Disabling 4-op mode (register 0x104)...');
+    this.opl.write(0x104, 0x00);
+
+    // Step 7: Write to feedback/connection registers to activate the 4-op change
+    // (DOSBox bug workaround: register 0x104 changes ignored until 0xC0-0xC8 written)
+    for (let ch = 0; ch < 9; ch++) {
+      this.opl.write(0xC0 + ch, 0x00);        // Bank 0 channels 0-8
+      this.opl.write(0x100 + 0xC0 + ch, 0x00); // Bank 1 channels 9-17
+    }
+
+    console.log('[SimpleSynth] ✅ OPL3 mode enabled with all channels in 2-op mode');
 
     // Load default instruments
     console.log('[SimpleSynth] Loading default instruments...');
@@ -349,15 +378,37 @@ export class SimpleSynth {
   }
 
   /**
-   * Get operator offsets for a channel
+   * Get operator offsets for a channel (supports OPL3's 18 channels)
+   * Channels 0-8: First chip (registers 0x00-0xFF)
+   * Channels 9-17: Second chip (registers 0x100-0x1FF)
    */
   private getOperatorOffsets(channelId: number): [number, number] {
-    const operatorMap: [number, number][] = [
+    const baseOperatorMap: [number, number][] = [
       [0x00, 0x03], [0x01, 0x04], [0x02, 0x05],
       [0x08, 0x0B], [0x09, 0x0C], [0x0A, 0x0D],
       [0x10, 0x13], [0x11, 0x14], [0x12, 0x15],
     ];
-    return operatorMap[channelId];
+
+    if (channelId < 9) {
+      return baseOperatorMap[channelId];
+    } else {
+      // Channels 9-17 use second register set (add 0x100)
+      const localChannel = channelId - 9;
+      const [mod, car] = baseOperatorMap[localChannel];
+      return [mod + 0x100, car + 0x100];
+    }
+  }
+
+  /**
+   * Get the correct register address for a channel-specific register
+   * Handles OPL3's two register sets (0x00-0xFF and 0x100-0x1FF)
+   */
+  private getChannelRegister(baseRegister: number, channelId: number): number {
+    if (channelId < 9) {
+      return baseRegister + channelId;
+    } else {
+      return baseRegister + 0x100 + (channelId - 9);
+    }
   }
 
   /**
@@ -388,8 +439,8 @@ export class SimpleSynth {
    * Load an instrument patch to a specific channel
    */
   public loadPatch(channelId: number, patch: OPLPatch): void {
-    if (channelId < 0 || channelId >= 9) {
-      throw new Error(`Invalid channel: ${channelId}. Must be 0-8.`);
+    if (channelId < 0 || channelId >= 18) {
+      throw new Error(`Invalid channel: ${channelId}. Must be 0-17.`);
     }
 
     console.log(`[SimpleSynth] Loading patch "${patch.name}" to channel ${channelId}`);
@@ -402,7 +453,8 @@ export class SimpleSynth {
     this.writeOperatorRegisters(carOffset, patch.carrier);
 
     const regC0 = (patch.feedback << 1) | (patch.connection === 'fm' ? 1 : 0);
-    this.writeOPL(0xC0 + channelId, regC0);
+    const c0Register = channelId < 9 ? 0xC0 + channelId : 0x1C0 + (channelId - 9);
+    this.writeOPL(c0Register, regC0);
 
     console.log(`[SimpleSynth] Patch loaded successfully to channel ${channelId}`);
   }
@@ -419,7 +471,7 @@ export class SimpleSynth {
    */
   public getAllPatches(): Array<[number, string]> {
     const result: Array<[number, string]> = [];
-    for (let ch = 0; ch < 9; ch++) {
+    for (let ch = 0; ch < 18; ch++) {
       const patch = this.channelPatches.get(ch);
       if (patch) {
         result.push([ch, patch.name]);
@@ -430,7 +482,7 @@ export class SimpleSynth {
 
   /**
    * Program a single voice to a hardware channel (for dual-voice support)
-   * @param oplChannel OPL3 hardware channel (0-8)
+   * @param oplChannel OPL3 hardware channel (0-17)
    * @param voice Voice data (modulator, carrier, feedback, connection)
    * @param patch Parent patch (for metadata)
    */
@@ -455,7 +507,8 @@ export class SimpleSynth {
 
     // Program feedback + connection
     const feedbackByte = (voice.feedback << 1) | (voice.connection === 'fm' ? 1 : 0);
-    this.writeOPL(0xC0 + oplChannel, feedbackByte);
+    const c0Register = oplChannel < 9 ? 0xC0 + oplChannel : 0x1C0 + (oplChannel - 9);
+    this.writeOPL(c0Register, feedbackByte);
 
     // Store patch reference for this channel
     this.channelPatches.set(oplChannel, patch);
@@ -553,14 +606,14 @@ export class SimpleSynth {
       const { fnum, block } = getOPLParams(adjustedNote);
 
       // Trigger channel 1
-      this.writeOPL(0xA0 + ch1, fnum & 0xFF);
+      this.writeOPL(this.getChannelRegister(0xA0, ch1), fnum & 0xFF);
       const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
-      this.writeOPL(0xB0 + ch1, keyOnByte);
+      this.writeOPL(this.getChannelRegister(0xB0, ch1), keyOnByte);
 
       // Trigger channel 2 (if different)
       if (ch1 !== ch2) {
-        this.writeOPL(0xA0 + ch2, fnum & 0xFF);
-        this.writeOPL(0xB0 + ch2, keyOnByte);
+        this.writeOPL(this.getChannelRegister(0xA0, ch2), fnum & 0xFF);
+        this.writeOPL(this.getChannelRegister(0xB0, ch2), keyOnByte);
       }
 
       // Track active note
@@ -586,9 +639,9 @@ export class SimpleSynth {
 
       // Trigger note
       const { fnum, block } = getOPLParams(adjustedNote);
-      this.writeOPL(0xA0 + oplChannel, fnum & 0xFF);
+      this.writeOPL(this.getChannelRegister(0xA0, oplChannel), fnum & 0xFF);
       const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
-      this.writeOPL(0xB0 + oplChannel, keyOnByte);
+      this.writeOPL(this.getChannelRegister(0xB0, oplChannel), keyOnByte);
 
       // Track active note
       this.activeNotes.set(channel, {
@@ -613,7 +666,7 @@ export class SimpleSynth {
     // Release all allocated OPL channels for this note
     for (const oplChannel of activeNote.channels) {
       console.log(`[SimpleSynth] Note OFF: MIDI ch=${channel}, OPL ch=${oplChannel}, note=${midiNote}`);
-      this.writeOPL(0xB0 + oplChannel, 0x00);
+      this.writeOPL(this.getChannelRegister(0xB0, oplChannel), 0x00);
     }
 
     // Release from channel manager
@@ -630,8 +683,8 @@ export class SimpleSynth {
     console.log('[SimpleSynth] All notes off');
 
     // Release all OPL hardware channels
-    for (let channel = 0; channel < 9; channel++) {
-      this.writeOPL(0xB0 + channel, 0x00);
+    for (let channel = 0; channel < 18; channel++) {
+      this.writeOPL(this.getChannelRegister(0xB0, channel), 0x00);
     }
 
     // Clear tracking
