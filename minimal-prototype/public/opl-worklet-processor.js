@@ -3,6 +3,9 @@
  *
  * Runs in the audio thread (AudioWorkletGlobalScope)
  * Generates audio samples from the OPL3 emulator
+ *
+ * Note: AudioWorklet has no access to fetch, importScripts, or DOM.
+ * WASM modules must be loaded in main thread and passed via messages.
  */
 
 class OPLWorkletProcessor extends AudioWorkletProcessor {
@@ -27,6 +30,10 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
     const { type, payload } = data;
 
     switch (type) {
+      case 'load-wasm':
+        this.loadWASMModules(payload);
+        break;
+
       case 'init':
         this.initOPL(payload);
         break;
@@ -44,6 +51,36 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
   }
 
   /**
+   * Load WASM modules from code passed by main thread
+   */
+  loadWASMModules(payload) {
+    try {
+      const { oplCode, wrapperCode } = payload;
+
+      console.log('[OPLWorkletProcessor] Loading WASM modules from main thread...');
+
+      // Execute opl.js in global scope
+      // This creates the 'opl' global function
+      (0, eval)(oplCode);
+      console.log('[OPLWorkletProcessor] ✅ opl.js loaded');
+
+      // Execute opl-wrapper.js in global scope
+      // This creates the 'OPL' class on globalThis
+      (0, eval)(wrapperCode);
+      console.log('[OPLWorkletProcessor] ✅ opl-wrapper.js loaded');
+
+      // Notify main thread that WASM is loaded
+      this.port.postMessage({ type: 'wasm-loaded' });
+    } catch (error) {
+      console.error('[OPLWorkletProcessor] Failed to load WASM modules:', error);
+      this.port.postMessage({
+        type: 'error',
+        payload: { message: `WASM load failed: ${error.message}` }
+      });
+    }
+  }
+
+  /**
    * Initialize OPL instance
    */
   async initOPL(payload) {
@@ -52,10 +89,12 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
 
       console.log('[OPLWorkletProcessor] Initializing OPL3...');
 
-      // Access global OPL class (loaded in main thread)
+      // Check if OPL class is available (should be loaded via 'load-wasm' message)
       if (typeof globalThis.OPL === 'undefined') {
-        throw new Error('OPL class not available in AudioWorklet scope');
+        throw new Error('OPL class not available. Send "load-wasm" message first.');
       }
+
+      console.log('[OPLWorkletProcessor] Creating OPL instance...');
 
       // Create OPL instance
       this.opl = await globalThis.OPL.create(sampleRate, 2); // stereo
@@ -65,7 +104,7 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
 
       this.isReady = true;
 
-      console.log('[OPLWorkletProcessor] OPL3 initialized successfully');
+      console.log('[OPLWorkletProcessor] ✅ OPL3 initialized successfully');
 
       // Notify main thread
       this.port.postMessage({ type: 'ready' });
