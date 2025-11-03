@@ -35,6 +35,7 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
   });
 
   const [useRawMode, setUseRawMode] = useState(false);
+  const [showOperatorParams, setShowOperatorParams] = useState(true);
 
   // Calculate OPL3 parameters (matches SimpleSynth's calculateFNum logic)
   const calculateOPLParams = (midiNote: number) => {
@@ -362,12 +363,23 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
 
         {/* Loaded Operator Parameters */}
         <section className="tester-section operator-params-panel">
-          <h2>Loaded Operator Parameters</h2>
-          <p className="param-description">
-            Current OPL3 operator values for the selected instrument. These control timbre, envelope, and modulation.
-          </p>
+          <div className="param-header">
+            <h2>Loaded Operator Parameters</h2>
+            <button
+              onClick={() => setShowOperatorParams(!showOperatorParams)}
+              className="collapse-button"
+            >
+              {showOperatorParams ? '▼ Hide' : '▶ Show'}
+            </button>
+          </div>
 
-          {instrumentBank[selectedInstrument] && (
+          {showOperatorParams && (
+            <>
+              <p className="param-description">
+                Current OPL3 operator values for the selected instrument. These control timbre, envelope, and modulation.
+              </p>
+
+              {instrumentBank[selectedInstrument] && (
             <div className="operator-params-grid">
               {/* Modulator Operator */}
               <div className="operator-section">
@@ -480,6 +492,8 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
                 </div>
               </div>
             </div>
+              )}
+            </>
           )}
         </section>
 

@@ -363,6 +363,29 @@
   border: 2px solid #00aaff;
 }
 
+.collapse-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  background-color: #00aaff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.collapse-button:hover {
+  background-color: #33bbff;
+  transform: translateY(-1px);
+}
+
+.collapse-button:active {
+  transform: translateY(0);
+  background-color: #0088cc;
+}
+
 .operator-params-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
