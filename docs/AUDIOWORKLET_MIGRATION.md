@@ -4,18 +4,24 @@
 
 Successfully migrated from deprecated **ScriptProcessorNode** to modern **AudioWorklet** with fallback support.
 
+**Status**: ✅ Working in Chrome, Firefox, Safari, and Edge (79+)
+
 ## Files Modified
 
 ### 1. **[opl-worklet-processor.js](minimal-prototype/public/opl-worklet-processor.js)**
-- Added `importScripts()` to load OPL WASM modules
+- Receives WASM code from main thread via message passing
+- Uses `eval()` to execute WASM loader code in AudioWorklet scope
 - Implements message passing protocol for OPL register writes
 - Runs in dedicated audio thread for better performance
 
 ### 2. **[SimpleSynth.ts](minimal-prototype/src/SimpleSynth.ts)**
 - **BREAKING CHANGE**: Complete rewrite with dual-mode support
 - **Feature Flag**: `USE_AUDIO_WORKLET = true` (line 16)
-- Supports both AudioWorklet and ScriptProcessorNode
-- Automatic fallback if AudioWorklet not supported
+- Fetches WASM binary in main thread (59KB opl.wasm)
+- Patches Emscripten code to embed WASM binary directly
+- Patches wrapper code to use `globalThis` instead of `window`
+- Sends patched code to AudioWorklet via postMessage
+- Supports both AudioWorklet and ScriptProcessorNode fallback
 - All OPL register writes now go through `writeOPL()` method
 
 ### 3. **[SimpleSynth.old.ts](minimal-prototype/src/SimpleSynth.old.ts)**
@@ -34,9 +40,9 @@ Main Thread: SimpleSynth → ScriptProcessorNode → Audio Output
 
 **After (AudioWorklet mode):**
 ```
-Main Thread: SimpleSynth → Messages →
-Audio Thread:                        AudioWorkletNode → Audio Output
-                                     (OPL instance runs here)
+Main Thread:  SimpleSynth → fetch WASM → patch code → send to worklet →
+Audio Thread:                                          AudioWorkletNode → Audio Output
+                                                       (OPL instance runs here)
 ```
 
 ### Feature Flag
@@ -53,6 +59,14 @@ const USE_AUDIO_WORKLET = false; // Legacy (Edge compatibility)
 **Main Thread → Worklet:**
 ```javascript
 {
+  type: 'load-wasm',
+  payload: {
+    oplCode: '...patched Emscripten code with embedded WASM...',
+    wrapperCode: '...patched OPL wrapper with globalThis...'
+  }
+}
+
+{
   type: 'init',
   payload: { sampleRate: 49716 }
 }
@@ -65,6 +79,10 @@ const USE_AUDIO_WORKLET = false; // Legacy (Edge compatibility)
 
 **Worklet → Main Thread:**
 ```javascript
+{
+  type: 'wasm-loaded'  // WASM code received and executed
+}
+
 {
   type: 'ready'  // OPL initialized
 }
@@ -119,19 +137,24 @@ Console should show:
 
 ### ⚠️ Potential Issues
 
-1. **importScripts() fails**
-   - Symptom: Console error "Failed to load WASM modules"
-   - Fix: Check that `/lib/opl.js` and `/opl-wrapper.js` are accessible
+1. **WASM loading fails**
+   - Symptom: Console error "Failed to fetch /lib/opl.wasm"
+   - Fix: Check that `/lib/opl.wasm` is accessible (59KB binary file)
    - Fallback: Set `USE_AUDIO_WORKLET = false`
 
 2. **Worklet timeout**
-   - Symptom: "AudioWorklet initialization timeout" after 5 seconds
-   - Fix: Check browser console for WASM loading errors
-   - Fallback: Will auto-fallback to ScriptProcessorNode (if implemented)
+   - Symptom: "AudioWorklet initialization timeout" or "WASM loading timeout"
+   - Fix: Check browser console for eval/WASM errors
+   - Note: WASM binary is embedded as ~60KB JavaScript array literal
 
 3. **No sound in any browser**
    - Check: AudioContext state (should be "running")
    - Fix: User interaction required to start audio (browser autoplay policy)
+
+4. **Memory issues (rare)**
+   - Symptom: Browser slowdown during initialization
+   - Cause: 59KB WASM binary being JSON.stringified as array
+   - Fix: Normal - only happens once during initialization
 
 ## Browser Compatibility
 
@@ -200,7 +223,28 @@ If something doesn't work:
 - Original code backed up to `SimpleSynth.old.ts`
 - Feature flag allows easy toggle between modes
 - Message passing adds ~1ms latency (acceptable for music)
-- WASM modules loaded once per worklet (efficient)
+- WASM binary fetched once and embedded in code sent to worklet
+- Code patching happens in main thread before sending to worklet
+- Total payload to worklet: ~120KB (61KB opl.js + 59KB embedded WASM)
+
+## Technical Challenges Solved
+
+1. **importScripts() not available in AudioWorklet**
+   - Solution: Fetch scripts in main thread, send as strings to worklet
+
+2. **fetch() not available in AudioWorklet**
+   - Solution: Load everything in main thread via postMessage
+
+3. **window object not available in AudioWorklet**
+   - Solution: Patch code to use `globalThis` instead
+
+4. **Emscripten WASM loader tries to read from filesystem**
+   - Solution: Fetch WASM binary, embed as Uint8Array in code
+   - Patch `getBinaryPromise()` to return embedded binary
+
+5. **60KB binary as postMessage payload**
+   - Solution: Convert to JavaScript array literal in code string
+   - Works because code is eval'd, not parsed as JSON
 
 ---
 
