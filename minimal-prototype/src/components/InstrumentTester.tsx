@@ -32,7 +32,7 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
   const [rawOPLParams, setRawOPLParams] = useState({
     channel: 0,
     fnum: 345,
-    block: 4,
+    block: 3,
   });
 
   const [useRawMode, setUseRawMode] = useState(false);

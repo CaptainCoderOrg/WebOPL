@@ -38,6 +38,11 @@ const FNUM_TABLE: ReadonlyArray<number> = [
  *
  * The FNUM_TABLE contains 31 entries covering notes 0-30.
  * For higher notes, we use block shifting (octaves) and repeat the 12-note chromatic pattern.
+ *
+ * Block numbering matches OPL3 hardware (0-7), where block changes every 12 semitones.
+ * This is offset by 1 from standard MIDI octave notation:
+ * - MIDI C-0 (12) → block 1
+ * - MIDI C-3 (48) → block 4
  */
 function calculateOPLParams(midiNote: number): OPLFrequencyParams {
   const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
@@ -46,19 +51,22 @@ function calculateOPLParams(midiNote: number): OPLFrequencyParams {
   let fnumIndex: number;
 
   if (midiNote < 12) {
-    // First octave (C-0 to B-0)
+    // MIDI notes 0-11 (C-1 to B-1 in standard notation)
     block = 0;
     fnumIndex = midiNote;
   } else {
-    // Higher octaves: use chromatic pattern with block shifting
-    // Each block represents one octave higher
-    block = Math.floor(midiNote / 12);
+    // Higher notes: block = octave number - 1
+    // This makes block align with 12-semitone boundaries
+    block = Math.floor(midiNote / 12) - 1;
     fnumIndex = (midiNote % 12) + 12; // Use entries 12-23 for chromatic scale
   }
 
   // Clamp block to valid range (0-7)
   if (block > 7) {
     block = 7;
+  }
+  if (block < 0) {
+    block = 0;
   }
 
   // Clamp fnumIndex to valid range
