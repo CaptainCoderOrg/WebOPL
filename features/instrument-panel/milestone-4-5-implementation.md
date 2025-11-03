@@ -1038,3 +1038,51 @@ Once both milestones pass:
 **Issues Found:** None
 
 **Milestones 4 & 5 are COMPLETE and VERIFIED.**
+
+---
+
+## Instrument Bank Upgrade (2025-01-03)
+
+**Original Implementation:** Basic placeholder patches with musically appropriate parameters
+
+**Upgraded To:** DMXOPL3 Enhanced Patches (v2.11d)
+
+### Upgrade Details
+
+**Source:** [DMXOPL3 by ConSiGno](https://github.com/sneakernets/DMXOPL)
+**License:** MIT License
+**Quality:** Professional-grade patches designed to mimic Roland Sound Canvas (SC-55/SC-88)
+
+### Implementation
+
+1. **Created Converter Tool:** `scripts/convertDMXOPL.js`
+   - Downloads GENMIDI.op2 binary from DMXOPL repository
+   - Parses binary format per [Kaitai Struct specification](https://formats.kaitai.io/genmidi_op2/)
+   - Converts to our JSON format
+   - Preserves all original instrument parameters
+
+2. **Converted Patches:** 128 authentic GM instruments
+   - File: `public/instruments/GENMIDI.json` (83KB)
+   - No modifications to instrument parameters
+   - All original names and characteristics preserved
+
+3. **License Documentation:** Created [LICENSES.md](/LICENSES.md)
+   - Full MIT license text
+   - Attribution to ConSiGno and DMXOPL project
+   - Documentation of conversion process
+   - Guidelines for future third-party additions
+
+### Benefits
+
+- ✅ **Authentic Sound:** Professional OPL3 patches used in classic Doom
+- ✅ **Better Quality:** Significantly improved over placeholders
+- ✅ **Proper Attribution:** Full license compliance and documentation
+- ✅ **Reproducible:** Converter script allows easy updates
+- ✅ **Open Source:** MIT license allows free use and modification
+
+### Verification
+
+- TypeScript compilation: ✅ Clean
+- File structure: ✅ Valid JSON, 128 instruments
+- License tracking: ✅ Documented in LICENSES.md
+- Converter script: ✅ ES module compatible, reproducible

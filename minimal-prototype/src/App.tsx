@@ -7,6 +7,7 @@ import { noteNameToMIDI } from './utils/noteConversion';
 import { TrackerGrid } from './components/TrackerGrid';
 import { PatchTest } from './components/PatchTest';
 import { InstrumentSelector } from './components/InstrumentSelector';
+import { InstrumentTester } from './components/InstrumentTester';
 import { validatePattern, formatValidationErrors } from './utils/patternValidation';
 import { defaultPatches } from './data/defaultPatches';
 import { loadGENMIDI } from './utils/genmidiParser';
@@ -364,6 +365,9 @@ function App() {
           <Link href="/test" className="nav-link">
             🧪 Patch Test
           </Link>
+          <Link href="/instrument-tester" className="nav-link">
+            🎸 Instrument Tester
+          </Link>
         </nav>
         <div className="status">
           {isReady ? '✅ Ready' : '⏳ Initializing...'}
@@ -513,6 +517,10 @@ function App() {
 
       <Route path="/test">
         <PatchTest synth={synth} />
+      </Route>
+
+      <Route path="/instrument-tester">
+        <InstrumentTester synth={synth} instrumentBank={instrumentBank} />
       </Route>
     </div>
   );
