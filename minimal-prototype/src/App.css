@@ -1,0 +1,112 @@
+.app {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #00ff00;
+  margin-bottom: 30px;
+}
+
+.status-section {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.status {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #3a0000;
+  border: 1px solid #ff0000;
+  border-radius: 4px;
+  color: #ff4444;
+}
+
+.info {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #0a2a0a;
+  border: 1px solid #00aa00;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.info div {
+  margin: 5px 0;
+}
+
+.button-section {
+  text-align: center;
+  margin: 30px 0;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #0066cc;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0088ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+}
+
+.btn-play {
+  background-color: #00aa00;
+  color: white;
+}
+
+.btn-play:hover {
+  background-color: #00cc00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 170, 0, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.instructions {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.instructions h3 {
+  margin-top: 0;
+  color: #ffaa00;
+}
+
+.instructions ol {
+  line-height: 1.8;
+}
+
+.instructions p {
+  margin-top: 15px;
+  color: #ffaa00;
+  font-style: italic;
+}
