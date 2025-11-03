@@ -199,6 +199,228 @@
   margin: 8px 0;
 }
 
+/* Debug Parameters Panel */
+.parameters-panel {
+  background-color: #0a0a0a;
+  border: 2px solid #ff6600;
+}
+
+.param-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.param-header h2 {
+  margin: 0;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 0;
+  border: 2px solid #444;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mode-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  background-color: #1a1a1a;
+  color: #aaa;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-button:not(:last-child) {
+  border-right: 1px solid #444;
+}
+
+.mode-button:hover:not(.active) {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.mode-button.active {
+  background-color: #ff6600;
+  color: #fff;
+}
+
+.param-description {
+  margin: 0 0 15px 0;
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.param-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.param-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.param-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffaa00;
+}
+
+.param-input {
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  border: 2px solid #444;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.param-input:hover {
+  border-color: #ff6600;
+}
+
+.param-input:focus {
+  outline: none;
+  border-color: #ff6600;
+  box-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+}
+
+.param-play-button-field {
+  justify-content: flex-end;
+}
+
+.param-play-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  background-color: #ff6600;
+  color: #fff;
+  border: 2px solid #ff6600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+}
+
+.param-play-button:hover:not(:disabled) {
+  background-color: #ff8833;
+  border-color: #ff8833;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.4);
+}
+
+.param-play-button:active:not(:disabled) {
+  transform: translateY(0);
+  background-color: #cc5500;
+}
+
+.param-play-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.param-info {
+  padding: 12px;
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.param-info strong {
+  color: #ff6600;
+  margin-right: 8px;
+}
+
+.param-hint {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #333;
+  font-size: 12px;
+  color: #888;
+  font-family: 'Courier New', monospace;
+}
+
+/* Operator Parameters Panel */
+.operator-params-panel {
+  background-color: #0a0a0a;
+  border: 2px solid #00aaff;
+}
+
+.operator-params-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.operator-section {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 15px;
+}
+
+.operator-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #00aaff;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+
+.operator-params {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.param-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background-color: #0a0a0a;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.param-row .param-label {
+  color: #aaa;
+  font-weight: 500;
+}
+
+.param-row .param-value {
+  color: #00ff88;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.channel-config {
+  grid-column: 1 / -1;
+}
+
+.channel-config .operator-params {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
 /* Instrument Details */
 .tester-info {
   background-color: #0a0a0a;

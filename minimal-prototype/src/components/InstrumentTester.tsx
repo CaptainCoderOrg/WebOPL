@@ -20,6 +20,42 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
   const [status, setStatus] = useState('Select an instrument and play notes');
   const [activeNote, setActiveNote] = useState<number | null>(null);
 
+  // Parameters for manual testing
+  const [debugParams, setDebugParams] = useState({
+    channel: 0,
+    midiNote: 48,
+    velocity: 100,
+  });
+
+  // Raw OPL3 parameters for direct register control
+  const [rawOPLParams, setRawOPLParams] = useState({
+    channel: 0,
+    fnum: 690,
+    block: 2,
+  });
+
+  const [useRawMode, setUseRawMode] = useState(false);
+
+  // Calculate OPL3 parameters (matches SimpleSynth's calculateFNum logic)
+  const calculateOPLParams = (midiNote: number) => {
+    const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
+
+    // Try each block from 0 to 7
+    for (let block = 0; block < 8; block++) {
+      const fnum = Math.round((freq * Math.pow(2, 20 - block)) / 49716);
+
+      // F-number must be in range 0-1023
+      if (fnum >= 0 && fnum < 1024) {
+        return { freq, fnum, block };
+      }
+    }
+
+    // Fallback
+    return { freq, fnum: 0, block: 0 };
+  };
+
+  const oplParams = calculateOPLParams(debugParams.midiNote);
+
   // Note names for C-3 through B-4 (MIDI 48-71)
   const noteNames = [
     'C-3', 'C#3', 'D-3', 'D#3', 'E-3', 'F-3', 'F#3', 'G-3', 'G#3', 'A-3', 'A#3', 'B-3',
@@ -43,6 +79,41 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
     }
   };
 
+  // Play note with raw OPL3 parameters
+  const playRawNote = (channel: number, fnum: number, block: number) => {
+    if (!synth) {
+      setStatus('❌ Synth not initialized');
+      return;
+    }
+
+    // Access the opl instance via window.synth (exposed in App.tsx)
+    const opl = (window as any).synth?.opl;
+    if (!opl) {
+      setStatus('❌ OPL instance not available');
+      return;
+    }
+
+    const patch = instrumentBank[selectedInstrument];
+
+    // Write frequency registers directly
+    opl.write(0xA0 + channel, fnum & 0xFF); // F-number low 8 bits
+
+    // Write key-on + block + F-number high 2 bits
+    const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
+    opl.write(0xB0 + channel, keyOnByte);
+
+    // Calculate frequency for display
+    const freq = (fnum * 49716) / Math.pow(2, 20 - block);
+
+    setStatus(`🎵 Raw Play: ch=${channel}, fnum=${fnum}, block=${block}, freq=${freq.toFixed(2)}Hz - ${patch?.name || 'Unknown'}`);
+
+    // Auto-release after 500ms
+    setTimeout(() => {
+      opl.write(0xB0 + channel, 0x00);
+      setStatus(`🔇 Note stopped - ${patch?.name || 'Unknown'}`);
+    }, 500);
+  };
+
   const playNote = (noteIndex: number) => {
     if (!synth) {
       setStatus('❌ Synth not initialized');
@@ -52,14 +123,31 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
     const midiNote = baseMidiNote + noteIndex;
     const noteName = noteNames[noteIndex];
     const patch = instrumentBank[selectedInstrument];
+    const channel = 0;
+    const velocity = 100;
 
-    synth.noteOn(0, midiNote);
+    // Update debug parameters to show what's being sent
+    setDebugParams({
+      channel,
+      midiNote,
+      velocity,
+    });
+
+    // Also update raw OPL params to show what gets calculated
+    const calculated = calculateOPLParams(midiNote);
+    setRawOPLParams({
+      channel,
+      fnum: calculated.fnum,
+      block: calculated.block,
+    });
+
+    synth.noteOn(channel, midiNote, velocity);
     setActiveNote(noteIndex);
     setStatus(`🎵 Playing ${noteName} (MIDI ${midiNote}) - ${patch?.name || 'Unknown'}`);
 
     // Auto-release after 500ms
     setTimeout(() => {
-      synth.noteOff(0, midiNote);
+      synth.noteOff(channel, midiNote);
       setActiveNote(null);
       setStatus(`🔇 Note stopped - ${patch?.name || 'Unknown'}`);
     }, 500);
@@ -104,6 +192,295 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
               <strong>Current:</strong> {instrumentBank[selectedInstrument]?.name || 'None'}
             </div>
           </div>
+        </section>
+
+        {/* Debug Parameters Panel */}
+        <section className="tester-section parameters-panel">
+          <div className="param-header">
+            <h2>Debug Parameters</h2>
+            <div className="mode-toggle">
+              <button
+                onClick={() => setUseRawMode(false)}
+                className={`mode-button ${!useRawMode ? 'active' : ''}`}
+              >
+                MIDI Mode
+              </button>
+              <button
+                onClick={() => setUseRawMode(true)}
+                className={`mode-button ${useRawMode ? 'active' : ''}`}
+              >
+                Raw OPL3 Mode
+              </button>
+            </div>
+          </div>
+
+          <p className="param-description">
+            {useRawMode
+              ? 'Direct OPL3 register control. Edit fnum and block values to test raw frequency generation.'
+              : 'MIDI parameters that get converted to OPL3 registers. Click any note button to populate these values.'}
+          </p>
+
+          {!useRawMode ? (
+            // MIDI Mode
+            <>
+              <div className="param-grid">
+                <div className="param-field">
+                  <label htmlFor="param-channel">Channel:</label>
+                  <input
+                    id="param-channel"
+                    type="number"
+                    min="0"
+                    max="8"
+                    value={debugParams.channel}
+                    onChange={(e) => setDebugParams({ ...debugParams, channel: parseInt(e.target.value, 10) })}
+                    className="param-input"
+                  />
+                </div>
+
+                <div className="param-field">
+                  <label htmlFor="param-midi">MIDI Note:</label>
+                  <input
+                    id="param-midi"
+                    type="number"
+                    min="0"
+                    max="127"
+                    value={debugParams.midiNote}
+                    onChange={(e) => setDebugParams({ ...debugParams, midiNote: parseInt(e.target.value, 10) })}
+                    className="param-input"
+                  />
+                </div>
+
+                <div className="param-field">
+                  <label htmlFor="param-velocity">Velocity:</label>
+                  <input
+                    id="param-velocity"
+                    type="number"
+                    min="0"
+                    max="127"
+                    value={debugParams.velocity}
+                    onChange={(e) => setDebugParams({ ...debugParams, velocity: parseInt(e.target.value, 10) })}
+                    className="param-input"
+                  />
+                </div>
+
+                <div className="param-field param-play-button-field">
+                  <button
+                    onClick={() => {
+                      if (!synth) {
+                        setStatus('❌ Synth not initialized');
+                        return;
+                      }
+                      const patch = instrumentBank[selectedInstrument];
+                      synth.noteOn(debugParams.channel, debugParams.midiNote, debugParams.velocity);
+                      setStatus(`🎵 MIDI Play: ch=${debugParams.channel}, midi=${debugParams.midiNote}, vel=${debugParams.velocity} - ${patch?.name || 'Unknown'}`);
+
+                      // Auto-release after 500ms
+                      setTimeout(() => {
+                        synth.noteOff(debugParams.channel, debugParams.midiNote);
+                        setStatus(`🔇 Note stopped - ${patch?.name || 'Unknown'}`);
+                      }, 500);
+                    }}
+                    disabled={!synth}
+                    className="param-play-button"
+                  >
+                    ▶ Play Note
+                  </button>
+                </div>
+              </div>
+
+              <div className="param-info">
+                <div><strong>Calculated OPL3 Parameters:</strong></div>
+                <div>Frequency: {oplParams.freq.toFixed(2)} Hz</div>
+                <div>F-Number: {oplParams.fnum}</div>
+                <div>Block: {oplParams.block}</div>
+              </div>
+            </>
+          ) : (
+            // Raw OPL3 Mode
+            <>
+              <div className="param-grid">
+                <div className="param-field">
+                  <label htmlFor="raw-channel">Channel:</label>
+                  <input
+                    id="raw-channel"
+                    type="number"
+                    min="0"
+                    max="8"
+                    value={rawOPLParams.channel}
+                    onChange={(e) => setRawOPLParams({ ...rawOPLParams, channel: parseInt(e.target.value, 10) })}
+                    className="param-input"
+                  />
+                </div>
+
+                <div className="param-field">
+                  <label htmlFor="raw-fnum">F-Number (fnum):</label>
+                  <input
+                    id="raw-fnum"
+                    type="number"
+                    min="0"
+                    max="1023"
+                    value={rawOPLParams.fnum}
+                    onChange={(e) => setRawOPLParams({ ...rawOPLParams, fnum: parseInt(e.target.value, 10) })}
+                    className="param-input"
+                  />
+                </div>
+
+                <div className="param-field">
+                  <label htmlFor="raw-block">Block (octave):</label>
+                  <input
+                    id="raw-block"
+                    type="number"
+                    min="0"
+                    max="7"
+                    value={rawOPLParams.block}
+                    onChange={(e) => setRawOPLParams({ ...rawOPLParams, block: parseInt(e.target.value, 10) })}
+                    className="param-input"
+                  />
+                </div>
+
+                <div className="param-field param-play-button-field">
+                  <button
+                    onClick={() => playRawNote(rawOPLParams.channel, rawOPLParams.fnum, rawOPLParams.block)}
+                    disabled={!synth}
+                    className="param-play-button"
+                  >
+                    ▶ Play Note
+                  </button>
+                </div>
+              </div>
+
+              <div className="param-info">
+                <div><strong>Calculated Frequency:</strong></div>
+                <div>{((rawOPLParams.fnum * 49716) / Math.pow(2, 20 - rawOPLParams.block)).toFixed(2)} Hz</div>
+                <div className="param-hint">
+                  Registers: 0xA0+ch={rawOPLParams.fnum & 0xFF}, 0xB0+ch={0x20 | ((rawOPLParams.block & 0x07) << 2) | ((rawOPLParams.fnum >> 8) & 0x03)}
+                </div>
+              </div>
+            </>
+          )}
+        </section>
+
+        {/* Loaded Operator Parameters */}
+        <section className="tester-section operator-params-panel">
+          <h2>Loaded Operator Parameters</h2>
+          <p className="param-description">
+            Current OPL3 operator values for the selected instrument. These control timbre, envelope, and modulation.
+          </p>
+
+          {instrumentBank[selectedInstrument] && (
+            <div className="operator-params-grid">
+              {/* Modulator Operator */}
+              <div className="operator-section">
+                <h3>Modulator (Op1)</h3>
+                <div className="operator-params">
+                  <div className="param-row">
+                    <span className="param-label">Attack Rate:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.attackRate}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Decay Rate:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.decayRate}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Sustain Level:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.sustainLevel}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Release Rate:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.releaseRate}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Freq Multiplier:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.frequencyMultiplier}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Waveform:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.waveform}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Output Level:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.outputLevel}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Key Scale Level:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].modulator.keyScaleLevel}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">AM/VIB/EG/KSR:</span>
+                    <span className="param-value">
+                      {instrumentBank[selectedInstrument].modulator.amplitudeModulation ? 'AM ' : ''}
+                      {instrumentBank[selectedInstrument].modulator.vibrato ? 'VIB ' : ''}
+                      {instrumentBank[selectedInstrument].modulator.envelopeType ? 'EG ' : ''}
+                      {instrumentBank[selectedInstrument].modulator.keyScaleRate ? 'KSR' : ''}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Carrier Operator */}
+              <div className="operator-section">
+                <h3>Carrier (Op2)</h3>
+                <div className="operator-params">
+                  <div className="param-row">
+                    <span className="param-label">Attack Rate:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.attackRate}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Decay Rate:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.decayRate}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Sustain Level:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.sustainLevel}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Release Rate:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.releaseRate}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Freq Multiplier:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.frequencyMultiplier}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Waveform:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.waveform}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Output Level:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.outputLevel}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Key Scale Level:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].carrier.keyScaleLevel}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">AM/VIB/EG/KSR:</span>
+                    <span className="param-value">
+                      {instrumentBank[selectedInstrument].carrier.amplitudeModulation ? 'AM ' : ''}
+                      {instrumentBank[selectedInstrument].carrier.vibrato ? 'VIB ' : ''}
+                      {instrumentBank[selectedInstrument].carrier.envelopeType ? 'EG ' : ''}
+                      {instrumentBank[selectedInstrument].carrier.keyScaleRate ? 'KSR' : ''}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Channel Configuration */}
+              <div className="operator-section channel-config">
+                <h3>Channel Config</h3>
+                <div className="operator-params">
+                  <div className="param-row">
+                    <span className="param-label">Feedback:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].feedback}</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-label">Connection:</span>
+                    <span className="param-value">{instrumentBank[selectedInstrument].connection}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Octave 3 (C-3 to B-3) */}
