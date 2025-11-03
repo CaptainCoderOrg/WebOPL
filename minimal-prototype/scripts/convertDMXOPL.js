@@ -16,6 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const DMXOPL_URL = 'https://raw.githubusercontent.com/sneakernets/DMXOPL/DMXOPL3/GENMIDI.op2';
+const CACHE_PATH = path.join(__dirname, 'GENMIDI.op2');
 const OUTPUT_PATH = path.join(__dirname, '../public/instruments/GENMIDI.json');
 
 /**
@@ -137,13 +138,19 @@ function parseGENMIDI(buffer) {
 }
 
 /**
- * Download and convert DMXOPL3 GENMIDI.op2 to JSON
+ * Download GENMIDI.op2 file (with caching)
  */
-async function downloadAndConvert() {
-  return new Promise((resolve, reject) => {
-    console.log('Downloading DMXOPL3 GENMIDI.op2...');
-    console.log(`URL: ${DMXOPL_URL}`);
+async function downloadFile() {
+  // Check if cached file exists
+  if (fs.existsSync(CACHE_PATH)) {
+    console.log('✓ Using cached GENMIDI.op2');
+    return fs.readFileSync(CACHE_PATH);
+  }
 
+  console.log('Downloading DMXOPL3 GENMIDI.op2...');
+  console.log(`URL: ${DMXOPL_URL}`);
+
+  return new Promise((resolve, reject) => {
     https.get(DMXOPL_URL, (response) => {
       if (response.statusCode !== 200) {
         reject(new Error(`HTTP ${response.statusCode}: ${response.statusMessage}`));
@@ -156,29 +163,39 @@ async function downloadAndConvert() {
         const buffer = Buffer.concat(chunks);
         console.log(`✓ Downloaded ${buffer.length} bytes`);
 
-        try {
-          const data = parseGENMIDI(buffer);
-          const json = JSON.stringify(data, null, 2);
+        // Cache the downloaded file
+        fs.writeFileSync(CACHE_PATH, buffer);
+        console.log(`✓ Cached to ${CACHE_PATH}`);
 
-          // Ensure output directory exists
-          const outputDir = path.dirname(OUTPUT_PATH);
-          if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir, { recursive: true });
-          }
-
-          fs.writeFileSync(OUTPUT_PATH, json, 'utf8');
-          console.log(`✓ Wrote ${OUTPUT_PATH}`);
-          console.log(`✓ Conversion complete! ${data.instruments.length} instruments converted.`);
-
-          resolve();
-        } catch (error) {
-          reject(error);
-        }
+        resolve(buffer);
       });
 
       response.on('error', reject);
     }).on('error', reject);
   });
+}
+
+/**
+ * Convert DMXOPL3 GENMIDI.op2 to JSON
+ */
+async function downloadAndConvert() {
+  try {
+    const buffer = await downloadFile();
+    const data = parseGENMIDI(buffer);
+    const json = JSON.stringify(data, null, 2);
+
+    // Ensure output directory exists
+    const outputDir = path.dirname(OUTPUT_PATH);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    fs.writeFileSync(OUTPUT_PATH, json, 'utf8');
+    console.log(`✓ Wrote ${OUTPUT_PATH}`);
+    console.log(`✓ Conversion complete! ${data.instruments.length} instruments converted.`);
+  } catch (error) {
+    throw error;
+  }
 }
 
 // Run converter
