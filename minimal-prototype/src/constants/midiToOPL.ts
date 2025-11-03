@@ -36,8 +36,8 @@ const FNUM_TABLE: ReadonlyArray<number> = [
 /**
  * Calculate OPL3 parameters for a single MIDI note using lookup table
  *
- * For MIDI notes 0-18: block = 0, fnum = FNUM_TABLE[midiNote]
- * For MIDI notes 19+: block = floor((midiNote - 19) / 12), fnum = FNUM_TABLE[(midiNote - 19) % 12 + 19]
+ * The FNUM_TABLE contains 31 entries covering notes 0-30.
+ * For higher notes, we use block shifting (octaves) and repeat the 12-note chromatic pattern.
  */
 function calculateOPLParams(midiNote: number): OPLFrequencyParams {
   const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
@@ -45,14 +45,20 @@ function calculateOPLParams(midiNote: number): OPLFrequencyParams {
   let block: number;
   let fnumIndex: number;
 
-  if (midiNote < 19) {
-    // First 19 notes use block 0 directly
+  if (midiNote < 12) {
+    // First octave (C-0 to B-0)
     block = 0;
     fnumIndex = midiNote;
   } else {
-    // Notes 19+ use block scaling
-    block = Math.floor((midiNote - 19) / 12);
-    fnumIndex = ((midiNote - 19) % 12) + 19;
+    // Higher octaves: use chromatic pattern with block shifting
+    // Each block represents one octave higher
+    block = Math.floor(midiNote / 12);
+    fnumIndex = (midiNote % 12) + 12; // Use entries 12-23 for chromatic scale
+  }
+
+  // Clamp block to valid range (0-7)
+  if (block > 7) {
+    block = 7;
   }
 
   // Clamp fnumIndex to valid range
