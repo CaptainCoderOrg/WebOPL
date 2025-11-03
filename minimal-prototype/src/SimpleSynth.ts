@@ -5,6 +5,8 @@
  * Supports 9 simultaneous voices (channels 0-8).
  */
 
+import type { OPLPatch, OPLOperator } from './types/OPLPatch';
+
 // Type definition for the global OPL class
 declare global {
   interface Window {
@@ -17,6 +19,7 @@ export class SimpleSynth {
   private audioContext: AudioContext | null = null;
   private scriptNode: ScriptProcessorNode | null = null;
   private activeChannels: Map<number, number> = new Map(); // channel → MIDI note
+  private channelPatches: Map<number, OPLPatch> = new Map(); // channel → loaded patch
   private isInitialized: boolean = false;
 
   /**
@@ -63,22 +66,18 @@ export class SimpleSynth {
       this.opl = await window.OPL.create(49716, 2); // 49716 Hz, stereo
       console.log('[SimpleSynth] ✅ OPL instance created');
 
-      // Step 4: Enable waveform selection
+      // Step 4: Enable waveform selection (required for custom waveforms)
       this.opl.write(0x01, 0x20);
 
-      // Step 5: Setup default instrument on all 9 channels
-      console.log('[SimpleSynth] Programming default instrument...');
-      for (let channel = 0; channel < 9; channel++) {
-        this.setupDefaultInstrument(channel);
-      }
-      console.log('[SimpleSynth] ✅ Instruments programmed');
+      console.log('[SimpleSynth] Initialized OPL3 synthesizer with 9 channels');
+      console.log('[SimpleSynth] Ready for patch loading');
 
-      // Step 6: Create AudioContext
+      // Step 5: Create AudioContext
       this.audioContext = new AudioContext({ sampleRate: 49716 });
       console.log('[SimpleSynth] ✅ AudioContext created');
       console.log('[SimpleSynth]    Sample rate:', this.audioContext.sampleRate);
 
-      // Step 7: Create ScriptProcessorNode
+      // Step 6: Create ScriptProcessorNode
       const bufferSize = 4096;
       this.scriptNode = this.audioContext.createScriptProcessor(bufferSize, 0, 2);
       this.scriptNode.onaudioprocess = this.processAudio.bind(this);
@@ -94,15 +93,16 @@ export class SimpleSynth {
   }
 
   /**
-   * Setup a basic instrument on a channel
-   * Uses hardcoded values for a simple sine-ish tone
+   * Get operator offsets for a channel
+   * OPL3 has an irregular operator layout that doesn't follow a linear pattern
+   *
+   * @param channelId Channel number (0-8)
+   * @returns [modulatorOffset, carrierOffset]
    */
-  private setupDefaultInstrument(channel: number): void {
-    if (!this.opl) return;
-
-    // Operator offsets for each channel (irregular pattern!)
-    const operatorOffsets = [
-      [0x00, 0x03], // Channel 0: modulator at 0x00, carrier at 0x03
+  private getOperatorOffsets(channelId: number): [number, number] {
+    // Operator offsets for each channel
+    const operatorMap: [number, number][] = [
+      [0x00, 0x03], // Channel 0
       [0x01, 0x04], // Channel 1
       [0x02, 0x05], // Channel 2
       [0x08, 0x0B], // Channel 3
@@ -113,24 +113,84 @@ export class SimpleSynth {
       [0x12, 0x15], // Channel 8
     ];
 
-    const [modOffset, carOffset] = operatorOffsets[channel];
+    return operatorMap[channelId];
+  }
 
-    // Modulator (operator 0)
-    this.opl.write(0x20 + modOffset, 0x01); // MULT=1
-    this.opl.write(0x40 + modOffset, 0x10); // Output level (0x10 = moderate)
-    this.opl.write(0x60 + modOffset, 0xF5); // Attack=15 (fast), Decay=5
-    this.opl.write(0x80 + modOffset, 0x77); // Sustain=7, Release=7
-    this.opl.write(0xE0 + modOffset, 0x00); // Waveform=sine
+  /**
+   * Write all registers for a single operator
+   *
+   * @param operatorOffset Operator offset (0x00-0x15)
+   * @param operator Operator configuration
+   */
+  private writeOperatorRegisters(operatorOffset: number, operator: OPLOperator): void {
+    // Register 0x20: AM/VIB/EG/KSR/MULT
+    const reg20 =
+      operator.frequencyMultiplier |
+      (operator.keyScaleRate ? 0x10 : 0) |
+      (operator.envelopeType ? 0x20 : 0) |
+      (operator.vibrato ? 0x40 : 0) |
+      (operator.amplitudeModulation ? 0x80 : 0);
+    this.opl.write(0x20 + operatorOffset, reg20);
 
-    // Carrier (operator 1)
-    this.opl.write(0x20 + carOffset, 0x01); // MULT=1
-    this.opl.write(0x40 + carOffset, 0x00); // Output level (0x00 = full volume)
-    this.opl.write(0x60 + carOffset, 0xF5); // Attack=15, Decay=5
-    this.opl.write(0x80 + carOffset, 0x77); // Sustain=7, Release=7
-    this.opl.write(0xE0 + carOffset, 0x00); // Waveform=sine
+    // Register 0x40: KSL/Output Level
+    const reg40 = operator.outputLevel | (operator.keyScaleLevel << 6);
+    this.opl.write(0x40 + operatorOffset, reg40);
 
-    // Channel settings (feedback + connection)
-    this.opl.write(0xC0 + channel, 0x01); // Feedback=0, Additive synthesis
+    // Register 0x60: Attack/Decay
+    const reg60 = operator.decayRate | (operator.attackRate << 4);
+    this.opl.write(0x60 + operatorOffset, reg60);
+
+    // Register 0x80: Sustain/Release
+    const reg80 = operator.releaseRate | (operator.sustainLevel << 4);
+    this.opl.write(0x80 + operatorOffset, reg80);
+
+    // Register 0xE0: Waveform
+    this.opl.write(0xE0 + operatorOffset, operator.waveform);
+  }
+
+  /**
+   * Load an instrument patch to a specific channel
+   * Reprograms all OPL3 registers for the channel's operators
+   *
+   * @param channelId Channel number (0-8)
+   * @param patch OPL patch to load
+   */
+  public loadPatch(channelId: number, patch: OPLPatch): void {
+    if (channelId < 0 || channelId >= 9) {
+      throw new Error(`Invalid channel: ${channelId}. Must be 0-8.`);
+    }
+
+    console.log(`[SimpleSynth] Loading patch "${patch.name}" to channel ${channelId}`);
+
+    // Store patch for this channel
+    this.channelPatches.set(channelId, patch);
+
+    // Get operator offsets for this channel
+    const [modOffset, carOffset] = this.getOperatorOffsets(channelId);
+
+    // Program modulator operator
+    this.writeOperatorRegisters(modOffset, patch.modulator);
+
+    // Program carrier operator
+    this.writeOperatorRegisters(carOffset, patch.carrier);
+
+    // Program channel configuration (feedback and connection)
+    const regC0 =
+      (patch.feedback << 1) |
+      (patch.connection === 'fm' ? 1 : 0);
+    this.opl.write(0xC0 + channelId, regC0);
+
+    console.log(`[SimpleSynth] Patch loaded successfully to channel ${channelId}`);
+  }
+
+  /**
+   * Get the currently loaded patch for a channel
+   *
+   * @param channelId Channel number (0-8)
+   * @returns Current patch or null if none set
+   */
+  public getChannelPatch(channelId: number): OPLPatch | null {
+    return this.channelPatches.get(channelId) || null;
   }
 
   /**

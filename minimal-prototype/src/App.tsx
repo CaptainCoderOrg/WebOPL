@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
+import { Route, Link } from 'wouter';
 import { SimpleSynth } from './SimpleSynth';
 import { SimplePlayer } from './SimplePlayer';
 import type { TrackerPattern, TrackerNote } from './SimplePlayer';
 import { noteNameToMIDI } from './utils/noteConversion';
 import { TrackerGrid } from './components/TrackerGrid';
+import { PatchTest } from './components/PatchTest';
 import { validatePattern, formatValidationErrors } from './utils/patternValidation';
 import './App.css';
 
 function App() {
-  const [, setSynth] = useState<SimpleSynth | null>(null);
+  const [synth, setSynth] = useState<SimpleSynth | null>(null);
   const [player, setPlayer] = useState<SimplePlayer | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -25,6 +27,12 @@ function App() {
 
   // Initialize audio engine
   useEffect(() => {
+    // Guard against double initialization in React Strict Mode
+    if (synth || isReady) {
+      console.log('[App] Already initialized, skipping');
+      return;
+    }
+
     const init = async () => {
       try {
         console.log('=== Initializing WebOrchestra ===');
@@ -33,6 +41,12 @@ function App() {
         const s = new SimpleSynth();
         await s.init();
         setSynth(s);
+
+        // Expose synth globally for console testing (development only)
+        if (import.meta.env.DEV) {
+          (window as any).synth = s;
+          console.log('[App] Synth exposed as window.synth for testing');
+        }
 
         // Initialize player
         const p = new SimplePlayer(s);
@@ -51,7 +65,7 @@ function App() {
     };
 
     init();
-  }, []);
+  }, [synth, isReady]);
 
   /**
    * Global keyboard shortcuts
@@ -258,12 +272,21 @@ function App() {
           <h1>🎵 WebOrchestra</h1>
           <div className="subtitle">Minimal Tracker Prototype</div>
         </div>
+        <nav className="nav-links">
+          <Link href="/" className="nav-link">
+            🎹 Tracker
+          </Link>
+          <Link href="/test" className="nav-link">
+            🧪 Patch Test
+          </Link>
+        </nav>
         <div className="status">
           {isReady ? '✅ Ready' : '⏳ Initializing...'}
         </div>
       </header>
 
-      <div className="controls">
+      <Route path="/">
+        <div className="controls">
         <div className="control-group">
           <button
             onClick={handlePlayStop}
@@ -374,6 +397,11 @@ function App() {
           </ul>
         </div>
       </div>
+      </Route>
+
+      <Route path="/test">
+        <PatchTest synth={synth} />
+      </Route>
     </div>
   );
 }
