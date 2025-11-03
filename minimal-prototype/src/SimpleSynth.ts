@@ -12,6 +12,7 @@
 import type { OPLPatch, OPLOperator } from './types/OPLPatch';
 import { defaultPatches } from './data/defaultPatches';
 import { getOPLParams } from './constants/midiToOPL';
+import { ChannelManager } from './utils/ChannelManager';
 
 // Feature flag: Toggle between AudioWorklet and ScriptProcessorNode
 const USE_AUDIO_WORKLET = true;
@@ -28,6 +29,7 @@ export class SimpleSynth {
   private audioContext: AudioContext | null = null;
   private activeChannels: Map<number, number> = new Map(); // channel → MIDI note
   private channelPatches: Map<number, OPLPatch> = new Map(); // channel → loaded patch
+  private channelManager: ChannelManager = new ChannelManager(); // Channel allocation for dual-voice
   private isInitialized: boolean = false;
 
   // AudioWorklet properties
@@ -552,5 +554,12 @@ export class SimpleSynth {
    */
   getActiveNoteCount(): number {
     return this.activeChannels.size;
+  }
+
+  /**
+   * Get channel manager stats (for debugging)
+   */
+  getChannelManagerStats() {
+    return this.channelManager.getStats();
   }
 }

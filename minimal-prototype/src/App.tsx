@@ -8,6 +8,7 @@ import { TrackerGrid } from './components/TrackerGrid';
 import { PatchTest } from './components/PatchTest';
 import { InstrumentSelector } from './components/InstrumentSelector';
 import { InstrumentTester } from './components/InstrumentTester';
+import { ChannelManagerTest } from './components/ChannelManagerTest';
 import { validatePattern, formatValidationErrors } from './utils/patternValidation';
 import { defaultPatches } from './data/defaultPatches';
 import { loadGENMIDI } from './utils/genmidiParser';
@@ -368,6 +369,9 @@ function App() {
           <Link href="/instrument-tester" className="nav-link">
             🎸 Instrument Tester
           </Link>
+          <Link href="/channel-test" className="nav-link">
+            🎛️ Channel Manager
+          </Link>
         </nav>
         <div className="status">
           {isReady ? '✅ Ready' : '⏳ Initializing...'}
@@ -521,6 +525,10 @@ function App() {
 
       <Route path="/instrument-tester">
         <InstrumentTester synth={synth} instrumentBank={instrumentBank} />
+      </Route>
+
+      <Route path="/channel-test">
+        <ChannelManagerTest />
       </Route>
     </div>
   );
