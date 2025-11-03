@@ -1,6 +1,6 @@
 # Dual-Voice Instrument Support Implementation Plan
 
-**Status:** In Progress - Phase 1 Complete ✅
+**Status:** In Progress - Phase 2 Complete ✅
 **Created:** 2025-01-03
 **Updated:** 2025-01-03
 **Complexity:** High
@@ -261,23 +261,22 @@ interface OPLPatch {
 ### Phase 2: Channel Manager Implementation (3-4 hours)
 
 #### 2.1 Create ChannelManager Class
-- [ ] Track channel allocation state (9 channels: 0-8)
-- [ ] `allocateChannel(noteId)`: Find free channel for single-voice
-- [ ] `allocateDualChannels(noteId)`: Find 2 consecutive free channels
-- [ ] `releaseChannel(channelId)`: Mark channel as free
-- [ ] `releaseDualChannels(channelId1, channelId2)`: Release both
-- [ ] Track which notes are using which channels
+- [x] Track channel allocation state (9 channels: 0-8)
+- [x] `allocateChannel(noteId)`: Find free channel for single-voice
+- [x] `allocateDualChannels(noteId)`: Find 2 free channels
+- [x] `releaseNote(noteId)`: Mark channels as free
+- [x] Track which notes are using which channels
 
 #### 2.2 Voice Stealing Algorithm
-- [ ] Implement LRU (Least Recently Used) voice stealing
-- [ ] When no channels available, steal oldest active note
-- [ ] For dual-voice: try single-voice fallback before stealing
-- [ ] Graceful degradation: dual-voice → single-voice → steal oldest
+- [x] Implement LRU (Least Recently Used) voice stealing
+- [x] When no channels available, steal oldest active note
+- [x] For dual-voice: try single-voice fallback before stealing
+- [x] Graceful degradation: dual-voice → single-voice → steal oldest
 
 #### 2.3 Channel Allocation Strategy
-- [ ] Reserve channels 0-1 for dual-voice pairs (if possible)
-- [ ] Use channels 2-8 for single-voice or additional dual-voice
-- [ ] Track allocation priority (recent notes preferred)
+- [x] Dynamic allocation (any available channels)
+- [x] Track allocation priority (recent notes preferred)
+- [x] Implemented LRU voice stealing
 
 **Success Criteria:**
 - ✅ ChannelManager correctly tracks 9 channels
