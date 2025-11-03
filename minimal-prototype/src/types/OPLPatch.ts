@@ -31,22 +31,40 @@ export interface OPLOperator {
 }
 
 /**
+ * Single voice in a dual-voice instrument
+ * Each voice consists of 2 operators (modulator + carrier)
+ */
+export interface OPLVoice {
+  modulator: OPLOperator;
+  carrier: OPLOperator;
+  feedback: number;              // 0-7: Modulator self-modulation depth
+  connection: 'fm' | 'additive'; // FM (mod→car) vs Additive (mod+car mixed)
+  baseNote?: number;             // Base note offset from GENMIDI (int16, -1200 to +1200 cents)
+}
+
+/**
  * Complete OPL3 instrument patch (2-operator FM synthesis)
+ * Supports both single-voice (backward compatible) and dual-voice modes
  */
 export interface OPLPatch {
   id: number;                   // Instrument ID (0-127 for GM compatibility)
   name: string;                 // Display name (e.g., "Acoustic Grand Piano")
   category?: string;            // Optional category (e.g., "Piano", "Bass", "Lead")
 
-  // Operators (FM synthesis: modulator modulates carrier)
+  // Backward compatibility: Single-voice format (always Voice 1)
   modulator: OPLOperator;       // Operator 1: Modulates the carrier
   carrier: OPLOperator;         // Operator 2: Produces final sound
-
-  // Channel configuration
   feedback: number;             // 0-7: Modulator self-modulation depth
   connection: 'fm' | 'additive'; // FM (mod→car) vs Additive (mod+car mixed)
 
-  // GENMIDI-specific: Base note offset for pitch correction
+  // Dual-voice format (new)
+  voice1?: OPLVoice;            // Voice 1 (detailed format)
+  voice2?: OPLVoice;            // Voice 2 (detailed format)
+
+  // Control flags
+  dualVoiceEnabled?: boolean;   // Use both voices if true (default: false for now)
+
+  // GENMIDI-specific
   noteOffset?: number;          // MIDI note offset (from GENMIDI 'note' field)
 
   // Metadata (for user customization tracking)

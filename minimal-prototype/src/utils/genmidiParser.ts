@@ -28,11 +28,25 @@ interface GENMIDIOperator {
 interface GENMIDIInstrument {
   id: number;
   name: string;
-  note?: number;      // Base note (unused for now)
-  mod: GENMIDIOperator;
-  car: GENMIDIOperator;
-  feedback: number;
-  additive: boolean;
+  note?: number;
+
+  // Voice 1
+  voice1: {
+    mod: GENMIDIOperator;
+    car: GENMIDIOperator;
+    feedback: number;
+    additive: boolean;
+    baseNote?: number;
+  };
+
+  // Voice 2
+  voice2: {
+    mod: GENMIDIOperator;
+    car: GENMIDIOperator;
+    feedback: number;
+    additive: boolean;
+    baseNote?: number;
+  };
 }
 
 interface GENMIDIData {
@@ -68,11 +82,34 @@ function convertInstrument(inst: GENMIDIInstrument): OPLPatch {
   return {
     id: inst.id,
     name: inst.name,
-    modulator: convertOperator(inst.mod),
-    carrier: convertOperator(inst.car),
-    feedback: inst.feedback,
-    connection: inst.additive ? 'additive' : 'fm',
-    noteOffset: inst.note, // GENMIDI 'note' field for pitch correction
+    noteOffset: inst.note,
+
+    // Voice 1
+    voice1: {
+      modulator: convertOperator(inst.voice1.mod),
+      carrier: convertOperator(inst.voice1.car),
+      feedback: inst.voice1.feedback,
+      connection: inst.voice1.additive ? 'additive' : 'fm',
+      baseNote: inst.voice1.baseNote
+    },
+
+    // Voice 2
+    voice2: {
+      modulator: convertOperator(inst.voice2.mod),
+      carrier: convertOperator(inst.voice2.car),
+      feedback: inst.voice2.feedback,
+      connection: inst.voice2.additive ? 'additive' : 'fm',
+      baseNote: inst.voice2.baseNote
+    },
+
+    // Backward compatibility: expose Voice 1 as top-level
+    modulator: convertOperator(inst.voice1.mod),
+    carrier: convertOperator(inst.voice1.car),
+    feedback: inst.voice1.feedback,
+    connection: inst.voice1.additive ? 'additive' : 'fm',
+
+    // Default: dual-voice disabled (will enable in Milestone 3)
+    dualVoiceEnabled: false
   };
 }
 

@@ -58,15 +58,19 @@ function parseInstrument(buffer, offset, index, names) {
   const finetune = buffer.readUInt8(offset + 2);
   const note = buffer.readUInt8(offset + 3);
 
-  // First operator instrument (offset + 4)
-  const mod = parseOperator(buffer, offset + 4);
-  const feedback = buffer.readUInt8(offset + 10);
-  const car = parseOperator(buffer, offset + 11);
+  // First voice instrument (offset + 4)
+  const mod1 = parseOperator(buffer, offset + 4);
+  const feedback1 = buffer.readUInt8(offset + 10);
+  const car1 = parseOperator(buffer, offset + 11);
   const unused1 = buffer.readUInt8(offset + 17);
   const baseNote1 = buffer.readInt16LE(offset + 18);
 
-  // Second operator instrument (offset + 20) - not used in our current implementation
-  // We only use the first instrument for simplicity
+  // Second voice instrument (offset + 20)
+  const mod2 = parseOperator(buffer, offset + 20);
+  const feedback2 = buffer.readUInt8(offset + 26);
+  const car2 = parseOperator(buffer, offset + 27);
+  const unused2 = buffer.readUInt8(offset + 33);
+  const baseNote2 = buffer.readInt16LE(offset + 34);
 
   const name = names[index] || `Unknown ${index}`;
 
@@ -74,10 +78,24 @@ function parseInstrument(buffer, offset, index, names) {
     id: index,
     name: name,
     note: note !== 0 ? note : undefined,
-    mod: mod,
-    car: car,
-    feedback: (feedback >> 1) & 0x07,  // Bits 1-3: Feedback
-    additive: (feedback & 0x01) === 0, // Bit 0: 0 = additive, 1 = FM
+
+    // Voice 1
+    voice1: {
+      mod: mod1,
+      car: car1,
+      feedback: (feedback1 >> 1) & 0x07,
+      additive: (feedback1 & 0x01) === 0,
+      baseNote: baseNote1
+    },
+
+    // Voice 2
+    voice2: {
+      mod: mod2,
+      car: car2,
+      feedback: (feedback2 >> 1) & 0x07,
+      additive: (feedback2 & 0x01) === 0,
+      baseNote: baseNote2
+    }
   };
 }
 
