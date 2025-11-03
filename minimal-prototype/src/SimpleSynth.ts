@@ -333,6 +333,15 @@ export class SimpleSynth {
   }
 
   /**
+   * Write to OPL register directly (public method for debugging/testing)
+   * @param register OPL register address
+   * @param value Value to write to register
+   */
+  public writeRegister(register: number, value: number): void {
+    this.writeOPL(register, value);
+  }
+
+  /**
    * Get operator offsets for a channel
    */
   private getOperatorOffsets(channelId: number): [number, number] {

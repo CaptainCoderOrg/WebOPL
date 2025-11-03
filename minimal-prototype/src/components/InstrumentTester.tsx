@@ -28,10 +28,11 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
   });
 
   // Raw OPL3 parameters for direct register control
+  // Initial values match MIDI 48 (C-3) from the lookup table
   const [rawOPLParams, setRawOPLParams] = useState({
     channel: 0,
-    fnum: 690,
-    block: 2,
+    fnum: 345,
+    block: 4,
   });
 
   const [useRawMode, setUseRawMode] = useState(false);
@@ -70,21 +71,15 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
       return;
     }
 
-    // Access the opl instance via window.synth (exposed in App.tsx)
-    const opl = (window as any).synth?.opl;
-    if (!opl) {
-      setStatus('❌ OPL instance not available');
-      return;
-    }
-
     const patch = instrumentBank[selectedInstrument];
 
-    // Write frequency registers directly
-    opl.write(0xA0 + channel, fnum & 0xFF); // F-number low 8 bits
+    // Write frequency registers directly using SimpleSynth's public method
+    // This works with both AudioWorklet and ScriptProcessorNode modes
+    synth.writeRegister(0xA0 + channel, fnum & 0xFF); // F-number low 8 bits
 
     // Write key-on + block + F-number high 2 bits
     const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
-    opl.write(0xB0 + channel, keyOnByte);
+    synth.writeRegister(0xB0 + channel, keyOnByte);
 
     // Calculate frequency for display
     const freq = (fnum * 49716) / Math.pow(2, 20 - block);
@@ -93,7 +88,7 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
 
     // Auto-release after 500ms
     setTimeout(() => {
-      opl.write(0xB0 + channel, 0x00);
+      synth.writeRegister(0xB0 + channel, 0x00);
       setStatus(`🔇 Note stopped - ${patch?.name || 'Unknown'}`);
     }, 500);
   };
