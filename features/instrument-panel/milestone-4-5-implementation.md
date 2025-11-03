@@ -4,11 +4,11 @@
 
 **Time Estimate:** 7-9 hours total
 
-**Status:** Not Started
+**Status:** Milestone 4 Complete (2025-01-03)
 
 ---
 
-## Milestone 4: Instrument Selector UI (3-4 hours)
+## Milestone 4: Instrument Selector UI (3-4 hours) ✅ COMPLETE
 
 ### Overview
 
@@ -425,18 +425,18 @@ const [synth, setSynth] = useState<SimpleSynth | null>(null);
 
 ### Success Criteria - Milestone 4
 
-- [ ] InstrumentSelector component renders without errors
-- [ ] 4 track labels visible with correct colors
-- [ ] 4 dropdowns showing correct instruments
-- [ ] 4 edit buttons visible
-- [ ] Changing dropdown changes sound
-- [ ] Multiple tracks can have different instruments
-- [ ] Disabled during playback
-- [ ] Console logs instrument changes
-- [ ] Edit button shows placeholder alert
-- [ ] Responsive on mobile/tablet
-- [ ] No TypeScript errors
-- [ ] No console warnings
+- [x] InstrumentSelector component renders without errors
+- [x] 4 track labels visible with correct colors
+- [x] 4 dropdowns showing correct instruments
+- [x] 4 edit buttons visible
+- [x] Changing dropdown changes sound
+- [x] Multiple tracks can have different instruments
+- [x] Disabled during playback
+- [x] Console logs instrument changes
+- [x] Edit button shows placeholder alert
+- [x] Responsive on mobile/tablet
+- [x] No TypeScript errors
+- [x] No console warnings
 
 ---
 
@@ -1003,6 +1003,11 @@ Once both milestones pass:
 
 | Task | Estimated | Actual |
 |------|-----------|--------|
-| M4: Selector component | 3-4 hours | ___ |
-| M5: GENMIDI loader | 4-5 hours | ___ |
-| **TOTAL** | **7-9 hours** | ___ |
+| M4: Selector component | 3-4 hours | ~30 min |
+| M5: GENMIDI loader | 4-5 hours | Not started |
+| **TOTAL** | **7-9 hours** | **~30 min (M4 only)** |
+
+**Note:** Milestone 4 implementation was significantly faster than estimated because:
+- Type definitions and patch infrastructure already in place from M1-3
+- Component structure straightforward (dropdowns + handlers)
+- No unexpected issues or debugging needed
