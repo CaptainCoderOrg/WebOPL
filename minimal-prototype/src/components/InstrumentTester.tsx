@@ -8,6 +8,7 @@
 import { useState } from 'react';
 import type { SimpleSynth } from '../SimpleSynth';
 import type { OPLPatch } from '../types/OPLPatch';
+import { getOPLParams } from '../constants/midiToOPL';
 import './InstrumentTester.css';
 
 interface InstrumentTesterProps {
@@ -20,11 +21,10 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
   const [status, setStatus] = useState('Select an instrument and play notes');
   const [activeNote, setActiveNote] = useState<number | null>(null);
 
-  // Parameters for manual testing
+  // Parameters for manual testing (MIDI mode)
   const [debugParams, setDebugParams] = useState({
     channel: 0,
     midiNote: 48,
-    velocity: 100,
   });
 
   // Raw OPL3 parameters for direct register control
@@ -37,25 +37,8 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
   const [useRawMode, setUseRawMode] = useState(false);
   const [showOperatorParams, setShowOperatorParams] = useState(false);
 
-  // Calculate OPL3 parameters (matches SimpleSynth's calculateFNum logic)
-  const calculateOPLParams = (midiNote: number) => {
-    const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
-
-    // Try each block from 0 to 7
-    for (let block = 0; block < 8; block++) {
-      const fnum = Math.round((freq * Math.pow(2, 20 - block)) / 49716);
-
-      // F-number must be in range 0-1023
-      if (fnum >= 0 && fnum < 1024) {
-        return { freq, fnum, block };
-      }
-    }
-
-    // Fallback
-    return { freq, fnum: 0, block: 0 };
-  };
-
-  const oplParams = calculateOPLParams(debugParams.midiNote);
+  // Get pre-calculated OPL3 parameters from lookup table
+  const oplParams = getOPLParams(debugParams.midiNote);
 
   // Note names for C-3 through B-4 (MIDI 48-71)
   const noteNames = [
@@ -125,24 +108,22 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
     const noteName = noteNames[noteIndex];
     const patch = instrumentBank[selectedInstrument];
     const channel = 0;
-    const velocity = 100;
 
     // Update debug parameters to show what's being sent
     setDebugParams({
       channel,
       midiNote,
-      velocity,
     });
 
     // Also update raw OPL params to show what gets calculated
-    const calculated = calculateOPLParams(midiNote);
+    const calculated = getOPLParams(midiNote);
     setRawOPLParams({
       channel,
       fnum: calculated.fnum,
       block: calculated.block,
     });
 
-    synth.noteOn(channel, midiNote, velocity);
+    synth.noteOn(channel, midiNote, 100);
     setActiveNote(noteIndex);
     setStatus(`🎵 Playing ${noteName} (MIDI ${midiNote}) - ${patch?.name || 'Unknown'}`);
 
@@ -251,19 +232,6 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
                   />
                 </div>
 
-                <div className="param-field">
-                  <label htmlFor="param-velocity">Velocity:</label>
-                  <input
-                    id="param-velocity"
-                    type="number"
-                    min="0"
-                    max="127"
-                    value={debugParams.velocity}
-                    onChange={(e) => setDebugParams({ ...debugParams, velocity: parseInt(e.target.value, 10) })}
-                    className="param-input"
-                  />
-                </div>
-
                 <div className="param-field param-play-button-field">
                   <button
                     onClick={() => {
@@ -272,8 +240,8 @@ export function InstrumentTester({ synth, instrumentBank }: InstrumentTesterProp
                         return;
                       }
                       const patch = instrumentBank[selectedInstrument];
-                      synth.noteOn(debugParams.channel, debugParams.midiNote, debugParams.velocity);
-                      setStatus(`🎵 MIDI Play: ch=${debugParams.channel}, midi=${debugParams.midiNote}, vel=${debugParams.velocity} - ${patch?.name || 'Unknown'}`);
+                      synth.noteOn(debugParams.channel, debugParams.midiNote, 100);
+                      setStatus(`🎵 MIDI Play: ch=${debugParams.channel}, midi=${debugParams.midiNote} - ${patch?.name || 'Unknown'}`);
 
                       // Auto-release after 500ms
                       setTimeout(() => {
