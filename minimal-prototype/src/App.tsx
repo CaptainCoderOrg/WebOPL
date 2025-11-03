@@ -6,7 +6,10 @@ import type { TrackerPattern, TrackerNote } from './SimplePlayer';
 import { noteNameToMIDI } from './utils/noteConversion';
 import { TrackerGrid } from './components/TrackerGrid';
 import { PatchTest } from './components/PatchTest';
+import { InstrumentSelector } from './components/InstrumentSelector';
 import { validatePattern, formatValidationErrors } from './utils/patternValidation';
+import { defaultPatches } from './data/defaultPatches';
+import type { OPLPatch } from './types/OPLPatch';
 import './App.css';
 
 function App() {
@@ -17,6 +20,12 @@ function App() {
   const [currentRow, setCurrentRow] = useState(0);
   const [bpm, setBpm] = useState(120);
   const [initError, setInitError] = useState<string | null>(null);
+
+  // Instrument selection: Track 0-3 → Patch index in instrumentBank
+  const [trackInstruments, setTrackInstruments] = useState<number[]>([0, 1, 2, 3]);
+
+  // Instrument bank (starts with defaults)
+  const [instrumentBank, setInstrumentBank] = useState<OPLPatch[]>(defaultPatches);
 
   // Pattern state: 16 rows × 4 tracks
   const [pattern, setPattern] = useState<string[][]>(() =>
@@ -241,6 +250,31 @@ function App() {
     console.log('Pattern cleared');
   };
 
+  /**
+   * Handle instrument selection change
+   */
+  const handleInstrumentChange = (trackIndex: number, patchId: number) => {
+    console.log(`Track ${trackIndex} → Patch ${patchId}: ${instrumentBank[patchId]?.name}`);
+
+    // Update track instruments array
+    const newInstruments = [...trackInstruments];
+    newInstruments[trackIndex] = patchId;
+    setTrackInstruments(newInstruments);
+
+    // Load patch to corresponding channel
+    if (synth && instrumentBank[patchId]) {
+      synth.loadPatch(trackIndex, instrumentBank[patchId]);
+    }
+  };
+
+  /**
+   * Handle edit button click (placeholder for M6)
+   */
+  const handleEditClick = (trackIndex: number) => {
+    console.log(`Edit clicked for track ${trackIndex}`);
+    alert(`Instrument editor coming in Milestone 6!\n\nTrack: ${trackIndex + 1}\nCurrent: ${instrumentBank[trackInstruments[trackIndex]]?.name}`);
+  };
+
   // Show loading/error screen if not ready
   if (!isReady) {
     return (
@@ -329,6 +363,15 @@ function App() {
           </button>
         </div>
       </div>
+
+      {/* Instrument Selector */}
+      <InstrumentSelector
+        trackInstruments={trackInstruments}
+        instrumentBank={instrumentBank}
+        onInstrumentChange={handleInstrumentChange}
+        onEditClick={handleEditClick}
+        disabled={isPlaying}
+      />
 
       <div className="tracker-section">
         <TrackerGrid
