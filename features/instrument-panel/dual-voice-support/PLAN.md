@@ -1,6 +1,6 @@
 # Dual-Voice Instrument Support Implementation Plan
 
-**Status:** In Progress - Phase 2 Complete ✅
+**Status:** In Progress - Phase 3 Complete ✅
 **Created:** 2025-01-03
 **Updated:** 2025-01-03
 **Complexity:** High
@@ -289,32 +289,45 @@ interface OPLPatch {
 ### Phase 3: SimpleSynth Refactor for Dual-Voice (3-4 hours)
 
 #### 3.1 Update SimpleSynth.loadPatch()
-- [ ] Accept `OPLPatch` with dual-voice structure
-- [ ] New method: `loadDualVoicePatch(channel1, channel2, patch)`
-- [ ] Load voice1 to channel1, voice2 to channel2
-- [ ] Configure both channels with correct parameters
+- [x] Accept `OPLPatch` with dual-voice structure
+- [x] New method: `programVoice(channel, voice, patch)` (instead of loadDualVoicePatch)
+- [x] Load voice1 to channel1, voice2 to channel2
+- [x] Configure both channels with correct parameters
 
 #### 3.2 Update SimpleSynth.noteOn()
-- [ ] Check if instrument has `dualVoiceEnabled: true`
-- [ ] If dual-voice:
-  - [ ] Call `channelManager.allocateDualChannels()`
-  - [ ] Load voice1 to channel1, voice2 to channel2
-  - [ ] Trigger both channels with same MIDI note
-- [ ] If single-voice or fallback:
-  - [ ] Call `channelManager.allocateChannel()`
-  - [ ] Load voice1 only (existing behavior)
-- [ ] Store channel allocation for noteOff
+- [x] Check if instrument has `dualVoiceEnabled: true`
+- [x] If dual-voice:
+  - [x] Call `channelManager.allocateDualChannels()`
+  - [x] Load voice1 to channel1, voice2 to channel2
+  - [x] Trigger both channels with same MIDI note
+- [x] If single-voice or fallback:
+  - [x] Call `channelManager.allocateChannel()`
+  - [x] Load voice1 only (existing behavior)
+- [x] Store channel allocation for noteOff
 
 #### 3.3 Update SimpleSynth.noteOff()
-- [ ] Look up channel(s) allocated for this note
-- [ ] If dual-voice: release both channels
-- [ ] If single-voice: release one channel
-- [ ] Update channel manager state
+- [x] Look up channel(s) allocated for this note
+- [x] If dual-voice: release both channels
+- [x] If single-voice: release one channel
+- [x] Update channel manager state
 
 #### 3.4 Add Internal Tracking
-- [ ] Map `noteId → [channelIds]` for active notes
-- [ ] Track which channels are dual-voice pairs
-- [ ] Track timestamps for LRU voice stealing
+- [x] Map `noteId → [channelIds]` for active notes
+- [x] Track which channels are dual-voice pairs
+- [x] Track timestamps for LRU voice stealing (via ChannelManager)
+
+#### 3.5 Add Dual-Voice Detection (Bonus)
+- [x] Implement operatorDistance() heuristic in genmidiParser
+- [x] Implement isDualVoiceWorthwhile() to auto-detect dual-voice instruments
+- [x] Enable dual-voice based on Voice 2 differences
+- [x] Log dual-voice enabled count on load
+
+#### 3.6 Create Interactive Test UI (Bonus)
+- [x] Create DualVoiceTest component at /dual-voice-test route
+- [x] Visual keyboard for playing notes
+- [x] Real-time channel allocation stats
+- [x] Test scenarios (polyphony, voice stealing)
+- [x] Event log with color-coded messages
 
 **Success Criteria:**
 - ✅ Can load and play dual-voice instruments (2 channels per note)

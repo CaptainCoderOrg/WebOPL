@@ -1,7 +1,7 @@
 # Milestone 3: Synth Integration (Dual-Voice Playback)
 
-**Status**: Ready to implement (after Milestone 2)
-**Effort**: 4-5 hours
+**Status**: ✅ Complete
+**Effort**: 4-5 hours (actual: ~3 hours)
 **Risk**: High (core audio logic changes)
 **Dependencies**: Milestone 1 + Milestone 2 complete
 
@@ -506,16 +506,17 @@ dualVoiceEnabled: shouldEnableDualVoice
 
 ## Milestone 3 Success Checklist
 
-- [ ] SimpleSynth.noteOn() refactored to use ChannelManager
-- [ ] Dual-voice instruments play on 2 channels
-- [ ] Single-voice instruments still work (backward compatible)
-- [ ] Voice stealing works seamlessly
-- [ ] All instruments sound correct (richer, no "crunchy" sounds)
-- [ ] InstrumentTester works with dual-voice
-- [ ] Sequencer works with dual-voice
-- [ ] No audio glitches or crashes
-- [ ] Logging shows channel allocations correctly
-- [ ] Edge cases handled (rapid notes, polyphony > 9 channels)
+- [x] SimpleSynth.noteOn() refactored to use ChannelManager
+- [x] Dual-voice instruments play on 2 channels
+- [x] Single-voice instruments still work (backward compatible)
+- [x] Voice stealing works seamlessly
+- [x] All instruments sound correct (richer, no "crunchy" sounds)
+- [x] InstrumentTester works with dual-voice
+- [x] Sequencer works with dual-voice
+- [x] No audio glitches or crashes
+- [x] Logging shows channel allocations correctly
+- [x] Edge cases handled (rapid notes, polyphony > 9 channels)
+- [x] **Bonus**: Interactive test UI created at `/dual-voice-test` route
 
 ---
 
@@ -541,15 +542,36 @@ npm run build
 ```
 feat(milestone-3): Implement dual-voice playback in SimpleSynth
 
-- Refactor noteOn/noteOff to use ChannelManager
-- Add programVoice() for dual-voice programming
-- Enable dual-voice for select instruments (heuristic-based)
-- Add diagnostic logging for channel allocations
-- Voice stealing works seamlessly during playback
-- Backward compatible with single-voice instruments
+SimpleSynth Changes:
+- Refactor noteOn() to use ChannelManager for dynamic allocation
+- Add programVoice() method for dual-voice programming
+- Update noteOff() to release channels via ChannelManager
+- Update activeNotes tracking structure to support dual-voice
+- Dual-voice path: allocates 2 channels, programs both voices
+- Single-voice path: allocates 1 channel (backward compatible)
+- Degradation mode: falls back to single channel when needed
 
-Fixes: #audio-quality-issue (crunchy sounds on non-G notes)
-Refs: #dual-voice-support Phase 3
+genmidiParser Changes:
+- Add operatorDistance() heuristic to measure voice differences
+- Add isDualVoiceWorthwhile() to auto-detect dual-voice instruments
+- Enable dual-voice for instruments where Voice 2 differs significantly
+- Log dual-voice enabled count on load
+
+Test UI:
+- Create interactive test route at /dual-voice-test
+- Visual keyboard for playing notes
+- Real-time channel allocation stats
+- Polyphony and voice stealing test scenarios
+- Event log with color-coded messages
+
+All success criteria met:
+- Dual-voice instruments use 2 channels per note
+- Single-voice instruments still work (backward compatible)
+- Voice stealing works seamlessly (LRU algorithm)
+- No audio glitches or crashes
+- Logging shows channel allocations correctly
+
+Refs: #dual-voice-support Milestone 3
 ```
 
 ---
