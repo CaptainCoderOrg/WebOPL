@@ -467,10 +467,23 @@ export class SimpleSynth {
       return;
     }
 
-    // Use pre-calculated lookup table for accurate OPL3 parameters
-    const { freq, fnum, block } = getOPLParams(midiNote);
+    // Apply GENMIDI note offset if present (for pitch correction)
+    let adjustedNote = midiNote;
+    const patch = this.channelPatches.get(channel);
+    if (patch && patch.noteOffset !== undefined) {
+      adjustedNote = midiNote - patch.noteOffset;
+      // Clamp to valid MIDI range
+      adjustedNote = Math.max(0, Math.min(127, adjustedNote));
+    }
 
-    console.log(`[SimpleSynth] Note ON: ch=${channel}, midi=${midiNote}, freq=${freq.toFixed(2)}Hz, fnum=${fnum}, block=${block}`);
+    // Use pre-calculated lookup table for accurate OPL3 parameters
+    const { freq, fnum, block } = getOPLParams(adjustedNote);
+
+    if (patch && patch.noteOffset !== undefined) {
+      console.log(`[SimpleSynth] Note ON: ch=${channel}, midi=${midiNote} (adjusted=${adjustedNote}, offset=${patch.noteOffset}), freq=${freq.toFixed(2)}Hz, fnum=${fnum}, block=${block}`);
+    } else {
+      console.log(`[SimpleSynth] Note ON: ch=${channel}, midi=${midiNote}, freq=${freq.toFixed(2)}Hz, fnum=${fnum}, block=${block}`);
+    }
 
     this.writeOPL(0xA0 + channel, fnum & 0xFF);
     const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);

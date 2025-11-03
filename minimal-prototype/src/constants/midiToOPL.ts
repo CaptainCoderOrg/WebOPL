@@ -42,7 +42,7 @@ const FNUM_TABLE: ReadonlyArray<number> = [
  * Block numbering matches OPL3 hardware (0-7), where block changes every 12 semitones.
  * This is offset by 1 from standard MIDI octave notation:
  * - MIDI C-0 (12) → block 1
- * - MIDI C-3 (48) → block 4
+ * - MIDI C-3 (48) → block 3
  */
 function calculateOPLParams(midiNote: number): OPLFrequencyParams {
   const freq = 440 * Math.pow(2, (midiNote - 69) / 12);

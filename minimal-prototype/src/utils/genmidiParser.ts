@@ -72,6 +72,7 @@ function convertInstrument(inst: GENMIDIInstrument): OPLPatch {
     carrier: convertOperator(inst.car),
     feedback: inst.feedback,
     connection: inst.additive ? 'additive' : 'fm',
+    noteOffset: inst.note, // GENMIDI 'note' field for pitch correction
   };
 }
 

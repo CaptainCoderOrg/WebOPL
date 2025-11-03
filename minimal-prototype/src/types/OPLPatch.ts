@@ -46,6 +46,9 @@ export interface OPLPatch {
   feedback: number;             // 0-7: Modulator self-modulation depth
   connection: 'fm' | 'additive'; // FM (mod→car) vs Additive (mod+car mixed)
 
+  // GENMIDI-specific: Base note offset for pitch correction
+  noteOffset?: number;          // MIDI note offset (from GENMIDI 'note' field)
+
   // Metadata (for user customization tracking)
   isCustom?: boolean;           // True if user-edited
   basePresetId?: number;        // If custom, which preset it was based on
