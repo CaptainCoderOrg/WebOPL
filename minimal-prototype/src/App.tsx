@@ -4,6 +4,7 @@ import { SimplePlayer } from './SimplePlayer';
 import type { TrackerPattern, TrackerNote } from './SimplePlayer';
 import { noteNameToMIDI } from './utils/noteConversion';
 import { TrackerGrid } from './components/TrackerGrid';
+import { validatePattern, formatValidationErrors } from './utils/patternValidation';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentRow, setCurrentRow] = useState(0);
   const [bpm, setBpm] = useState(120);
+  const [initError, setInitError] = useState<string | null>(null);
 
   // Pattern state: 16 rows × 4 tracks
   const [pattern, setPattern] = useState<string[][]>(() =>
@@ -43,12 +45,49 @@ function App() {
         console.log('=== Ready! ===');
       } catch (error) {
         console.error('Initialization failed:', error);
-        alert('Failed to initialize audio engine. Check console for details.');
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        setInitError(errorMsg);
       }
     };
 
     init();
   }, []);
+
+  /**
+   * Global keyboard shortcuts
+   */
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Only handle if not focused on an input
+      const target = e.target as HTMLElement;
+      const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+
+      if (isInput) {
+        // Don't interfere with note entry
+        return;
+      }
+
+      // Space bar: Toggle play/stop
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (isReady && player) {
+          handlePlayStop();
+        }
+      }
+
+      // Escape: Stop playback
+      if (e.code === 'Escape' && isPlaying) {
+        e.preventDefault();
+        handlePlayStop();
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleGlobalKeyDown);
+    };
+  }, [isReady, isPlaying, player]);
 
   /**
    * Play/Stop toggle
@@ -62,8 +101,34 @@ function App() {
       setIsPlaying(false);
       setCurrentRow(0);
     } else {
+      // Check if pattern is completely empty
+      const hasNotes = pattern.some(row =>
+        row.some(cell => cell !== '---' && cell.trim() !== '')
+      );
+
+      if (!hasNotes) {
+        console.warn('Pattern is empty');
+        alert('Pattern is empty!\n\nLoad an example or enter some notes.');
+        return;
+      }
+
+      // Validate pattern before playing
+      const validation = validatePattern(pattern);
+
+      if (!validation.valid) {
+        console.error('Pattern validation failed:', validation.errors);
+
+        // Show error to user
+        const errorMessage = formatValidationErrors(validation.errors);
+        alert(
+          'Cannot play: Pattern contains invalid notes\n\n' + errorMessage
+        );
+        return;
+      }
+
       // Play
       console.log('--- Converting pattern to tracker format ---');
+      console.log('✅ Pattern validation passed');
 
       // Convert string pattern to TrackerPattern
       const trackerPattern: TrackerPattern = {
@@ -83,6 +148,28 @@ function App() {
       player.loadPattern(trackerPattern);
       player.play();
       setIsPlaying(true);
+    }
+  };
+
+  /**
+   * Handle BPM change with validation
+   */
+  const handleBPMChange = (value: string) => {
+    const num = parseInt(value, 10);
+
+    // Allow empty or invalid while typing
+    if (isNaN(num)) {
+      setBpm(120); // Reset to default
+      return;
+    }
+
+    // Clamp to valid range
+    if (num < 60) {
+      setBpm(60);
+    } else if (num > 240) {
+      setBpm(240);
+    } else {
+      setBpm(num);
     }
   };
 
@@ -134,6 +221,36 @@ function App() {
     console.log('Pattern cleared');
   };
 
+  // Show loading/error screen if not ready
+  if (!isReady) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-content">
+          <h1>🎵 WebOrchestra</h1>
+
+          {initError ? (
+            <>
+              <div className="error-icon">❌</div>
+              <h2>Initialization Failed</h2>
+              <p className="error-message">{initError}</p>
+              <button onClick={() => window.location.reload()}>
+                Retry
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="loading-spinner"></div>
+              <p>Initializing audio engine...</p>
+              <p className="loading-subtext">
+                Loading OPL3 synthesizer and Web Audio API
+              </p>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       <header className="header">
@@ -161,12 +278,7 @@ function App() {
             <input
               type="number"
               value={bpm}
-              onChange={(e) => setBpm(parseInt(e.target.value) || 120)}
-              onBlur={() => {
-                // Clamp to valid range
-                if (bpm < 60) setBpm(60);
-                if (bpm > 240) setBpm(240);
-              }}
+              onChange={(e) => handleBPMChange(e.target.value)}
               min={60}
               max={240}
               disabled={isPlaying}
@@ -200,10 +312,10 @@ function App() {
       </div>
 
       <div className="help-section">
-        <h3>How to use:</h3>
+        <h3>📖 Quick Guide</h3>
         <div className="help-columns">
           <div>
-            <h4>Note Entry:</h4>
+            <h4>🎹 Note Entry:</h4>
             <ul>
               <li>
                 <strong>Format:</strong> C-4, D-4, E-4, F-4, G-4, A-4, B-4
@@ -217,10 +329,13 @@ function App() {
               <li>
                 <strong>Middle C:</strong> C-4 = MIDI 60
               </li>
+              <li>
+                <strong>Octaves:</strong> C-0 to G-9
+              </li>
             </ul>
           </div>
           <div>
-            <h4>Navigation:</h4>
+            <h4>⌨️ Navigation:</h4>
             <ul>
               <li>
                 <strong>Arrow keys:</strong> Move between cells
@@ -235,10 +350,28 @@ function App() {
                 <strong>Delete:</strong> Clear cell
               </li>
               <li>
-                <strong>Click cell:</strong> Select for editing
+                <strong>Space:</strong> Play/Stop (when not editing)
+              </li>
+              <li>
+                <strong>Escape:</strong> Stop playback
               </li>
             </ul>
           </div>
+        </div>
+
+        <div className="help-tips">
+          <h4>💡 Tips:</h4>
+          <ul>
+            <li>
+              Invalid notes appear in <span style={{ color: '#ff4444' }}>red</span>
+            </li>
+            <li>
+              Current playback row is <span style={{ color: '#00ff00' }}>highlighted</span>
+            </li>
+            <li>Pattern loops automatically</li>
+            <li>BPM range: 60-240</li>
+            <li>16 rows = 1 bar at 16th note resolution</li>
+          </ul>
         </div>
       </div>
     </div>

@@ -4,8 +4,9 @@
  * Displays a grid of note inputs with keyboard navigation.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import './TrackerGrid.css';
+import { validateNote } from '../utils/patternValidation';
 
 interface TrackerGridProps {
   rows: number;               // Number of rows (e.g., 16)
@@ -22,6 +23,35 @@ export function TrackerGrid({
   onUpdate,
   currentRow,
 }: TrackerGridProps) {
+  /**
+   * Check if a note is invalid
+   */
+  const isInvalidNote = (note: string): boolean => {
+    // Empty or rest is valid
+    if (!note || note === '---' || note.trim() === '') {
+      return false;
+    }
+
+    return !validateNote(note);
+  };
+
+  /**
+   * Auto-focus first cell on mount
+   */
+  useEffect(() => {
+    const firstInput = document.querySelector(
+      'input[data-row="0"][data-track="0"]'
+    ) as HTMLInputElement;
+
+    if (firstInput) {
+      // Delay to ensure render complete
+      setTimeout(() => {
+        firstInput.focus();
+        firstInput.select();
+      }, 100);
+    }
+  }, []); // Empty deps = run once on mount
+
   /**
    * Handle cell value change
    */
@@ -141,10 +171,15 @@ export function TrackerGrid({
                     onKeyDown={(e) => handleKeyDown(e, row, track)}
                     onFocus={(e) => e.target.select()}
                     maxLength={4}
-                    className="note-input"
+                    className={`note-input ${isInvalidNote(pattern[row][track]) ? 'invalid' : ''}`}
                     placeholder="---"
                     data-row={row}
                     data-track={track}
+                    title={
+                      isInvalidNote(pattern[row][track])
+                        ? `Invalid note: ${pattern[row][track]}`
+                        : ''
+                    }
                   />
                 </td>
               ))}
