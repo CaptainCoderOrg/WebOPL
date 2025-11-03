@@ -76,9 +76,49 @@ function convertOperator(op: GENMIDIOperator): OPLOperator {
 }
 
 /**
+ * Calculate "distance" between two operators (sum of absolute differences)
+ */
+function operatorDistance(op1: GENMIDIOperator, op2: GENMIDIOperator): number {
+  let distance = 0;
+  distance += Math.abs(op1.attack - op2.attack);
+  distance += Math.abs(op1.decay - op2.decay);
+  distance += Math.abs(op1.sustain - op2.sustain);
+  distance += Math.abs(op1.release - op2.release);
+  distance += Math.abs(op1.multi - op2.multi);
+  distance += Math.abs(op1.out - op2.out);
+  distance += Math.abs(op1.wave - op2.wave);
+  distance += Math.abs(op1.ksl - op2.ksl);
+  return distance;
+}
+
+/**
+ * Heuristic: Check if Voice 2 is significantly different from Voice 1
+ * If Voice 2 is identical or nearly identical to Voice 1, dual-voice is wasteful
+ */
+function isDualVoiceWorthwhile(inst: GENMIDIInstrument): boolean {
+  const v1 = inst.voice1;
+  const v2 = inst.voice2;
+
+  // Check if feedback or connection differ
+  if (v1.feedback !== v2.feedback) return true;
+  if (v1.additive !== v2.additive) return true;
+
+  // Check if operator parameters differ significantly
+  const modDiff = operatorDistance(v1.mod, v2.mod);
+  const carDiff = operatorDistance(v1.car, v2.car);
+
+  // If combined difference > threshold, enable dual-voice
+  const threshold = 10; // Arbitrary threshold (tune later based on testing)
+  return (modDiff + carDiff) > threshold;
+}
+
+/**
  * Convert GENMIDI instrument to OPLPatch format
  */
 function convertInstrument(inst: GENMIDIInstrument): OPLPatch {
+  // Determine if dual-voice should be enabled
+  const shouldEnableDualVoice = isDualVoiceWorthwhile(inst);
+
   return {
     id: inst.id,
     name: inst.name,
@@ -108,8 +148,8 @@ function convertInstrument(inst: GENMIDIInstrument): OPLPatch {
     feedback: inst.voice1.feedback,
     connection: inst.voice1.additive ? 'additive' : 'fm',
 
-    // Default: dual-voice disabled (will enable in Milestone 3)
-    dualVoiceEnabled: false
+    // Enable dual-voice if Voice 2 is different enough
+    dualVoiceEnabled: shouldEnableDualVoice
   };
 }
 
@@ -139,6 +179,10 @@ export async function loadGENMIDI(): Promise<InstrumentBank> {
   if (patches.length !== 128) {
     console.warn(`[GENMIDI] Expected 128 instruments, got ${patches.length}`);
   }
+
+  // Count dual-voice enabled instruments
+  const dualVoiceCount = patches.filter(p => p.dualVoiceEnabled).length;
+  console.log(`[GENMIDI] Dual-voice enabled for ${dualVoiceCount}/${patches.length} instruments`);
 
   return {
     name: json.name,
