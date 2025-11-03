@@ -5,7 +5,6 @@
  * Includes edit buttons for future instrument editor integration.
  */
 
-import React from 'react';
 import './InstrumentSelector.css';
 import type { OPLPatch } from '../types/OPLPatch';
 
@@ -34,7 +33,6 @@ export function InstrumentSelector({
 
       <div className="selector-tracks">
         {trackInstruments.map((patchId, trackIndex) => {
-          const patch = instrumentBank[patchId];
           const trackColor = trackColors[trackIndex];
 
           return (

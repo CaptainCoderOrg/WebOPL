@@ -326,6 +326,44 @@ button:disabled {
   font-size: 16px;
 }
 
+/* Instrument loading states */
+.loading-instruments {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  color: #ffaa00;
+  font-size: 14px;
+}
+
+.loading-spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-top-color: #ffaa00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.instrument-warning {
+  padding: 10px 15px;
+  background-color: #332200;
+  border: 1px solid #ffaa00;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  color: #ffaa00;
+  font-size: 14px;
+}
+
+.instrument-warning small {
+  color: #cc8800;
+  font-size: 12px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .controls {

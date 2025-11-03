@@ -1,0 +1,1030 @@
+{
+  "name": "GENMIDI",
+  "version": "1.0",
+  "instruments": [
+    {
+      "id": 0,
+      "name": "Acoustic Grand Piano",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 14, "decay": 4, "sustain": 6, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 4, "sustain": 6, "release": 6, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 1,
+      "name": "Bright Acoustic Piano",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 16, "attack": 15, "decay": 3, "sustain": 7, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 3, "sustain": 7, "release": 5, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 2,
+      "name": "Electric Grand Piano",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 13, "decay": 5, "sustain": 5, "release": 7, "wave": 1 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 5, "sustain": 5, "release": 7, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 3,
+      "name": "Honky-tonk Piano",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 22, "attack": 15, "decay": 6, "sustain": 8, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 15, "decay": 6, "sustain": 8, "release": 8, "wave": 0 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 4,
+      "name": "Electric Piano 1",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 14, "attack": 15, "decay": 4, "sustain": 4, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 4, "sustain": 4, "release": 5, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 5,
+      "name": "Electric Piano 2",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 12, "attack": 14, "decay": 5, "sustain": 5, "release": 6, "wave": 1 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 14, "decay": 5, "sustain": 5, "release": 6, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 6,
+      "name": "Harpsichord",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 4, "ksl": 1, "out": 20, "attack": 15, "decay": 10, "sustain": 0, "release": 12, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 1, "out": 0, "attack": 15, "decay": 10, "sustain": 0, "release": 12, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 7,
+      "name": "Clavinet",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 3, "ksl": 1, "out": 24, "attack": 15, "decay": 12, "sustain": 0, "release": 15, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 15, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 8,
+      "name": "Celesta",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 8, "ksl": 0, "out": 32, "attack": 15, "decay": 8, "sustain": 4, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 8, "sustain": 4, "release": 8, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 9,
+      "name": "Glockenspiel",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 8, "ksl": 2, "out": 40, "attack": 15, "decay": 12, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 2, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 10,
+      "name": "Music Box",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 12, "ksl": 1, "out": 36, "attack": 14, "decay": 6, "sustain": 6, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 1, "out": 0, "attack": 14, "decay": 6, "sustain": 6, "release": 8, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 11,
+      "name": "Vibraphone",
+      "mod": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 28, "attack": 13, "decay": 8, "sustain": 5, "release": 10, "wave": 0 },
+      "car": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 8, "sustain": 5, "release": 10, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 12,
+      "name": "Marimba",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 1, "out": 26, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 13,
+      "name": "Xylophone",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 8, "ksl": 2, "out": 42, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 1 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 2, "out": 0, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 14,
+      "name": "Tubular Bells",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 6, "ksl": 0, "out": 30, "attack": 12, "decay": 6, "sustain": 7, "release": 9, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 6, "sustain": 7, "release": 9, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 15,
+      "name": "Dulcimer",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 3, "ksl": 0, "out": 20, "attack": 14, "decay": 7, "sustain": 6, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 7, "sustain": 6, "release": 8, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 16,
+      "name": "Drawbar Organ",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 15, "decay": 0, "sustain": 0, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 0, "sustain": 0, "release": 4, "wave": 0 },
+      "feedback": 0,
+      "additive": true
+    },
+    {
+      "id": 17,
+      "name": "Percussive Organ",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 10, "attack": 15, "decay": 6, "sustain": 5, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 15, "decay": 6, "sustain": 5, "release": 5, "wave": 0 },
+      "feedback": 3,
+      "additive": true
+    },
+    {
+      "id": 18,
+      "name": "Rock Organ",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 0, "attack": 15, "decay": 0, "sustain": 0, "release": 3, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 0, "sustain": 0, "release": 3, "wave": 2 },
+      "feedback": 4,
+      "additive": true
+    },
+    {
+      "id": 19,
+      "name": "Church Organ",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 8, "ksl": 0, "out": 0, "attack": 10, "decay": 0, "sustain": 0, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 10, "decay": 0, "sustain": 0, "release": 6, "wave": 0 },
+      "feedback": 0,
+      "additive": true
+    },
+    {
+      "id": 20,
+      "name": "Reed Organ",
+      "mod": { "trem": true, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 16, "attack": 11, "decay": 3, "sustain": 4, "release": 5, "wave": 0 },
+      "car": { "trem": true, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 3, "sustain": 4, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 21,
+      "name": "Accordion",
+      "mod": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 18, "attack": 12, "decay": 2, "sustain": 3, "release": 4, "wave": 0 },
+      "car": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 2, "sustain": 3, "release": 4, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 22,
+      "name": "Harmonica",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 14, "attack": 13, "decay": 4, "sustain": 5, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 4, "sustain": 5, "release": 5, "wave": 1 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 23,
+      "name": "Tango Accordion",
+      "mod": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 20, "attack": 12, "decay": 3, "sustain": 4, "release": 4, "wave": 0 },
+      "car": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 3, "sustain": 4, "release": 4, "wave": 0 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 24,
+      "name": "Acoustic Guitar (nylon)",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 22, "attack": 15, "decay": 10, "sustain": 0, "release": 12, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 10, "sustain": 0, "release": 12, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 25,
+      "name": "Acoustic Guitar (steel)",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 1, "out": 20, "attack": 15, "decay": 11, "sustain": 0, "release": 13, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 11, "sustain": 0, "release": 13, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 26,
+      "name": "Electric Guitar (jazz)",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 16, "attack": 14, "decay": 6, "sustain": 6, "release": 7, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 6, "sustain": 6, "release": 7, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 27,
+      "name": "Electric Guitar (clean)",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 14, "attack": 15, "decay": 5, "sustain": 5, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 5, "sustain": 5, "release": 6, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 28,
+      "name": "Electric Guitar (muted)",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 24, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 29,
+      "name": "Overdriven Guitar",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 15, "decay": 4, "sustain": 4, "release": 5, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 4, "sustain": 4, "release": 5, "wave": 2 },
+      "feedback": 5,
+      "additive": false
+    },
+    {
+      "id": 30,
+      "name": "Distortion Guitar",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 8, "attack": 15, "decay": 3, "sustain": 3, "release": 4, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 3, "sustain": 3, "release": 4, "wave": 3 },
+      "feedback": 7,
+      "additive": false
+    },
+    {
+      "id": 31,
+      "name": "Guitar Harmonics",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 8, "ksl": 1, "out": 35, "attack": 13, "decay": 7, "sustain": 6, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 1, "out": 0, "attack": 13, "decay": 7, "sustain": 6, "release": 8, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 32,
+      "name": "Acoustic Bass",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 15, "decay": 6, "sustain": 4, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 6, "sustain": 4, "release": 5, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 33,
+      "name": "Electric Bass (finger)",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 8, "attack": 15, "decay": 6, "sustain": 3, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 6, "sustain": 3, "release": 4, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 34,
+      "name": "Electric Bass (pick)",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 12, "attack": 15, "decay": 7, "sustain": 4, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 7, "sustain": 4, "release": 5, "wave": 1 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 35,
+      "name": "Fretless Bass",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 12, "attack": 14, "decay": 6, "sustain": 4, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 6, "sustain": 4, "release": 5, "wave": 1 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 36,
+      "name": "Slap Bass 1",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 20, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 1 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 37,
+      "name": "Slap Bass 2",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 22, "attack": 15, "decay": 13, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 13, "sustain": 0, "release": 15, "wave": 2 },
+      "feedback": 4,
+      "additive": false
+    },
+    {
+      "id": 38,
+      "name": "Synth Bass 1",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 8, "attack": 15, "decay": 6, "sustain": 3, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 6, "sustain": 3, "release": 4, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 39,
+      "name": "Synth Bass 2",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 15, "decay": 5, "sustain": 4, "release": 5, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 5, "sustain": 4, "release": 5, "wave": 2 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 40,
+      "name": "Violin",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 10, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 10, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 41,
+      "name": "Viola",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 10, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 10, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 42,
+      "name": "Cello",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 22, "attack": 9, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 9, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 43,
+      "name": "Contrabass",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 24, "attack": 8, "decay": 5, "sustain": 4, "release": 7, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 8, "decay": 5, "sustain": 4, "release": 7, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 44,
+      "name": "Tremolo Strings",
+      "mod": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": true, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 45,
+      "name": "Pizzicato Strings",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 26, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 46,
+      "name": "Orchestral Harp",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 24, "attack": 15, "decay": 8, "sustain": 5, "release": 9, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 8, "sustain": 5, "release": 9, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 47,
+      "name": "Timpani",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 2, "out": 36, "attack": 15, "decay": 12, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 2, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 48,
+      "name": "String Ensemble 1",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 22, "attack": 9, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 9, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 49,
+      "name": "String Ensemble 2",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 20, "attack": 8, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 8, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 50,
+      "name": "Synth Strings 1",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 1 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 51,
+      "name": "Synth Strings 2",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 16, "attack": 8, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 8, "decay": 3, "sustain": 2, "release": 5, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 52,
+      "name": "Choir Aahs",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 22, "attack": 9, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 9, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 53,
+      "name": "Voice Oohs",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 24, "attack": 10, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 10, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 54,
+      "name": "Synth Voice",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 10, "decay": 4, "sustain": 3, "release": 6, "wave": 1 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 10, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 55,
+      "name": "Orchestra Hit",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 2, "out": 30, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 2, "out": 0, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 3 },
+      "feedback": 5,
+      "additive": false
+    },
+    {
+      "id": 56,
+      "name": "Trumpet",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 12, "attack": 14, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 57,
+      "name": "Trombone",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 14, "attack": 13, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 58,
+      "name": "Tuba",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 16, "attack": 12, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 4, "sustain": 3, "release": 6, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 59,
+      "name": "Muted Trumpet",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 14, "decay": 5, "sustain": 4, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 5, "sustain": 4, "release": 6, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 60,
+      "name": "French Horn",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 11, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 61,
+      "name": "Brass Section",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 14, "attack": 13, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 62,
+      "name": "Synth Brass 1",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 12, "attack": 13, "decay": 3, "sustain": 2, "release": 4, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 3, "sustain": 2, "release": 4, "wave": 2 },
+      "feedback": 4,
+      "additive": false
+    },
+    {
+      "id": 63,
+      "name": "Synth Brass 2",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 14, "decay": 3, "sustain": 2, "release": 4, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 3, "sustain": 2, "release": 4, "wave": 2 },
+      "feedback": 5,
+      "additive": false
+    },
+    {
+      "id": 64,
+      "name": "Soprano Sax",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 14, "attack": 13, "decay": 4, "sustain": 3, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 4, "sustain": 3, "release": 5, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 65,
+      "name": "Alto Sax",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 16, "attack": 13, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 66,
+      "name": "Tenor Sax",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 12, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 67,
+      "name": "Baritone Sax",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 12, "decay": 5, "sustain": 4, "release": 7, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 5, "sustain": 4, "release": 7, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 68,
+      "name": "Oboe",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 18, "attack": 12, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 69,
+      "name": "English Horn",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 20, "attack": 11, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 70,
+      "name": "Bassoon",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 22, "attack": 11, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 4, "sustain": 3, "release": 6, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 71,
+      "name": "Clarinet",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 16, "attack": 12, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 72,
+      "name": "Piccolo",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 4, "ksl": 1, "out": 24, "attack": 13, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 1, "out": 0, "attack": 13, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 73,
+      "name": "Flute",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 18, "attack": 12, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 74,
+      "name": "Recorder",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 20, "attack": 11, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 75,
+      "name": "Pan Flute",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 22, "attack": 10, "decay": 3, "sustain": 2, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 10, "decay": 3, "sustain": 2, "release": 6, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 76,
+      "name": "Blown Bottle",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 24, "attack": 10, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 10, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 77,
+      "name": "Shakuhachi",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 26, "attack": 11, "decay": 4, "sustain": 3, "release": 7, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 4, "sustain": 3, "release": 7, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 78,
+      "name": "Whistle",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 32, "attack": 14, "decay": 1, "sustain": 0, "release": 3, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 1, "sustain": 0, "release": 3, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 79,
+      "name": "Ocarina",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 20, "attack": 11, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 80,
+      "name": "Square Lead",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 12, "attack": 15, "decay": 2, "sustain": 4, "release": 5, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 2, "sustain": 4, "release": 5, "wave": 2 },
+      "feedback": 4,
+      "additive": true
+    },
+    {
+      "id": 81,
+      "name": "Sawtooth Lead",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 15, "decay": 2, "sustain": 3, "release": 4, "wave": 3 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 2, "sustain": 3, "release": 4, "wave": 3 },
+      "feedback": 5,
+      "additive": true
+    },
+    {
+      "id": 82,
+      "name": "Calliope Lead",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 28, "attack": 14, "decay": 2, "sustain": 2, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 2, "sustain": 2, "release": 4, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 83,
+      "name": "Chiff Lead",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 16, "attack": 15, "decay": 3, "sustain": 3, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 3, "sustain": 3, "release": 5, "wave": 2 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 84,
+      "name": "Charang Lead",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 8, "attack": 15, "decay": 2, "sustain": 3, "release": 4, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 2, "sustain": 3, "release": 4, "wave": 3 },
+      "feedback": 6,
+      "additive": false
+    },
+    {
+      "id": 85,
+      "name": "Voice Lead",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 13, "decay": 3, "sustain": 3, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 13, "decay": 3, "sustain": 3, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 86,
+      "name": "Fifths Lead",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 3, "ksl": 0, "out": 0, "attack": 14, "decay": 2, "sustain": 3, "release": 4, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 14, "decay": 2, "sustain": 3, "release": 4, "wave": 2 },
+      "feedback": 3,
+      "additive": true
+    },
+    {
+      "id": 87,
+      "name": "Bass & Lead",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 15, "decay": 3, "sustain": 4, "release": 5, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 15, "decay": 3, "sustain": 4, "release": 5, "wave": 2 },
+      "feedback": 4,
+      "additive": true
+    },
+    {
+      "id": 88,
+      "name": "New Age Pad",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 22, "attack": 8, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 8, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 89,
+      "name": "Warm Pad",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 8, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 8, "decay": 3, "sustain": 2, "release": 4, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 90,
+      "name": "Polysynth Pad",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 1 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 91,
+      "name": "Choir Pad",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 22, "attack": 9, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 9, "decay": 2, "sustain": 1, "release": 4, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 92,
+      "name": "Bowed Pad",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 9, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 93,
+      "name": "Metallic Pad",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 7, "ksl": 0, "out": 28, "attack": 8, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 8, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 94,
+      "name": "Halo Pad",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 24, "attack": 7, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 7, "decay": 3, "sustain": 2, "release": 5, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 95,
+      "name": "Sweep Pad",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 18, "attack": 8, "decay": 4, "sustain": 3, "release": 6, "wave": 1 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 8, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 96,
+      "name": "Rain",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 8, "ksl": 0, "out": 38, "attack": 10, "decay": 6, "sustain": 5, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 0, "attack": 10, "decay": 6, "sustain": 5, "release": 8, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 97,
+      "name": "Soundtrack",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 20, "attack": 8, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 0, "attack": 8, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 98,
+      "name": "Crystal",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 8, "ksl": 1, "out": 32, "attack": 14, "decay": 7, "sustain": 5, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 1, "out": 0, "attack": 14, "decay": 7, "sustain": 5, "release": 8, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 99,
+      "name": "Atmosphere",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 24, "attack": 7, "decay": 4, "sustain": 3, "release": 7, "wave": 1 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 7, "decay": 4, "sustain": 3, "release": 7, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 100,
+      "name": "Brightness",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 6, "ksl": 0, "out": 28, "attack": 11, "decay": 5, "sustain": 4, "release": 7, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 5, "sustain": 4, "release": 7, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 101,
+      "name": "Goblins",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 3, "ksl": 0, "out": 26, "attack": 9, "decay": 5, "sustain": 4, "release": 7, "wave": 2 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 9, "decay": 5, "sustain": 4, "release": 7, "wave": 3 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 102,
+      "name": "Echoes",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 4, "ksl": 0, "out": 30, "attack": 10, "decay": 6, "sustain": 5, "release": 9, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 10, "decay": 6, "sustain": 5, "release": 9, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 103,
+      "name": "Sci-Fi",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 7, "ksl": 0, "out": 32, "attack": 11, "decay": 7, "sustain": 6, "release": 10, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 7, "sustain": 6, "release": 10, "wave": 3 },
+      "feedback": 3,
+      "additive": false
+    },
+    {
+      "id": 104,
+      "name": "Sitar",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 3, "ksl": 0, "out": 20, "attack": 15, "decay": 10, "sustain": 6, "release": 12, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 10, "sustain": 6, "release": 12, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 105,
+      "name": "Banjo",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 1, "out": 22, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 106,
+      "name": "Shamisen",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 1, "out": 24, "attack": 15, "decay": 13, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 13, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 1,
+      "additive": false
+    },
+    {
+      "id": 107,
+      "name": "Koto",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 3, "ksl": 1, "out": 22, "attack": 15, "decay": 9, "sustain": 5, "release": 10, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 9, "sustain": 5, "release": 10, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 108,
+      "name": "Kalimba",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 8, "ksl": 0, "out": 34, "attack": 15, "decay": 9, "sustain": 5, "release": 10, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 9, "sustain": 5, "release": 10, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 109,
+      "name": "Bagpipe",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 12, "attack": 12, "decay": 1, "sustain": 0, "release": 3, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 12, "decay": 1, "sustain": 0, "release": 3, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 110,
+      "name": "Fiddle",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 18, "attack": 11, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 11, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 111,
+      "name": "Shanai",
+      "mod": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 2, "ksl": 0, "out": 16, "attack": 13, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "car": { "trem": false, "vib": true, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 13, "decay": 4, "sustain": 3, "release": 6, "wave": 0 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 112,
+      "name": "Tinkle Bell",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 12, "ksl": 1, "out": 38, "attack": 15, "decay": 10, "sustain": 6, "release": 12, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 10, "sustain": 6, "release": 12, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 113,
+      "name": "Agogo",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 6, "ksl": 2, "out": 36, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 2, "out": 0, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 114,
+      "name": "Steel Drums",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 4, "ksl": 1, "out": 26, "attack": 15, "decay": 9, "sustain": 5, "release": 10, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 9, "sustain": 5, "release": 10, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 115,
+      "name": "Woodblock",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 8, "ksl": 3, "out": 48, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 1 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 2, "ksl": 3, "out": 0, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 1 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 116,
+      "name": "Taiko Drum",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 2, "out": 40, "attack": 15, "decay": 13, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 2, "out": 0, "attack": 15, "decay": 13, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 117,
+      "name": "Melodic Tom",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 1, "out": 34, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 1, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 118,
+      "name": "Synth Drum",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 2, "out": 38, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 1 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 2, "out": 0, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 1 },
+      "feedback": 2,
+      "additive": false
+    },
+    {
+      "id": 119,
+      "name": "Reverse Cymbal",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 3, "out": 52, "attack": 0, "decay": 15, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 3, "out": 0, "attack": 0, "decay": 15, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 120,
+      "name": "Guitar Fret Noise",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 8, "ksl": 3, "out": 50, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 2 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 4, "ksl": 3, "out": 0, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 3 },
+      "feedback": 7,
+      "additive": false
+    },
+    {
+      "id": 121,
+      "name": "Breath Noise",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 0, "out": 42, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 14, "sustain": 0, "release": 15, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 122,
+      "name": "Seashore",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 0, "ksl": 0, "out": 48, "attack": 8, "decay": 6, "sustain": 5, "release": 8, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 8, "decay": 6, "sustain": 5, "release": 8, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 123,
+      "name": "Bird Tweet",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 12, "ksl": 2, "out": 46, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 4, "ksl": 2, "out": 0, "attack": 15, "decay": 12, "sustain": 0, "release": 14, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 124,
+      "name": "Telephone Ring",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 8, "ksl": 0, "out": 0, "attack": 15, "decay": 0, "sustain": 0, "release": 2, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 0, "attack": 15, "decay": 0, "sustain": 0, "release": 2, "wave": 0 },
+      "feedback": 0,
+      "additive": true
+    },
+    {
+      "id": 125,
+      "name": "Helicopter",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 0, "ksl": 0, "out": 44, "attack": 14, "decay": 8, "sustain": 6, "release": 10, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 14, "decay": 8, "sustain": 6, "release": 10, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 126,
+      "name": "Applause",
+      "mod": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 0, "ksl": 0, "out": 46, "attack": 13, "decay": 7, "sustain": 5, "release": 9, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": true, "ksr": false, "multi": 1, "ksl": 0, "out": 10, "attack": 13, "decay": 7, "sustain": 5, "release": 9, "wave": 0 },
+      "feedback": 0,
+      "additive": false
+    },
+    {
+      "id": 127,
+      "name": "Gunshot",
+      "mod": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 0, "ksl": 3, "out": 54, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 0 },
+      "car": { "trem": false, "vib": false, "sus": false, "ksr": true, "multi": 1, "ksl": 3, "out": 0, "attack": 15, "decay": 15, "sustain": 0, "release": 15, "wave": 1 },
+      "feedback": 3,
+      "additive": false
+    }
+  ]
+}

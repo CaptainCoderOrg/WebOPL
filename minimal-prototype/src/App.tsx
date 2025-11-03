@@ -9,6 +9,7 @@ import { PatchTest } from './components/PatchTest';
 import { InstrumentSelector } from './components/InstrumentSelector';
 import { validatePattern, formatValidationErrors } from './utils/patternValidation';
 import { defaultPatches } from './data/defaultPatches';
+import { loadGENMIDI } from './utils/genmidiParser';
 import type { OPLPatch } from './types/OPLPatch';
 import './App.css';
 
@@ -26,6 +27,10 @@ function App() {
 
   // Instrument bank (starts with defaults)
   const [instrumentBank, setInstrumentBank] = useState<OPLPatch[]>(defaultPatches);
+
+  // Bank loading status
+  const [bankLoaded, setBankLoaded] = useState(false);
+  const [bankError, setBankError] = useState<string | null>(null);
 
   // Pattern state: 16 rows × 4 tracks
   const [pattern, setPattern] = useState<string[][]>(() =>
@@ -81,6 +86,46 @@ function App() {
 
     init();
   }, [synth, isReady]);
+
+  /**
+   * Load GENMIDI instrument bank
+   */
+  useEffect(() => {
+    const loadInstruments = async () => {
+      // Only load once, after synth is ready
+      if (!isReady || bankLoaded || instrumentBank.length > 4) return;
+
+      try {
+        console.log('[App] Loading GENMIDI instrument bank...');
+        setBankError(null);
+
+        const bank = await loadGENMIDI();
+
+        console.log(`[App] Loaded ${bank.patches.length} instruments from ${bank.name}`);
+        setInstrumentBank(bank.patches);
+        setBankLoaded(true);
+
+        // Re-apply current track instruments with new bank
+        trackInstruments.forEach((patchId, trackIndex) => {
+          if (synth && bank.patches[patchId]) {
+            synth.loadPatch(trackIndex, bank.patches[patchId]);
+          }
+        });
+
+        console.log('[App] GENMIDI bank loaded successfully');
+      } catch (error) {
+        console.error('[App] Failed to load GENMIDI:', error);
+        const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+        setBankError(errorMsg);
+
+        // Keep using default patches
+        console.log('[App] Using default instrument patches as fallback');
+        setBankLoaded(true); // Mark as "loaded" to prevent retry loop
+      }
+    };
+
+    loadInstruments();
+  }, [isReady, synth, bankLoaded, instrumentBank.length, trackInstruments]);
 
   /**
    * Global keyboard shortcuts
@@ -364,14 +409,32 @@ function App() {
         </div>
       </div>
 
+      {/* Instrument Bank Status */}
+      {!bankLoaded && (
+        <div className="loading-instruments">
+          <div className="loading-spinner-small"></div>
+          <span>Loading instrument bank...</span>
+        </div>
+      )}
+
+      {bankError && (
+        <div className="instrument-warning">
+          ⚠️ Could not load GENMIDI: {bankError}
+          <br />
+          <small>Using {instrumentBank.length} default instruments</small>
+        </div>
+      )}
+
       {/* Instrument Selector */}
-      <InstrumentSelector
-        trackInstruments={trackInstruments}
-        instrumentBank={instrumentBank}
-        onInstrumentChange={handleInstrumentChange}
-        onEditClick={handleEditClick}
-        disabled={isPlaying}
-      />
+      {bankLoaded && (
+        <InstrumentSelector
+          trackInstruments={trackInstruments}
+          instrumentBank={instrumentBank}
+          onInstrumentChange={handleInstrumentChange}
+          onEditClick={handleEditClick}
+          disabled={isPlaying}
+        />
+      )}
 
       <div className="tracker-section">
         <TrackerGrid
