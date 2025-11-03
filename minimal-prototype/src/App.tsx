@@ -46,6 +46,12 @@ function App() {
         if (import.meta.env.DEV) {
           (window as any).synth = s;
           console.log('[App] Synth exposed as window.synth for testing');
+
+          // Log loaded instruments
+          console.log('%c=== Loaded Instruments ===', 'color: #00ff00; font-weight: bold');
+          s.getAllPatches().slice(0, 4).forEach(([ch, name]) => {
+            console.log(`%cTrack ${ch}: ${name}`, 'color: #ffaa00');
+          });
         }
 
         // Initialize player

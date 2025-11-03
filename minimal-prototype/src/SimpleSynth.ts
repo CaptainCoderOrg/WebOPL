@@ -6,6 +6,7 @@
  */
 
 import type { OPLPatch, OPLOperator } from './types/OPLPatch';
+import { defaultPatches } from './data/defaultPatches';
 
 // Type definition for the global OPL class
 declare global {
@@ -69,8 +70,21 @@ export class SimpleSynth {
       // Step 4: Enable waveform selection (required for custom waveforms)
       this.opl.write(0x01, 0x20);
 
+      // Step 4.5: Load default instruments to all channels
+      console.log('[SimpleSynth] Loading default instruments...');
+      for (let ch = 0; ch < 4; ch++) {
+        const patch = defaultPatches[ch];
+        this.loadPatch(ch, patch);
+        console.log(`[SimpleSynth] Channel ${ch}: ${patch.name}`);
+      }
+
+      // Channels 4-8 get piano as default (for future use)
+      for (let ch = 4; ch < 9; ch++) {
+        this.loadPatch(ch, defaultPatches[0]);
+      }
+
+      console.log('[SimpleSynth] All channels initialized with default patches');
       console.log('[SimpleSynth] Initialized OPL3 synthesizer with 9 channels');
-      console.log('[SimpleSynth] Ready for patch loading');
 
       // Step 5: Create AudioContext
       this.audioContext = new AudioContext({ sampleRate: 49716 });
@@ -191,6 +205,21 @@ export class SimpleSynth {
    */
   public getChannelPatch(channelId: number): OPLPatch | null {
     return this.channelPatches.get(channelId) || null;
+  }
+
+  /**
+   * Get all loaded patches (for debugging/UI)
+   * @returns Array of [channelId, patchName] tuples
+   */
+  public getAllPatches(): Array<[number, string]> {
+    const result: Array<[number, string]> = [];
+    for (let ch = 0; ch < 9; ch++) {
+      const patch = this.channelPatches.get(ch);
+      if (patch) {
+        result.push([ch, patch.name]);
+      }
+    }
+    return result;
   }
 
   /**

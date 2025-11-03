@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { SimpleSynth } from '../SimpleSynth';
-import { testPiano, testOrgan, testBell } from '../testPatches';
+import { defaultPatches } from '../data/defaultPatches';
 import './PatchTest.css';
 
 interface PatchTestProps {
@@ -36,34 +36,47 @@ export function PatchTest({ synth }: PatchTestProps) {
       return;
     }
     try {
-      synth.loadPatch(0, testPiano);
-      setStatus(`✅ Loaded "${testPiano.name}" to channel 0`);
+      synth.loadPatch(0, defaultPatches[0]);
+      setStatus(`✅ Loaded "${defaultPatches[0].name}" to channel 0`);
     } catch (error) {
       setStatus(`❌ Error: ${error}`);
     }
   };
 
-  const handleLoadOrgan = () => {
+  const handleLoadBass = () => {
     if (!synth) {
       setStatus('❌ Synth not initialized');
       return;
     }
     try {
-      synth.loadPatch(1, testOrgan);
-      setStatus(`✅ Loaded "${testOrgan.name}" to channel 1`);
+      synth.loadPatch(1, defaultPatches[1]);
+      setStatus(`✅ Loaded "${defaultPatches[1].name}" to channel 1`);
     } catch (error) {
       setStatus(`❌ Error: ${error}`);
     }
   };
 
-  const handleLoadBell = () => {
+  const handleLoadLead = () => {
     if (!synth) {
       setStatus('❌ Synth not initialized');
       return;
     }
     try {
-      synth.loadPatch(2, testBell);
-      setStatus(`✅ Loaded "${testBell.name}" to channel 2`);
+      synth.loadPatch(2, defaultPatches[2]);
+      setStatus(`✅ Loaded "${defaultPatches[2].name}" to channel 2`);
+    } catch (error) {
+      setStatus(`❌ Error: ${error}`);
+    }
+  };
+
+  const handleLoadPad = () => {
+    if (!synth) {
+      setStatus('❌ Synth not initialized');
+      return;
+    }
+    try {
+      synth.loadPatch(3, defaultPatches[3]);
+      setStatus(`✅ Loaded "${defaultPatches[3].name}" to channel 3`);
     } catch (error) {
       setStatus(`❌ Error: ${error}`);
     }
@@ -82,30 +95,43 @@ export function PatchTest({ synth }: PatchTestProps) {
     }, 1000);
   };
 
-  const handlePlayOrgan = () => {
+  const handlePlayBass = () => {
     if (!synth) {
       setStatus('❌ Synth not initialized');
       return;
     }
-    synth.noteOn(1, 60);
-    setStatus('🎵 Playing Organ (C4) on channel 1');
+    synth.noteOn(1, 48); // Lower note for bass
+    setStatus('🎵 Playing Bass (C3) on channel 1');
     setTimeout(() => {
-      synth.noteOff(1, 60);
-      setStatus('🔇 Organ note stopped');
+      synth.noteOff(1, 48);
+      setStatus('🔇 Bass note stopped');
     }, 1000);
   };
 
-  const handlePlayBell = () => {
+  const handlePlayLead = () => {
     if (!synth) {
       setStatus('❌ Synth not initialized');
       return;
     }
-    synth.noteOn(2, 60);
-    setStatus('🎵 Playing Bell (C4) on channel 2');
+    synth.noteOn(2, 72); // Higher note for lead
+    setStatus('🎵 Playing Lead (C5) on channel 2');
     setTimeout(() => {
-      synth.noteOff(2, 60);
-      setStatus('🔇 Bell note stopped');
-    }, 2000);
+      synth.noteOff(2, 72);
+      setStatus('🔇 Lead note stopped');
+    }, 1000);
+  };
+
+  const handlePlayPad = () => {
+    if (!synth) {
+      setStatus('❌ Synth not initialized');
+      return;
+    }
+    synth.noteOn(3, 60);
+    setStatus('🎵 Playing Pad (C4) on channel 3');
+    setTimeout(() => {
+      synth.noteOff(3, 60);
+      setStatus('🔇 Pad note stopped');
+    }, 2000); // Longer for pad
   };
 
   const handlePlayAll = () => {
@@ -113,15 +139,17 @@ export function PatchTest({ synth }: PatchTestProps) {
       setStatus('❌ Synth not initialized');
       return;
     }
-    // Play all three simultaneously
-    synth.noteOn(0, 60);
-    synth.noteOn(1, 60);
-    synth.noteOn(2, 60);
-    setStatus('🎵 Playing all three instruments simultaneously');
+    // Play all four simultaneously at different octaves
+    synth.noteOn(0, 60); // Piano C4
+    synth.noteOn(1, 48); // Bass C3
+    synth.noteOn(2, 72); // Lead C5
+    synth.noteOn(3, 60); // Pad C4
+    setStatus('🎵 Playing all four instruments simultaneously');
     setTimeout(() => {
       synth.noteOff(0, 60);
-      synth.noteOff(1, 60);
-      synth.noteOff(2, 60);
+      synth.noteOff(1, 48);
+      synth.noteOff(2, 72);
+      synth.noteOff(3, 60);
       setStatus('🔇 All notes stopped');
     }, 2000);
   };
@@ -135,6 +163,7 @@ export function PatchTest({ synth }: PatchTestProps) {
       synth.getChannelPatch(0),
       synth.getChannelPatch(1),
       synth.getChannelPatch(2),
+      synth.getChannelPatch(3),
     ];
     const info = patches
       .map((p, i) => `Ch${i}: ${p?.name || 'none'}`)
@@ -147,7 +176,7 @@ export function PatchTest({ synth }: PatchTestProps) {
       <div className="test-header">
         <h1>🎹 Patch Loading Test</h1>
         <p className="test-description">
-          Test Milestone 1: Type Definitions & Manual Patch Loading
+          Test Milestone 2: Default Patches (Piano, Bass, Lead, Pad)
         </p>
       </div>
 
@@ -177,36 +206,42 @@ export function PatchTest({ synth }: PatchTestProps) {
             <button onClick={handleLoadPiano} className="btn-secondary">
               🎹 Load Piano (Ch 0)
             </button>
-            <button onClick={handleLoadOrgan} className="btn-secondary">
-              🎺 Load Organ (Ch 1)
+            <button onClick={handleLoadBass} className="btn-secondary">
+              🎸 Load Bass (Ch 1)
             </button>
-            <button onClick={handleLoadBell} className="btn-secondary">
-              🔔 Load Bell (Ch 2)
+            <button onClick={handleLoadLead} className="btn-secondary">
+              🎺 Load Lead (Ch 2)
+            </button>
+            <button onClick={handleLoadPad} className="btn-secondary">
+              🎵 Load Pad (Ch 3)
             </button>
           </div>
         </section>
 
         <section className="test-section">
           <h2>Step 3: Play Notes</h2>
-          <p>Test individual instruments (plays middle C for 1-2 seconds)</p>
+          <p>Test individual instruments (different octaves)</p>
           <div className="button-grid">
             <button onClick={handlePlayPiano} className="btn-play">
-              ▶️ Play Piano
+              ▶️ Play Piano (C4)
             </button>
-            <button onClick={handlePlayOrgan} className="btn-play">
-              ▶️ Play Organ
+            <button onClick={handlePlayBass} className="btn-play">
+              ▶️ Play Bass (C3)
             </button>
-            <button onClick={handlePlayBell} className="btn-play">
-              ▶️ Play Bell
+            <button onClick={handlePlayLead} className="btn-play">
+              ▶️ Play Lead (C5)
+            </button>
+            <button onClick={handlePlayPad} className="btn-play">
+              ▶️ Play Pad (C4)
             </button>
           </div>
         </section>
 
         <section className="test-section">
           <h2>Step 4: Test Polyphony</h2>
-          <p>Play all three instruments at once to verify different sounds</p>
+          <p>Play all four instruments at once to verify different sounds</p>
           <button onClick={handlePlayAll} className="btn-primary">
-            🎵 Play All Three Simultaneously
+            🎵 Play All Four Simultaneously
           </button>
         </section>
 
@@ -222,10 +257,11 @@ export function PatchTest({ synth }: PatchTestProps) {
       <div className="test-footer">
         <h3>Expected Results:</h3>
         <ul>
-          <li>✅ Piano: Smooth, sustained tone</li>
-          <li>✅ Organ: Brighter, more immediate sound (octave higher carrier)</li>
-          <li>✅ Bell: Metallic, decaying sound with longer release</li>
-          <li>✅ All three sound distinctly different when played together</li>
+          <li>✅ Piano: Clear, percussive attack, moderate sustain</li>
+          <li>✅ Bass: Deep, punchy, quick attack with warmth</li>
+          <li>✅ Lead: Bright, cutting, sustained with square-like timbre</li>
+          <li>✅ Pad: Slow attack, evolving, ethereal with vibrato</li>
+          <li>✅ All four sound distinctly different when played together</li>
         </ul>
       </div>
     </div>
