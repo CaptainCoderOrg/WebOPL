@@ -31,6 +31,8 @@ window.synth.noteOn(0, 60);
 
 **Deliverable:** Can manually program different sounds per channel via console
 
+**Bonus:** Created interactive PatchTest UI component at `/test` route for easier testing
+
 ---
 
 ## Milestone 2: Default Patches (1-2 hours)
@@ -445,7 +447,7 @@ If NO to any → Fix before proceeding
 
 ## Current Status
 
-- [x] Milestone 1: Not started
+- [x] Milestone 1: Complete (2025-01-03)
 - [ ] Milestone 2: Not started
 - [ ] Milestone 3: Not started
 - [ ] Milestone 4: Not started
@@ -459,4 +461,4 @@ If NO to any → Fix before proceeding
 - [ ] Milestone 12: Not started
 - [ ] Milestone 13: Not started
 
-**Next:** Begin Milestone 1
+**Next:** Begin Milestone 2 (Default Patches)
