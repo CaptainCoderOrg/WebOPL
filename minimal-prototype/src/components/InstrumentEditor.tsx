@@ -43,6 +43,7 @@ export function InstrumentEditor({
   const [currentSoloNote, setCurrentSoloNote] = useState<number | null>(null);
   const [currentChordNotes, setCurrentChordNotes] = useState<Set<number>>(new Set());
   const [currentArpeggioNote, setCurrentArpeggioNote] = useState<number | null>(null);
+  const [octaveOffset, setOctaveOffset] = useState<number>(0); // 0 = base octave (C3-C5)
 
   // Ref to track current edited patch for Solo/Chords playback (avoids restarting)
   const editedPatchRef = useRef<OPLPatch>(editedPatch);
@@ -85,6 +86,7 @@ export function InstrumentEditor({
     }
 
     const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12; // Transpose amount based on octave offset
 
     // 12-bar blues melody in C using blues scale (C Eb F F# G Bb)
     // Generic blues lick pattern over 12 bars
@@ -152,16 +154,17 @@ export function InstrumentEditor({
       synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
 
       const currentNote = melody[currentNoteIndex];
+      const transposedNote = currentNote.note + transpose;
 
       // Highlight the note being played
-      setCurrentSoloNote(currentNote.note);
+      setCurrentSoloNote(transposedNote);
 
       // Play note
-      synth.noteOn(PREVIEW_CHANNEL, currentNote.note);
+      synth.noteOn(PREVIEW_CHANNEL, transposedNote);
 
       // Stop note after duration (with slight gap for articulation)
       setTimeout(() => {
-        synth.noteOff(PREVIEW_CHANNEL, currentNote.note);
+        synth.noteOff(PREVIEW_CHANNEL, transposedNote);
         setCurrentSoloNote(null);
       }, currentNote.duration * 0.8);
 
@@ -180,13 +183,13 @@ export function InstrumentEditor({
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      // Stop any playing notes
+      // Stop any playing notes (with transpose)
       melody.forEach(({ note }) => {
-        synth.noteOff(PREVIEW_CHANNEL, note);
+        synth.noteOff(PREVIEW_CHANNEL, note + transpose);
       });
       setCurrentSoloNote(null);
     };
-  }, [demoMode, synth]);
+  }, [demoMode, synth, octaveOffset]);
 
   // Classical piece playback (Bach's Minuet in G Major - left hand bass + right hand melody)
   useEffect(() => {
@@ -198,6 +201,7 @@ export function InstrumentEditor({
     // Use channels 8-11 for left hand (bass + chords), channel 12 for right hand (melody)
     const LEFT_HAND_CHANNELS = [8, 9, 10, 11];
     const RIGHT_HAND_CHANNEL = 12;
+    const transpose = octaveOffset * 12; // Transpose amount based on octave offset
 
     // Bach - Minuet in G Major (BWV Anh. 114) - simplified arrangement
     // Each entry: left hand bass/chord + right hand melody note
@@ -255,8 +259,12 @@ export function InstrumentEditor({
 
       const current = arrangement[currentNoteIndex];
 
+      // Transpose all notes
+      const transposedLeftHand = current.leftHand.map(note => note + transpose);
+      const transposedMelody = current.melody + transpose;
+
       // Collect all notes being played (left hand + melody)
-      const allNotes = new Set([...current.leftHand, current.melody]);
+      const allNotes = new Set([...transposedLeftHand, transposedMelody]);
       setCurrentChordNotes(allNotes);
 
       // Load patch for all channels
@@ -264,21 +272,21 @@ export function InstrumentEditor({
       synth.setTrackPatch(RIGHT_HAND_CHANNEL, editedPatchRef.current);
 
       // Play left hand (bass + chord)
-      current.leftHand.forEach((note, index) => {
+      transposedLeftHand.forEach((note, index) => {
         const channel = LEFT_HAND_CHANNELS[index];
         synth.noteOn(channel, note);
       });
 
       // Play right hand (melody)
-      synth.noteOn(RIGHT_HAND_CHANNEL, current.melody);
+      synth.noteOn(RIGHT_HAND_CHANNEL, transposedMelody);
 
       // Stop notes after duration
       setTimeout(() => {
-        current.leftHand.forEach((note, index) => {
+        transposedLeftHand.forEach((note, index) => {
           const channel = LEFT_HAND_CHANNELS[index];
           synth.noteOff(channel, note);
         });
-        synth.noteOff(RIGHT_HAND_CHANNEL, current.melody);
+        synth.noteOff(RIGHT_HAND_CHANNEL, transposedMelody);
         setCurrentChordNotes(new Set());
       }, current.duration * 0.9);
 
@@ -297,20 +305,20 @@ export function InstrumentEditor({
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      // Stop all notes
+      // Stop all notes (with transpose)
       LEFT_HAND_CHANNELS.forEach(channel => {
         arrangement.forEach(item => {
           item.leftHand.forEach(note => {
-            synth.noteOff(channel, note);
+            synth.noteOff(channel, note + transpose);
           });
         });
       });
       arrangement.forEach(item => {
-        synth.noteOff(RIGHT_HAND_CHANNEL, item.melody);
+        synth.noteOff(RIGHT_HAND_CHANNEL, item.melody + transpose);
       });
       setCurrentChordNotes(new Set());
     };
-  }, [demoMode, synth]);
+  }, [demoMode, synth, octaveOffset]);
 
   // Arpeggio playback (minor chord progression)
   useEffect(() => {
@@ -320,6 +328,7 @@ export function InstrumentEditor({
     }
 
     const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12; // Transpose amount based on octave offset
 
     // Minor chord progression: Am - Dm - Em - Am
     // Each chord: root, minor third, fifth (ascending then descending)
@@ -368,16 +377,17 @@ export function InstrumentEditor({
       synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
 
       const currentNote = arpeggioPattern[currentNoteIndex];
+      const transposedNote = currentNote.note + transpose;
 
       // Highlight the note being played
-      setCurrentArpeggioNote(currentNote.note);
+      setCurrentArpeggioNote(transposedNote);
 
       // Play note
-      synth.noteOn(PREVIEW_CHANNEL, currentNote.note);
+      synth.noteOn(PREVIEW_CHANNEL, transposedNote);
 
       // Stop note after duration (with slight gap for articulation)
       setTimeout(() => {
-        synth.noteOff(PREVIEW_CHANNEL, currentNote.note);
+        synth.noteOff(PREVIEW_CHANNEL, transposedNote);
         setCurrentArpeggioNote(null);
       }, currentNote.duration * 0.8);
 
@@ -396,13 +406,13 @@ export function InstrumentEditor({
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      // Stop any playing notes
+      // Stop any playing notes (with transpose)
       arpeggioPattern.forEach(({ note }) => {
-        synth.noteOff(PREVIEW_CHANNEL, note);
+        synth.noteOff(PREVIEW_CHANNEL, note + transpose);
       });
       setCurrentArpeggioNote(null);
     };
-  }, [demoMode, synth]);
+  }, [demoMode, synth, octaveOffset]);
 
   /**
    * Preview the current edited patch
@@ -446,6 +456,30 @@ export function InstrumentEditor({
       onCancel();
     }
   };
+
+  // Calculate keyboard range based on octave offset
+  const BASE_START_NOTE = 48; // C3
+  const BASE_END_NOTE = 72;   // C5
+  const keyboardStartNote = BASE_START_NOTE + (octaveOffset * 12);
+  const keyboardEndNote = BASE_END_NOTE + (octaveOffset * 12);
+
+  // Octave shift handlers (constrain to valid MIDI range 0-127)
+  const handleOctaveDown = () => {
+    const newStartNote = keyboardStartNote - 12;
+    if (newStartNote >= 0) {
+      setOctaveOffset(octaveOffset - 1);
+    }
+  };
+
+  const handleOctaveUp = () => {
+    const newEndNote = keyboardEndNote + 12;
+    if (newEndNote <= 127) {
+      setOctaveOffset(octaveOffset + 1);
+    }
+  };
+
+  const canShiftDown = keyboardStartNote - 12 >= 0;
+  const canShiftUp = keyboardEndNote + 12 <= 127;
 
   return (
     <div className="editor-backdrop" onClick={handleBackdropClick}>
@@ -656,30 +690,51 @@ export function InstrumentEditor({
             <div className="editor-keyboard-container">
               {synth ? (
                 <>
-                  <PianoKeyboard
-                    startNote={48}
-                    endNote={72}
-                    height={100}
-                    showLabels={true}
-                    compact={true}
-                    activeNotes={(() => {
-                      const activeNotes = new Set<number>();
-                      if (currentSoloNote !== null) activeNotes.add(currentSoloNote);
-                      if (currentArpeggioNote !== null) activeNotes.add(currentArpeggioNote);
-                      currentChordNotes.forEach(note => activeNotes.add(note));
-                      return activeNotes.size > 0 ? activeNotes : undefined;
-                    })()}
-                    onNoteOn={(note) => {
-                      // Load edited patch to preview channel before playing
-                      const PREVIEW_CHANNEL = 8;
-                      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatch);
-                      synth.noteOn(PREVIEW_CHANNEL, note);
-                    }}
-                    onNoteOff={(note) => {
-                      const PREVIEW_CHANNEL = 8;
-                      synth.noteOff(PREVIEW_CHANNEL, note);
-                    }}
-                  />
+                  <div className="editor-keyboard-with-arrows">
+                    <button
+                      className="editor-octave-arrow editor-octave-arrow-left"
+                      onClick={handleOctaveDown}
+                      disabled={!canShiftDown}
+                      aria-label="Shift octave down"
+                      title="Shift octave down"
+                    >
+                      ◀
+                    </button>
+                    <PianoKeyboard
+                      startNote={keyboardStartNote}
+                      endNote={keyboardEndNote}
+                      height={90}
+                      maxWidth={411}
+                      showLabels={true}
+                      compact={true}
+                      activeNotes={(() => {
+                        const activeNotes = new Set<number>();
+                        if (currentSoloNote !== null) activeNotes.add(currentSoloNote);
+                        if (currentArpeggioNote !== null) activeNotes.add(currentArpeggioNote);
+                        currentChordNotes.forEach(note => activeNotes.add(note));
+                        return activeNotes.size > 0 ? activeNotes : undefined;
+                      })()}
+                      onNoteOn={(note) => {
+                        // Load edited patch to preview channel before playing
+                        const PREVIEW_CHANNEL = 8;
+                        synth.setTrackPatch(PREVIEW_CHANNEL, editedPatch);
+                        synth.noteOn(PREVIEW_CHANNEL, note);
+                      }}
+                      onNoteOff={(note) => {
+                        const PREVIEW_CHANNEL = 8;
+                        synth.noteOff(PREVIEW_CHANNEL, note);
+                      }}
+                    />
+                    <button
+                      className="editor-octave-arrow editor-octave-arrow-right"
+                      onClick={handleOctaveUp}
+                      disabled={!canShiftUp}
+                      aria-label="Shift octave up"
+                      title="Shift octave up"
+                    >
+                      ▶
+                    </button>
+                  </div>
                   <div className="editor-demos-control">
                     <label className="editor-demos-title">Demos</label>
                     <div className="editor-demos-options">

@@ -19,6 +19,9 @@ export interface PianoKeyboardProps {
   /** Height in pixels (default: 80) */
   height?: number;
 
+  /** Maximum width in pixels (keyboard will scale to fit) */
+  maxWidth?: number;
+
   /** Currently active notes from user interaction (highlighted in default color) */
   activeNotes?: Set<number>;
 
@@ -50,6 +53,7 @@ export function PianoKeyboard({
   startNote,
   endNote,
   height = 80,
+  maxWidth,
   activeNotes = new Set(),
   activeNotesByTrack,
   onNoteOn,
@@ -100,12 +104,29 @@ export function PianoKeyboard({
   }, [startNote, endNote, activeNotesByTrack]);
 
   // Dimensions
-  const whiteKeyWidth = compact ? 30 : 40;
   const gap = compact ? 1 : 2;
   const whiteKeyCount = useMemo(
     () => countWhiteKeys(startNote, endNote),
     [startNote, endNote]
   );
+
+  // Calculate white key width - scale to fit maxWidth if provided
+  const whiteKeyWidth = useMemo(() => {
+    const defaultWidth = compact ? 30 : 40;
+
+    if (maxWidth) {
+      // Calculate the maximum key width that fits within maxWidth
+      // Formula: maxWidth = whiteKeyCount * keyWidth + (whiteKeyCount - 1) * gap
+      // Solving for keyWidth: keyWidth = (maxWidth - (whiteKeyCount - 1) * gap) / whiteKeyCount
+      const calculatedWidth = (maxWidth - (whiteKeyCount - 1) * gap) / whiteKeyCount;
+
+      // Use the smaller of calculated width or default width (never scale up)
+      return Math.min(calculatedWidth, defaultWidth);
+    }
+
+    return defaultWidth;
+  }, [compact, maxWidth, whiteKeyCount, gap]);
+
   const containerWidth = whiteKeyCount * whiteKeyWidth + (whiteKeyCount - 1) * gap;
 
   // Pre-calculate all key geometries (memoized)
