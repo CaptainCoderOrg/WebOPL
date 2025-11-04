@@ -5,7 +5,7 @@
  * Uses AudioWorklet for modern, low-latency audio processing
  */
 
-import type { OPLPatch } from './types/OPLPatch';
+import type { OPLPatch, OPLOperator } from './types/OPLPatch';
 import { getOPLParams } from './constants/midiToOPL';
 
 export class SimpleSynth {
@@ -13,6 +13,7 @@ export class SimpleSynth {
   private workletNode: AudioWorkletNode | null = null;
   private workletReady: boolean = false;
   private isInitialized: boolean = false;
+  private channelPatches: Map<number, OPLPatch> = new Map(); // Track loaded patches per channel
 
   /**
    * Initialize OPL3 and Web Audio
@@ -163,25 +164,114 @@ export class SimpleSynth {
   }
 
   /**
+   * Get operator offsets for a channel (supports OPL3's 18 channels)
+   * Channels 0-8: First chip (registers 0x00-0xFF)
+   * Channels 9-17: Second chip (registers 0x100-0x1FF)
+   */
+  private getOperatorOffsets(channelId: number): [number, number] {
+    const baseOperatorMap: [number, number][] = [
+      [0x00, 0x03], [0x01, 0x04], [0x02, 0x05],
+      [0x08, 0x0B], [0x09, 0x0C], [0x0A, 0x0D],
+      [0x10, 0x13], [0x11, 0x14], [0x12, 0x15],
+    ];
+
+    if (channelId < 9) {
+      return baseOperatorMap[channelId];
+    } else {
+      // Channels 9-17 use second register set (add 0x100)
+      const localChannel = channelId - 9;
+      const [mod, car] = baseOperatorMap[localChannel];
+      return [mod + 0x100, car + 0x100];
+    }
+  }
+
+  /**
+   * Write all registers for a single operator
+   */
+  private writeOperatorRegisters(operatorOffset: number, operator: OPLOperator): void {
+    // Register 0x20-0x35: AM, VIB, EGT, KSR, MULT
+    const reg20 =
+      operator.frequencyMultiplier |
+      (operator.keyScaleRate ? 0x10 : 0) |
+      (operator.envelopeType ? 0x20 : 0) |
+      (operator.vibrato ? 0x40 : 0) |
+      (operator.amplitudeModulation ? 0x80 : 0);
+    this.writeOPL(0x20 + operatorOffset, reg20);
+
+    // Register 0x40-0x55: KSL, TL (Output Level)
+    const reg40 = operator.outputLevel | (operator.keyScaleLevel << 6);
+    this.writeOPL(0x40 + operatorOffset, reg40);
+
+    // Register 0x60-0x75: AR, DR (Attack Rate, Decay Rate)
+    const reg60 = operator.decayRate | (operator.attackRate << 4);
+    this.writeOPL(0x60 + operatorOffset, reg60);
+
+    // Register 0x80-0x95: SL, RR (Sustain Level, Release Rate)
+    const reg80 = operator.releaseRate | (operator.sustainLevel << 4);
+    this.writeOPL(0x80 + operatorOffset, reg80);
+
+    // Register 0xE0-0xF5: Waveform Select
+    this.writeOPL(0xE0 + operatorOffset, operator.waveform);
+  }
+
+  /**
    * Load an instrument patch to a specific channel
-   * TODO: Implement in next phase
+   * Programs modulator, carrier, feedback, and connection
    */
   public loadPatch(channelId: number, patch: OPLPatch): void {
-    console.log(`[SimpleSynth] TODO: Load patch "${patch.name}" to channel ${channelId}`);
+    if (channelId < 0 || channelId >= 18) {
+      throw new Error(`Invalid channel: ${channelId}. Must be 0-17.`);
+    }
+
+    console.log(`[SimpleSynth] Loading patch "${patch.name}" to channel ${channelId}`);
+
+    // Store patch reference
+    this.channelPatches.set(channelId, patch);
+
+    // Get operator offsets for this channel
+    const [modOffset, carOffset] = this.getOperatorOffsets(channelId);
+
+    // Program modulator (operator 1)
+    this.writeOperatorRegisters(modOffset, patch.modulator);
+
+    // Program carrier (operator 2)
+    this.writeOperatorRegisters(carOffset, patch.carrier);
+
+    // Program feedback + connection (register 0xC0-0xC8 / 0x1C0-0x1C8)
+    // Following working test pattern: initialize to 0x00 first
+    const c0Register = this.getChannelRegister(0xC0, channelId);
+    this.writeOPL(c0Register, 0x00); // Reset first (DOSBox workaround)
+
+    // Now set feedback and connection
+    // Bits 1-3: Feedback (0-7)
+    // Bit 0: Connection (0=FM, 1=Additive)
+    // Bits 4-5: Output routing (we set to 0x30 for stereo)
+    const feedbackByte = (patch.feedback << 1) | (patch.connection === 'additive' ? 1 : 0);
+    const regC0 = feedbackByte | 0x30; // 0x30 = stereo output (CHA + CHB)
+    this.writeOPL(c0Register, regC0);
+
+    console.log(`[SimpleSynth] ✅ Patch loaded to channel ${channelId}`);
   }
 
   /**
    * Get the currently loaded patch for a channel
    */
-  public getChannelPatch(_channelId: number): OPLPatch | null {
-    return null;
+  public getChannelPatch(channelId: number): OPLPatch | null {
+    return this.channelPatches.get(channelId) || null;
   }
 
   /**
    * Get all loaded patches
    */
   public getAllPatches(): Array<[number, string]> {
-    return [];
+    const result: Array<[number, string]> = [];
+    for (let ch = 0; ch < 18; ch++) {
+      const patch = this.channelPatches.get(ch);
+      if (patch) {
+        result.push([ch, patch.name]);
+      }
+    }
+    return result;
   }
 
   /**

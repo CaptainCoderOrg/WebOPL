@@ -79,35 +79,14 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
     this.chipWrite(0x104, 0x00);
 
     // Initialize C0-C8 registers (DOSBox workaround from working test)
-    // IMPORTANT: Initialize to 0x00 first, THEN program them later
+    // IMPORTANT: Initialize to 0x00 first, THEN program them later via loadPatch()
     console.log('[OPLWorkletProcessor] Initializing C0-C8 registers to 0x00...');
     for (let ch = 0; ch < 9; ch++) {
       this.chipWrite(0xC0 + ch, 0x00);        // Bank 0 channels 0-8
       this.chipWrite(0x100 + 0xC0 + ch, 0x00); // Bank 1 channels 9-17
     }
 
-    // Now program default instrument on channel 0 for testing
-    // (Simple sine wave like in opl3-chip-test.html)
-    console.log('[OPLWorkletProcessor] Programming default instrument on channel 0...');
-
-    // Modulator (operator 0x00)
-    this.chipWrite(0x20, 0x01); // AM=0, VIB=0, EGT=0, KSR=0, MULT=1
-    this.chipWrite(0x40, 0x10); // KSL=0, TL=16
-    this.chipWrite(0x60, 0xF0); // AR=15, DR=0
-    this.chipWrite(0x80, 0x77); // SL=7, RR=7
-    this.chipWrite(0xE0, 0x00); // Waveform=0 (sine)
-
-    // Carrier (operator 0x03)
-    this.chipWrite(0x23, 0x01); // AM=0, VIB=0, EGT=0, KSR=0, MULT=1
-    this.chipWrite(0x43, 0x00); // KSL=0, TL=0 (max volume)
-    this.chipWrite(0x63, 0xF0); // AR=15, DR=0
-    this.chipWrite(0x83, 0x77); // SL=7, RR=7
-    this.chipWrite(0xE3, 0x00); // Waveform=0 (sine)
-
-    // Channel 0 settings: 0x30 = stereo output (left + right)
-    this.chipWrite(0xC0, 0x30);
-
-    console.log('[OPLWorkletProcessor] ✅ OPL3 mode enabled and channel 0 programmed');
+    console.log('[OPLWorkletProcessor] ✅ OPL3 mode enabled, ready for patch loading');
 
     this.isReady = true;
 

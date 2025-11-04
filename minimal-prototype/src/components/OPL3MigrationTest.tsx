@@ -7,24 +7,41 @@
 
 import { useState } from 'react';
 import { SimpleSynth } from '../SimpleSynth';
+import { defaultPatches } from '../data/defaultPatches';
 
 export function OPL3MigrationTest() {
   const [synth, setSynth] = useState<SimpleSynth | null>(null);
   const [status, setStatus] = useState<string>('Not initialized');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [selectedPatchIndex, setSelectedPatchIndex] = useState<number>(0);
 
   const init = async () => {
     try {
       setStatus('Initializing...');
       const newSynth = new SimpleSynth();
       await newSynth.init();
+
+      // Load default instrument on channel 0
+      console.log('OPL3 Test: Loading default patch...');
+      newSynth.loadPatch(0, defaultPatches[selectedPatchIndex]);
+
       setSynth(newSynth);
-      setStatus('✅ Ready!');
-      console.log('OPL3 Test: Synth initialized');
+      setStatus(`✅ Ready! (${defaultPatches[selectedPatchIndex].name})`);
+      console.log('OPL3 Test: Synth initialized with default patch');
     } catch (error) {
       setStatus(`❌ Error: ${error}`);
       console.error('OPL3 Test: Init failed:', error);
     }
+  };
+
+  const changePatch = (patchIndex: number) => {
+    if (!synth) return;
+
+    setSelectedPatchIndex(patchIndex);
+    const patch = defaultPatches[patchIndex];
+    console.log(`OPL3 Test: Switching to "${patch.name}"`);
+    synth.loadPatch(0, patch);
+    setStatus(`✅ Ready! (${patch.name})`);
   };
 
   const playNote = async (midiNote: number, noteName: string) => {
@@ -103,6 +120,39 @@ export function OPL3MigrationTest() {
 
       {synth && (
         <div>
+          <div style={{
+            padding: '15px',
+            marginBottom: '20px',
+            backgroundColor: '#2d2d2d',
+            borderRadius: '5px',
+            border: '2px solid #4a4a4a'
+          }}>
+            <h2 style={{ color: '#ffffff' }}>Instrument</h2>
+            <p style={{ marginBottom: '10px', color: '#e0e0e0' }}>
+              Select an instrument to test:
+            </p>
+            <select
+              value={selectedPatchIndex}
+              onChange={(e) => changePatch(Number(e.target.value))}
+              style={{
+                width: '100%',
+                padding: '10px',
+                fontSize: '16px',
+                backgroundColor: '#1e1e1e',
+                color: '#e0e0e0',
+                border: '1px solid #4a4a4a',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              {defaultPatches.map((patch, index) => (
+                <option key={index} value={index}>
+                  {patch.id}: {patch.name} {patch.category ? `(${patch.category})` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <h2 style={{ color: '#ffffff' }}>Test Notes</h2>
           <p style={{ marginBottom: '15px', color: '#e0e0e0' }}>
             Click any note to hear it play for 1 second:
@@ -165,11 +215,16 @@ export function OPL3MigrationTest() {
               fontSize: '12px',
               border: '1px solid #4a4a4a'
             }}>
-{`[SimpleSynth] Using AudioWorklet mode...
-[SimpleSynth] ✅ OPL3 code loaded
+{`[SimpleSynth] Initializing OPL3...
+[SimpleSynth] ✅ AudioContext created (sample rate: 49716 Hz)
+[SimpleSynth] ✅ OPL3 browser bundle loaded
+[OPLWorkletProcessor] ✅ OPL3 browser bundle loaded
 [OPLWorkletProcessor] ✅ OPL3 chip created
-[OPLWorkletProcessor] ✅ OPL3 mode enabled with all channels in 2-op mode
-[SimpleSynth] ✅ OPL3 initialized in worklet`}
+[OPLWorkletProcessor] ✅ OPL3 mode enabled, ready for patch loading
+[SimpleSynth] ✅ OPL3 chip ready in AudioWorklet
+[SimpleSynth] ✅ Initialization complete!
+[SimpleSynth] Loading patch "Acoustic Grand Piano" to channel 0
+[SimpleSynth] ✅ Patch loaded to channel 0`}
             </pre>
           </div>
         </div>
