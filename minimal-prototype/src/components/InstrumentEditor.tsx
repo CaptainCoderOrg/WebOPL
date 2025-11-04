@@ -3,7 +3,7 @@
  * Modal for editing instrument parameters
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { OPLPatch } from '../types/OPLPatch';
 import { PianoKeyboard } from './PianoKeyboard';
 import './InstrumentEditor.css';
@@ -39,11 +39,21 @@ export function InstrumentEditor({
   // Local state for editing (not applied until Save)
   const [editedPatch, setEditedPatch] = useState<OPLPatch>(currentPatch);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
+  const [isSoloPlaying, setIsSoloPlaying] = useState(false);
+  const [currentSoloNote, setCurrentSoloNote] = useState<number | null>(null);
+
+  // Ref to track current edited patch for Solo playback (avoids restarting melody)
+  const editedPatchRef = useRef<OPLPatch>(editedPatch);
 
   // Reset local state when currentPatch changes
   useEffect(() => {
     setEditedPatch(currentPatch);
   }, [currentPatch]);
+
+  // Update patch ref whenever editedPatch changes (for Solo playback)
+  useEffect(() => {
+    editedPatchRef.current = editedPatch;
+  }, [editedPatch]);
 
   // Handle Escape key
   useEffect(() => {
@@ -64,6 +74,80 @@ export function InstrumentEditor({
       document.body.style.overflow = 'unset';
     };
   }, []);
+
+  // Solo melody playback
+  useEffect(() => {
+    if (!isSoloPlaying || !synth) {
+      setCurrentSoloNote(null);
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+
+    // Simple recognizable melody: "Twinkle Twinkle Little Star" (first line)
+    // C C G G A A G - F F E E D D C
+    const melody = [
+      { note: 60, duration: 400 }, // C
+      { note: 60, duration: 400 }, // C
+      { note: 67, duration: 400 }, // G
+      { note: 67, duration: 400 }, // G
+      { note: 69, duration: 400 }, // A
+      { note: 69, duration: 400 }, // A
+      { note: 67, duration: 800 }, // G (longer)
+      { note: 65, duration: 400 }, // F
+      { note: 65, duration: 400 }, // F
+      { note: 64, duration: 400 }, // E
+      { note: 64, duration: 400 }, // E
+      { note: 62, duration: 400 }, // D
+      { note: 62, duration: 400 }, // D
+      { note: 60, duration: 800 }, // C (longer)
+    ];
+
+    let currentNoteIndex = 0;
+    let timeoutId: number;
+
+    const playNextNote = () => {
+      if (!isSoloPlaying) return;
+
+      // Load edited patch (use ref to get latest patch without restarting melody)
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentNote = melody[currentNoteIndex];
+
+      // Highlight the note being played
+      setCurrentSoloNote(currentNote.note);
+
+      // Play note
+      synth.noteOn(PREVIEW_CHANNEL, currentNote.note);
+
+      // Stop note after duration (with slight gap for articulation)
+      setTimeout(() => {
+        synth.noteOff(PREVIEW_CHANNEL, currentNote.note);
+        setCurrentSoloNote(null);
+      }, currentNote.duration * 0.8);
+
+      // Move to next note
+      currentNoteIndex = (currentNoteIndex + 1) % melody.length;
+
+      // Schedule next note
+      timeoutId = window.setTimeout(playNextNote, currentNote.duration);
+    };
+
+    // Start playing
+    playNextNote();
+
+    // Cleanup
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      // Stop any playing notes
+      melody.forEach(({ note }) => {
+        synth.noteOff(PREVIEW_CHANNEL, note);
+      });
+      setCurrentSoloNote(null);
+    };
+  }, [isSoloPlaying, synth]);
 
   /**
    * Preview the current edited patch
@@ -321,23 +405,36 @@ export function InstrumentEditor({
 
             <div className="editor-keyboard-container">
               {synth ? (
-                <PianoKeyboard
-                  startNote={48}
-                  endNote={72}
-                  height={100}
-                  showLabels={true}
-                  compact={true}
-                  onNoteOn={(note) => {
-                    // Load edited patch to preview channel before playing
-                    const PREVIEW_CHANNEL = 8;
-                    synth.setTrackPatch(PREVIEW_CHANNEL, editedPatch);
-                    synth.noteOn(PREVIEW_CHANNEL, note);
-                  }}
-                  onNoteOff={(note) => {
-                    const PREVIEW_CHANNEL = 8;
-                    synth.noteOff(PREVIEW_CHANNEL, note);
-                  }}
-                />
+                <>
+                  <PianoKeyboard
+                    startNote={48}
+                    endNote={72}
+                    height={100}
+                    showLabels={true}
+                    compact={true}
+                    activeNotes={currentSoloNote !== null ? new Set([currentSoloNote]) : undefined}
+                    onNoteOn={(note) => {
+                      // Load edited patch to preview channel before playing
+                      const PREVIEW_CHANNEL = 8;
+                      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatch);
+                      synth.noteOn(PREVIEW_CHANNEL, note);
+                    }}
+                    onNoteOff={(note) => {
+                      const PREVIEW_CHANNEL = 8;
+                      synth.noteOff(PREVIEW_CHANNEL, note);
+                    }}
+                  />
+                  <div className="editor-solo-control">
+                    <label className="editor-solo-label">
+                      <input
+                        type="checkbox"
+                        checked={isSoloPlaying}
+                        onChange={(e) => setIsSoloPlaying(e.target.checked)}
+                      />
+                      <span>Solo (auto-play melody)</span>
+                    </label>
+                  </div>
+                </>
               ) : (
                 <p className="editor-keyboard-disabled">
                   Synth not available
