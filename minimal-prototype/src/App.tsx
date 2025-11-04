@@ -636,7 +636,7 @@ function App() {
       </Route>
 
       <Route path="/test-keyboard">
-        <PianoKeyboardTest synth={synth || undefined} />
+        <PianoKeyboardTest synth={synth || undefined} instrumentBank={instrumentBank} />
       </Route>
 
       {/* Instrument Editor Modal */}

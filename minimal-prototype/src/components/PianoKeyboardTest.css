@@ -40,7 +40,8 @@
   font-size: 13px;
 }
 
-.config-section input[type="number"] {
+.config-section input[type="number"],
+.config-section select {
   width: 100%;
   padding: 6px;
   margin-top: 4px;
@@ -48,6 +49,15 @@
   border: 1px solid #4d4d4d;
   border-radius: 4px;
   color: #fff;
+}
+
+.config-section select {
+  cursor: pointer;
+}
+
+.config-section select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .config-section input[type="range"] {

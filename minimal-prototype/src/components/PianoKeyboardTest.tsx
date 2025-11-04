@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PianoKeyboard } from './PianoKeyboard';
 import type { SimpleSynth } from '../SimpleSynth';
+import type { OPLPatch } from '../types/OPLPatch';
 import './PianoKeyboardTest.css';
 
 export interface PianoKeyboardTestProps {
   synth?: SimpleSynth;
+  instrumentBank?: OPLPatch[];
 }
 
-export function PianoKeyboardTest({ synth }: PianoKeyboardTestProps) {
+export function PianoKeyboardTest({ synth, instrumentBank = [] }: PianoKeyboardTestProps) {
   // Configuration state
   const [startNote, setStartNote] = useState(60); // C-4
   const [endNote, setEndNote] = useState(72);     // C-5
@@ -17,12 +19,28 @@ export function PianoKeyboardTest({ synth }: PianoKeyboardTestProps) {
   const [disabled, setDisabled] = useState(false);
   const [playSound, setPlaySound] = useState(true);
   const [channel] = useState(8);
+  const [selectedPatchId, setSelectedPatchId] = useState(0);
 
   // Active notes (for visualization testing)
   const [activeNotes, setActiveNotes] = useState<Set<number>>(new Set());
 
   // Track-based visualization state (for future use)
   const [activeNotesByTrack] = useState<Map<number, { notes: Set<number>; color: string }>>(new Map());
+
+  // Load patch when selection changes
+  useEffect(() => {
+    if (synth && instrumentBank.length > 0) {
+      const patch = instrumentBank[selectedPatchId];
+      if (patch) {
+        console.log(`[PianoKeyboardTest] Setting track ${channel} to patch ${selectedPatchId} (${patch.name})`);
+        synth.setTrackPatch(channel, patch);
+      } else {
+        console.warn(`[PianoKeyboardTest] Patch ${selectedPatchId} not found in instrumentBank`);
+      }
+    } else {
+      console.log(`[PianoKeyboardTest] Cannot load patch - synth: ${!!synth}, instrumentBank.length: ${instrumentBank.length}`);
+    }
+  }, [synth, instrumentBank, selectedPatchId, channel]);
 
   // Handlers
   const handleNoteOn = (note: number) => {
@@ -185,6 +203,20 @@ export function PianoKeyboardTest({ synth }: PianoKeyboardTestProps) {
             />
             Play Sound
           </label>
+          <label>
+            Instrument:
+            <select
+              value={selectedPatchId}
+              onChange={(e) => setSelectedPatchId(Number(e.target.value))}
+              disabled={!synth || instrumentBank.length === 0}
+            >
+              {instrumentBank.map((patch, idx) => (
+                <option key={idx} value={idx}>
+                  {String(idx).padStart(3, '0')} - {patch.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <button onClick={simulatePlayback}>Simulate Playback</button>
         </div>
 
@@ -224,6 +256,8 @@ export function PianoKeyboardTest({ synth }: PianoKeyboardTestProps) {
           <li>Labels: {showLabels ? 'Yes' : 'No'}</li>
           <li>Disabled: {disabled ? 'Yes' : 'No'}</li>
           <li>Play Sound: {playSound ? 'Yes' : 'No'}</li>
+          <li>Channel: {channel}</li>
+          <li>Instrument: {instrumentBank[selectedPatchId]?.name || 'None'}</li>
         </ul>
         <p>Active Notes: [{Array.from(activeNotes).join(', ')}]</p>
       </div>
