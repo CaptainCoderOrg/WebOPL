@@ -19,6 +19,7 @@ interface TrackerGridProps {
   instrumentBank?: OPLPatch[]; // All available patches
   onInstrumentChange?: (trackIndex: number, patchId: number) => void;
   onEditClick?: (trackIndex: number) => void;
+  compact?: boolean;          // Compact mode (narrow columns, minimal headers)
 }
 
 export function TrackerGrid({
@@ -31,6 +32,7 @@ export function TrackerGrid({
   instrumentBank,
   onInstrumentChange,
   onEditClick,
+  compact = false,
 }: TrackerGridProps) {
   // Track colors for visual distinction
   const trackColors = ['#00ff00', '#00aaff', '#ffaa00', '#ff00ff'];
@@ -148,7 +150,7 @@ export function TrackerGrid({
   };
 
   return (
-    <div className="tracker-grid-container">
+    <div className={`tracker-grid-container ${compact ? 'compact-mode' : ''}`}>
       <table className="tracker-grid">
         <thead>
           <tr>
@@ -160,37 +162,61 @@ export function TrackerGrid({
               const currentPatch = instrumentBank?.[patchId];
 
               return (
-                <th key={i} className="track-header" style={{ borderTopColor: trackColor }}>
-                  <div className="track-header-content">
-                    <span className="track-number" style={{ color: trackColor }}>
-                      Track {i + 1}
-                    </span>
-                    {showInstruments && currentPatch && (
-                      <div className="track-instrument-selector">
-                        <select
-                          value={patchId}
-                          onChange={(e) => onInstrumentChange(i, parseInt(e.target.value, 10))}
-                          className="track-instrument-dropdown"
-                          title={currentPatch.name}
-                          aria-label={`Instrument for Track ${i + 1}`}
-                        >
-                          {instrumentBank.map((p, idx) => (
-                            <option key={idx} value={idx} title={p.name}>
-                              {p.name}
-                            </option>
-                          ))}
-                        </select>
+                <th
+                  key={i}
+                  className={compact ? 'track-header track-header-compact' : 'track-header'}
+                  style={{ borderTopColor: trackColor }}
+                >
+                  {compact ? (
+                    // Compact mode: just track number and edit button
+                    <div className="track-header-compact-content">
+                      <span className="track-number-compact" style={{ color: trackColor }}>
+                        {i + 1}
+                      </span>
+                      {showInstruments && onEditClick && (
                         <button
                           onClick={() => onEditClick(i)}
-                          className="track-edit-button"
-                          title={`Edit ${currentPatch.name}`}
+                          className="track-edit-button-compact"
+                          title={`Edit Track ${i + 1}: ${currentPatch?.name || 'Unknown'}`}
                           aria-label={`Edit instrument for Track ${i + 1}`}
                         >
                           ✏️
                         </button>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  ) : (
+                    // Full mode: track number, dropdown, and edit button
+                    <div className="track-header-content">
+                      <span className="track-number" style={{ color: trackColor }}>
+                        Track {i + 1}
+                      </span>
+                      {showInstruments && currentPatch && (
+                        <div className="track-instrument-selector">
+                          <select
+                            value={patchId}
+                            onChange={(e) => onInstrumentChange(i, parseInt(e.target.value, 10))}
+                            className="track-instrument-dropdown"
+                            title={currentPatch.name}
+                            aria-label={`Instrument for Track ${i + 1}`}
+                          >
+                            {instrumentBank.map((p, idx) => (
+                              <option key={idx} value={idx} title={p.name}>
+                                {p.name}
+                              </option>
+                            ))}
+                          </select>
+                          <button
+                            onClick={() => onEditClick(i)}
+                            className="track-edit-button"
+                            title={`Edit ${currentPatch.name}`}
+                            aria-label={`Edit instrument for Track ${i + 1}`}
+                          >
+                            ✏️
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </th>
               );
             })}

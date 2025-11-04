@@ -64,6 +64,18 @@
   background-color: #ff0000;
 }
 
+/* Compact mode toggle active state */
+.btn-compact-active {
+  background-color: #2a4a2a;
+  border-color: #00ff00;
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.btn-compact-active:hover:not(:disabled) {
+  background-color: #3a5a3a;
+}
+
 /* BPM Input */
 .bpm-input {
   width: 80px;

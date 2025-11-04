@@ -15,6 +15,11 @@
   color: #00ff00;
 }
 
+/* Compact mode: table sizes to content */
+.compact-mode .tracker-grid {
+  width: auto;
+}
+
 /* Sticky header */
 .tracker-grid thead {
   position: sticky;
@@ -116,6 +121,63 @@
 
 .track-edit-button:active {
   transform: scale(0.95);
+}
+
+/* Compact mode styles */
+.track-header-compact {
+  min-width: 50px !important;
+  max-width: 50px !important;
+  width: 50px !important;
+  padding: 6px 2px;
+}
+
+.track-header-compact-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.track-number-compact {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.track-edit-button-compact {
+  padding: 2px 3px;
+  font-size: 11px;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.track-edit-button-compact:hover {
+  background-color: #3a3a3a;
+  border-color: #555;
+  transform: scale(1.05);
+}
+
+.track-edit-button-compact:active {
+  transform: scale(0.95);
+}
+
+/* Compact mode: narrower note cells */
+.compact-mode .note-cell {
+  min-width: 50px !important;
+  max-width: 50px !important;
+  width: 50px !important;
+}
+
+/* Compact mode: narrower note inputs */
+.compact-mode .note-input {
+  min-width: 44px !important;
+  max-width: 44px !important;
+  width: 44px !important;
+  padding: 4px 2px !important;
+  font-size: 13px !important;
 }
 
 /* Row styling */

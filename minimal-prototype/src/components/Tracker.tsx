@@ -59,6 +59,9 @@ export function Tracker({
   // Quick guide collapsed state
   const [guideCollapsed, setGuideCollapsed] = useState(false);
 
+  // Compact mode state (narrow columns, minimal headers)
+  const [compactMode, setCompactMode] = useState(false);
+
   /**
    * Set up player row change callback
    */
@@ -279,6 +282,13 @@ export function Tracker({
           <button onClick={clearPattern} disabled={isPlaying}>
             🗑️ Clear
           </button>
+          <button
+            onClick={() => setCompactMode(!compactMode)}
+            className={compactMode ? 'btn-compact-active' : ''}
+            title={compactMode ? 'Switch to full view' : 'Switch to compact view'}
+          >
+            {compactMode ? '📏 Full' : '📐 Compact'}
+          </button>
         </div>
       </div>
 
@@ -310,6 +320,7 @@ export function Tracker({
           instrumentBank={bankLoaded ? instrumentBank : undefined}
           onInstrumentChange={bankLoaded ? handleInstrumentChange : undefined}
           onEditClick={bankLoaded ? onEditInstrument : undefined}
+          compact={compactMode}
         />
       </div>
 
