@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   isBlackKey,
   getNoteName,
@@ -60,6 +60,29 @@ export function PianoKeyboard({
 }: PianoKeyboardProps) {
   // Local state for mouse-pressed keys
   const [pressedKeys, setPressedKeys] = useState<Set<number>>(new Set());
+  // Track if any mouse button is currently down (for drag-to-play)
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  // Track the last note played during drag (for cleanup)
+  const [lastDragNote, setLastDragNote] = useState<number | null>(null);
+
+  // Listen for global mouse up to clear drag state and release all notes
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      setIsMouseDown(false);
+      setLastDragNote(null);
+      // Release all currently pressed keys
+      setPressedKeys(prev => {
+        // Call noteOff for each pressed key
+        prev.forEach(note => {
+          onNoteOff?.(note);
+        });
+        return new Set();
+      });
+    };
+
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+  }, [onNoteOff]);
 
   // Calculate track indicators for each note
   // Each note can have multiple track indicators (4px tall colored bars)
@@ -117,26 +140,44 @@ export function PianoKeyboard({
 
   const handleMouseDown = useCallback((midiNote: number) => {
     if (disabled) return;
+    setIsMouseDown(true);
+    setLastDragNote(midiNote);
     setPressedKeys(prev => new Set(prev).add(midiNote));
     onNoteOn?.(midiNote);
   }, [disabled, onNoteOn]);
 
-  const handleMouseUp = useCallback((midiNote: number) => {
+  const handleMouseEnter = useCallback((midiNote: number) => {
     if (disabled) return;
-    setPressedKeys(prev => {
-      const next = new Set(prev);
-      next.delete(midiNote);
-      return next;
-    });
-    onNoteOff?.(midiNote);
-  }, [disabled, onNoteOff]);
+    // Play note if dragging (mouse button down)
+    if (isMouseDown && !pressedKeys.has(midiNote)) {
+      // Release previous drag note if it exists
+      if (lastDragNote !== null && lastDragNote !== midiNote) {
+        setPressedKeys(prev => {
+          const next = new Set(prev);
+          next.delete(lastDragNote);
+          return next;
+        });
+        onNoteOff?.(lastDragNote);
+      }
+
+      // Play new note
+      setLastDragNote(midiNote);
+      setPressedKeys(prev => new Set(prev).add(midiNote));
+      onNoteOn?.(midiNote);
+    }
+  }, [disabled, isMouseDown, pressedKeys, lastDragNote, onNoteOn, onNoteOff]);
 
   const handleMouseLeave = useCallback((midiNote: number) => {
-    // Auto-release if mouse leaves while pressed
+    // Stop note when mouse leaves
     if (pressedKeys.has(midiNote)) {
-      handleMouseUp(midiNote);
+      setPressedKeys(prev => {
+        const next = new Set(prev);
+        next.delete(midiNote);
+        return next;
+      });
+      onNoteOff?.(midiNote);
     }
-  }, [pressedKeys, handleMouseUp]);
+  }, [pressedKeys, onNoteOff]);
 
   return (
     <div
@@ -159,7 +200,7 @@ export function PianoKeyboard({
               height: geometry.height
             }}
             onMouseDown={() => handleMouseDown(note)}
-            onMouseUp={() => handleMouseUp(note)}
+            onMouseEnter={() => handleMouseEnter(note)}
             onMouseLeave={() => handleMouseLeave(note)}
             disabled={disabled}
             aria-label={`${getNoteName(note)} key`}
@@ -199,7 +240,7 @@ export function PianoKeyboard({
               height: geometry.height
             }}
             onMouseDown={() => handleMouseDown(note)}
-            onMouseUp={() => handleMouseUp(note)}
+            onMouseEnter={() => handleMouseEnter(note)}
             onMouseLeave={() => handleMouseLeave(note)}
             disabled={disabled}
             aria-label={`${getNoteName(note)} key`}
