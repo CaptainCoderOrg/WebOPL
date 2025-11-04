@@ -134,6 +134,33 @@ export class SimplePlayer {
   }
 
   /**
+   * Change BPM during playback
+   * If playing, restarts the interval with new timing
+   */
+  setBPM(newBPM: number): void {
+    if (!this.pattern) {
+      console.warn('[SimplePlayer] No pattern loaded');
+      return;
+    }
+
+    // Update pattern BPM
+    this.pattern.bpm = newBPM;
+    console.log(`[SimplePlayer] BPM changed to ${newBPM}`);
+
+    // If playing, restart interval with new timing
+    if (this.isPlaying && this.intervalId !== null) {
+      clearInterval(this.intervalId);
+
+      const msPerRow = this.calculateMsPerRow();
+      console.log(`[SimplePlayer] Restarting playback at ${msPerRow.toFixed(2)}ms per row`);
+
+      this.intervalId = window.setInterval(() => {
+        this.playRow();
+      }, msPerRow);
+    }
+  }
+
+  /**
    * Play current row
    * @private
    */

@@ -262,12 +262,20 @@ function App() {
     }
 
     // Clamp to valid range
+    let newBpm: number;
     if (num < 60) {
-      setBpm(60);
+      newBpm = 60;
     } else if (num > 240) {
-      setBpm(240);
+      newBpm = 240;
     } else {
-      setBpm(num);
+      newBpm = num;
+    }
+
+    setBpm(newBpm);
+
+    // Update player if currently playing
+    if (player && isPlaying) {
+      player.setBPM(newBpm);
     }
   };
 
@@ -425,7 +433,6 @@ function App() {
               onChange={(e) => handleBPMChange(e.target.value)}
               min={60}
               max={240}
-              disabled={isPlaying}
               className="bpm-input"
             />
           </label>
@@ -468,7 +475,6 @@ function App() {
           instrumentBank={instrumentBank}
           onInstrumentChange={handleInstrumentChange}
           onEditClick={handleEditClick}
-          disabled={isPlaying}
         />
       )}
 
