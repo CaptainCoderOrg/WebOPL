@@ -16,5 +16,11 @@
     "name": "Cave Exploration",
     "description": "Dark atmospheric cave music with mysterious melodies and deep bass",
     "file": "cave-exploration.yaml"
+  },
+  {
+    "id": "orchestral-fanfare",
+    "name": "Orchestral Fanfare",
+    "description": "Triumphant orchestral fanfare with full brass and string sections",
+    "file": "orchestral-fanfare.yaml"
   }
 ]
