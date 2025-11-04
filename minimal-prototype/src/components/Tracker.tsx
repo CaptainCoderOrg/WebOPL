@@ -283,6 +283,46 @@ export function Tracker({
     }
   };
 
+  /**
+   * Delete a track
+   */
+  const handleDeleteTrack = (trackIndex: number) => {
+    if (isPlaying) return;
+
+    // Check if track has any notes
+    const hasNotes = pattern.some(row => {
+      const cell = row[trackIndex];
+      return cell !== '---' && cell.trim() !== '';
+    });
+
+    // Confirm deletion if track has notes
+    if (hasNotes) {
+      const confirmed = window.confirm(
+        `Track ${trackIndex + 1} contains notes.\n\nAre you sure you want to delete it?`
+      );
+      if (!confirmed) return;
+    }
+
+    console.log(`Deleting track ${trackIndex + 1}...`);
+
+    // Remove the column from each row
+    const newPattern = pattern.map(row => {
+      const newRow = [...row];
+      newRow.splice(trackIndex, 1);
+      return newRow;
+    });
+    setPattern(newPattern);
+
+    // Remove the instrument
+    const newInstruments = [...trackInstruments];
+    newInstruments.splice(trackIndex, 1);
+    setTrackInstruments(newInstruments);
+
+    // Decrement track count
+    setNumTracks(numTracks - 1);
+    console.log(`Track ${trackIndex + 1} deleted`);
+  };
+
   return (
     <div className="tracker">
       {/* Controls */}
@@ -369,6 +409,7 @@ export function Tracker({
           instrumentBank={bankLoaded ? instrumentBank : undefined}
           onInstrumentChange={bankLoaded ? handleInstrumentChange : undefined}
           onEditClick={bankLoaded ? onEditInstrument : undefined}
+          onDeleteClick={handleDeleteTrack}
           compact={compactMode}
         />
       </div>

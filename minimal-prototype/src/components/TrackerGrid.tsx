@@ -19,6 +19,7 @@ interface TrackerGridProps {
   instrumentBank?: OPLPatch[]; // All available patches
   onInstrumentChange?: (trackIndex: number, patchId: number) => void;
   onEditClick?: (trackIndex: number) => void;
+  onDeleteClick?: (trackIndex: number) => void;
   compact?: boolean;          // Compact mode (narrow columns, minimal headers)
 }
 
@@ -32,6 +33,7 @@ export function TrackerGrid({
   instrumentBank,
   onInstrumentChange,
   onEditClick,
+  onDeleteClick,
   compact = false,
 }: TrackerGridProps) {
   // Track colors for visual distinction
@@ -168,21 +170,33 @@ export function TrackerGrid({
                   style={{ borderTopColor: trackColor }}
                 >
                   {compact ? (
-                    // Compact mode: just track number and edit button
+                    // Compact mode: just track number, edit button, and delete button
                     <div className="track-header-compact-content">
                       <span className="track-number-compact" style={{ color: trackColor }}>
                         {i + 1}
                       </span>
-                      {showInstruments && onEditClick && (
-                        <button
-                          onClick={() => onEditClick(i)}
-                          className="track-edit-button-compact"
-                          title={`Edit Track ${i + 1}: ${currentPatch?.name || 'Unknown'}`}
-                          aria-label={`Edit instrument for Track ${i + 1}`}
-                        >
-                          ✏️
-                        </button>
-                      )}
+                      <div className="track-header-buttons-compact">
+                        {showInstruments && onEditClick && (
+                          <button
+                            onClick={() => onEditClick(i)}
+                            className="track-edit-button-compact"
+                            title={`Edit Track ${i + 1}: ${currentPatch?.name || 'Unknown'}`}
+                            aria-label={`Edit instrument for Track ${i + 1}`}
+                          >
+                            ✏️
+                          </button>
+                        )}
+                        {onDeleteClick && (
+                          <button
+                            onClick={() => onDeleteClick(i)}
+                            className="track-delete-button-compact"
+                            title={`Delete Track ${i + 1}`}
+                            aria-label={`Delete Track ${i + 1}`}
+                          >
+                            🗑️
+                          </button>
+                        )}
+                      </div>
                     </div>
                   ) : (
                     // Full mode: track number, dropdown, and edit button
@@ -213,6 +227,16 @@ export function TrackerGrid({
                           >
                             ✏️
                           </button>
+                          {onDeleteClick && (
+                            <button
+                              onClick={() => onDeleteClick(i)}
+                              className="track-delete-button"
+                              title={`Delete Track ${i + 1}`}
+                              aria-label={`Delete Track ${i + 1}`}
+                            >
+                              🗑️
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>

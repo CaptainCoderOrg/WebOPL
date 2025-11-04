@@ -123,6 +123,27 @@
   transform: scale(0.95);
 }
 
+.track-delete-button {
+  padding: 2px 4px;
+  font-size: 12px;
+  background-color: #3a0000;
+  border: 1px solid #660000;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.track-delete-button:hover {
+  background-color: #550000;
+  border-color: #880000;
+  transform: scale(1.05);
+}
+
+.track-delete-button:active {
+  transform: scale(0.95);
+}
+
 /* Compact mode styles */
 .track-header-compact {
   min-width: 50px !important;
@@ -161,6 +182,33 @@
 }
 
 .track-edit-button-compact:active {
+  transform: scale(0.95);
+}
+
+.track-header-buttons-compact {
+  display: flex;
+  gap: 2px;
+  flex-direction: row;
+}
+
+.track-delete-button-compact {
+  padding: 2px 3px;
+  font-size: 11px;
+  background-color: #3a0000;
+  border: 1px solid #660000;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.track-delete-button-compact:hover {
+  background-color: #550000;
+  border-color: #880000;
+  transform: scale(1.05);
+}
+
+.track-delete-button-compact:active {
   transform: scale(0.95);
 }
 
