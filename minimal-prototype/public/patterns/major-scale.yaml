@@ -1,0 +1,35 @@
+# Major Scale Polka
+# Simple C major scale example with bass and chords
+
+name: Major Scale Polka
+description: Simple C major scale with bass accompaniment
+author: WebOPL
+rows: 16
+tracks: 4
+bpm: 120
+
+# Instrument assignments (patch indices)
+instruments: [0, 1, 2, 3]
+
+# Pattern data
+# Each row is an array of note strings (C-4, D-4, etc.)
+# Use "---" for rests/empty cells
+pattern:
+  # Rows 0-7: C major scale on track 0
+  - ["C-4", "C-3", "E-4", "---"]
+  - ["D-4", "---", "---", "---"]
+  - ["E-4", "---", "---", "---"]
+  - ["F-4", "---", "---", "---"]
+  - ["G-4", "G-3", "G-4", "---"]
+  - ["A-4", "---", "---", "---"]
+  - ["B-4", "---", "---", "---"]
+  - ["C-5", "---", "---", "---"]
+  # Rows 8-15: Repeat pattern
+  - ["---", "C-3", "E-4", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "G-3", "G-4", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]

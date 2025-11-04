@@ -8,8 +8,10 @@ import type { SimpleSynth } from '../SimpleSynth';
 import type { SimplePlayer } from '../SimplePlayer';
 import type { TrackerPattern, TrackerNote } from '../SimplePlayer';
 import type { OPLPatch } from '../types/OPLPatch';
+import type { PatternCatalogEntry } from '../types/PatternFile';
 import { noteNameToMIDI } from '../utils/noteConversion';
 import { validatePattern, formatValidationErrors } from '../utils/patternValidation';
+import { loadPatternCatalog, loadPattern } from '../utils/patternLoader';
 import { TrackerGrid } from './TrackerGrid';
 import './Tracker.css';
 
@@ -70,8 +72,32 @@ export function Tracker({
   // Compact mode state (narrow columns, minimal headers)
   const [compactMode, setCompactMode] = useState(false);
 
+  // Pattern catalog
+  const [patternCatalog, setPatternCatalog] = useState<PatternCatalogEntry[]>([]);
+  const [catalogLoaded, setCatalogLoaded] = useState(false);
+
   // Selected example pattern
   const [selectedExample, setSelectedExample] = useState<string>('major-scale');
+
+  /**
+   * Load pattern catalog on mount
+   */
+  useEffect(() => {
+    const loadCatalog = async () => {
+      try {
+        const catalog = await loadPatternCatalog();
+        setPatternCatalog(catalog);
+        setCatalogLoaded(true);
+        console.log('[Tracker] Loaded pattern catalog:', catalog.length, 'patterns');
+      } catch (error) {
+        console.error('[Tracker] Failed to load pattern catalog:', error);
+        // Continue with empty catalog
+        setCatalogLoaded(true);
+      }
+    };
+
+    loadCatalog();
+  }, []);
 
   /**
    * Set up player row change callback
@@ -192,232 +218,45 @@ export function Tracker({
   };
 
   /**
-   * Load example pattern
+   * Load example pattern from YAML file
    */
-  const loadExample = () => {
+  const loadExample = async () => {
     if (isPlaying) return;
 
-    console.log(`Loading example pattern: ${selectedExample}`);
+    try {
+      console.log(`[Tracker] Loading pattern: ${selectedExample}`);
 
-    if (selectedExample === 'rpg-adventure') {
-      // RPG Adventure: 64 rows, 8 tracks
-      // Set up the grid size first
-      setNumRows(64);
-      setNumTracks(8);
+      // Load the pattern file
+      const patternFile = await loadPattern(selectedExample);
 
-      // Create 64x8 pattern
-      const example: string[][] = Array(64)
-        .fill(null)
-        .map(() => Array(8).fill('---'));
+      // Set grid dimensions
+      setNumRows(patternFile.rows);
+      setNumTracks(patternFile.tracks);
 
-      // Track 0: Main melody (Lead instrument)
-      // Bar 1 (rows 0-15): A minor melody
-      example[0][0] = 'A-4';
-      example[4][0] = 'C-5';
-      example[8][0] = 'E-5';
-      example[12][0] = 'D-5';
-      // Bar 2 (rows 16-31): Development
-      example[16][0] = 'C-5';
-      example[20][0] = 'A-4';
-      example[24][0] = 'G-4';
-      example[28][0] = 'A-4';
-      // Bar 3 (rows 32-47): Climax
-      example[32][0] = 'F-5';
-      example[36][0] = 'E-5';
-      example[40][0] = 'D-5';
-      example[44][0] = 'C-5';
-      // Bar 4 (rows 48-63): Resolution
-      example[48][0] = 'E-5';
-      example[52][0] = 'D-5';
-      example[56][0] = 'C-5';
-      example[60][0] = 'A-4';
+      // Set BPM if specified
+      if (patternFile.bpm) {
+        setBpm(patternFile.bpm);
+      }
 
-      // Track 1: Counter melody
-      example[2][1] = 'E-4';
-      example[6][1] = 'G-4';
-      example[10][1] = 'A-4';
-      example[14][1] = 'G-4';
-      example[18][1] = 'E-4';
-      example[22][1] = 'G-4';
-      example[26][1] = 'E-4';
-      example[30][1] = 'D-4';
-      example[34][1] = 'A-4';
-      example[38][1] = 'C-5';
-      example[42][1] = 'G-4';
-      example[46][1] = 'A-4';
-      example[50][1] = 'C-5';
-      example[54][1] = 'B-4';
-      example[58][1] = 'A-4';
-      example[62][1] = 'G-4';
+      // Set pattern data
+      setPattern(patternFile.pattern);
 
-      // Track 2: Bass line (walking bass)
-      example[0][2] = 'A-2';
-      example[4][2] = 'A-2';
-      example[8][2] = 'A-2';
-      example[12][2] = 'A-2';
-      example[16][2] = 'C-3';
-      example[20][2] = 'C-3';
-      example[24][2] = 'G-2';
-      example[28][2] = 'G-2';
-      example[32][2] = 'F-2';
-      example[36][2] = 'F-2';
-      example[40][2] = 'G-2';
-      example[44][2] = 'G-2';
-      example[48][2] = 'A-2';
-      example[52][2] = 'E-2';
-      example[56][2] = 'A-2';
-      example[60][2] = 'A-2';
+      // Set instrument assignments
+      setTrackInstruments(patternFile.instruments);
 
-      // Track 3: Chord progression
-      example[0][3] = 'C-4';
-      example[8][3] = 'E-4';
-      example[16][3] = 'E-4';
-      example[24][3] = 'D-4';
-      example[32][3] = 'A-4';
-      example[40][3] = 'B-4';
-      example[48][3] = 'C-4';
-      example[56][3] = 'E-4';
-
-      // Track 4: Arpeggiated accompaniment
-      example[1][4] = 'A-3';
-      example[3][4] = 'C-4';
-      example[5][4] = 'E-4';
-      example[7][4] = 'C-4';
-      example[9][4] = 'A-3';
-      example[11][4] = 'C-4';
-      example[13][4] = 'E-4';
-      example[15][4] = 'C-4';
-      example[17][4] = 'C-3';
-      example[19][4] = 'E-4';
-      example[21][4] = 'G-4';
-      example[23][4] = 'E-4';
-      example[25][4] = 'G-3';
-      example[27][4] = 'B-4';
-      example[29][4] = 'D-4';
-      example[31][4] = 'B-4';
-      example[33][4] = 'F-3';
-      example[35][4] = 'A-4';
-      example[37][4] = 'C-4';
-      example[39][4] = 'A-4';
-      example[41][4] = 'G-3';
-      example[43][4] = 'B-4';
-      example[45][4] = 'D-4';
-      example[47][4] = 'B-4';
-      example[49][4] = 'A-3';
-      example[51][4] = 'C-4';
-      example[53][4] = 'E-4';
-      example[55][4] = 'C-4';
-      example[57][4] = 'A-3';
-      example[59][4] = 'C-4';
-      example[61][4] = 'E-4';
-      example[63][4] = 'A-3';
-
-      // Track 5: Sustained pad notes
-      example[0][5] = 'A-3';
-      example[16][5] = 'C-4';
-      example[32][5] = 'F-3';
-      example[48][5] = 'A-3';
-
-      // Track 6: Rhythmic accents
-      example[0][6] = 'E-3';
-      example[2][6] = 'E-3';
-      example[4][6] = 'E-3';
-      example[6][6] = 'E-3';
-      example[8][6] = 'E-3';
-      example[10][6] = 'E-3';
-      example[12][6] = 'E-3';
-      example[14][6] = 'E-3';
-      example[16][6] = 'E-3';
-      example[18][6] = 'E-3';
-      example[20][6] = 'E-3';
-      example[22][6] = 'E-3';
-      example[24][6] = 'E-3';
-      example[26][6] = 'E-3';
-      example[28][6] = 'E-3';
-      example[30][6] = 'E-3';
-      example[32][6] = 'E-3';
-      example[34][6] = 'E-3';
-      example[36][6] = 'E-3';
-      example[38][6] = 'E-3';
-      example[40][6] = 'E-3';
-      example[42][6] = 'E-3';
-      example[44][6] = 'E-3';
-      example[46][6] = 'E-3';
-      example[48][6] = 'E-3';
-      example[50][6] = 'E-3';
-      example[52][6] = 'E-3';
-      example[54][6] = 'E-3';
-      example[56][6] = 'E-3';
-      example[58][6] = 'E-3';
-      example[60][6] = 'E-3';
-      example[62][6] = 'E-3';
-
-      // Track 7: Decorative high notes
-      example[3][7] = 'E-5';
-      example[11][7] = 'D-5';
-      example[19][7] = 'G-5';
-      example[27][7] = 'E-5';
-      example[35][7] = 'A-5';
-      example[43][7] = 'G-5';
-      example[51][7] = 'E-5';
-      example[59][7] = 'A-5';
-
-      // Set up instruments for RPG feel
-      const newInstruments = [
-        0,  // Track 0: Lead melody
-        1,  // Track 1: Counter melody
-        2,  // Track 2: Bass
-        3,  // Track 3: Chords
-        0,  // Track 4: Arpeggios (lead sound)
-        1,  // Track 5: Pad
-        2,  // Track 6: Rhythm
-        3,  // Track 7: Decoration
-      ];
-
-      // Update pattern and instruments
-      setPattern(example);
-      setTrackInstruments(newInstruments);
-
-      // Initialize patches for new tracks
+      // Initialize patches for tracks
       if (synth && bankLoaded) {
-        newInstruments.forEach((patchId, trackIndex) => {
+        patternFile.instruments.forEach((patchId, trackIndex) => {
           if (instrumentBank[patchId]) {
             synth.setTrackPatch(trackIndex, instrumentBank[patchId]);
           }
         });
       }
 
-      console.log('RPG Adventure pattern loaded! (64 rows, 8 tracks)');
-    } else {
-      // Major Scale Polka: Original example (uses current rows/tracks)
-      const example: string[][] = Array(numRows)
-        .fill(null)
-        .map(() => Array(numTracks).fill('---'));
-
-      // Track 0: C major scale
-      example[0][0] = 'C-4';
-      example[1][0] = 'D-4';
-      example[2][0] = 'E-4';
-      example[3][0] = 'F-4';
-      example[4][0] = 'G-4';
-      example[5][0] = 'A-4';
-      example[6][0] = 'B-4';
-      example[7][0] = 'C-5';
-
-      // Track 1: Bass notes
-      example[0][1] = 'C-3';
-      example[4][1] = 'G-3';
-      example[8][1] = 'C-3';
-      example[12][1] = 'G-3';
-
-      // Track 2: Chords (every 4 rows)
-      example[0][2] = 'E-4';
-      example[4][2] = 'G-4';
-      example[8][2] = 'E-4';
-      example[12][2] = 'G-4';
-
-      setPattern(example);
-      console.log('Major Scale Polka pattern loaded!');
+      console.log(`[Tracker] Pattern loaded: ${patternFile.name} (${patternFile.rows}×${patternFile.tracks})`);
+    } catch (error) {
+      console.error('[Tracker] Failed to load pattern:', error);
+      alert(`Failed to load pattern: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -623,14 +462,21 @@ export function Tracker({
             <select
               value={selectedExample}
               onChange={(e) => setSelectedExample(e.target.value)}
-              disabled={isPlaying}
+              disabled={isPlaying || !catalogLoaded}
               className="example-selector"
             >
-              <option value="major-scale">Major Scale Polka</option>
-              <option value="rpg-adventure">RPG Adventure</option>
+              {catalogLoaded && patternCatalog.length > 0 ? (
+                patternCatalog.map((entry) => (
+                  <option key={entry.id} value={entry.id} title={entry.description}>
+                    {entry.name}
+                  </option>
+                ))
+              ) : (
+                <option value="">Loading patterns...</option>
+              )}
             </select>
           </label>
-          <button onClick={loadExample} disabled={isPlaying}>
+          <button onClick={loadExample} disabled={isPlaying || !catalogLoaded}>
             📝 Load
           </button>
           <button onClick={clearPattern} disabled={isPlaying}>

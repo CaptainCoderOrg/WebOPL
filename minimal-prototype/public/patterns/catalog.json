@@ -1,0 +1,14 @@
+[
+  {
+    "id": "major-scale",
+    "name": "Major Scale Polka",
+    "description": "Simple C major scale with bass accompaniment",
+    "file": "major-scale.yaml"
+  },
+  {
+    "id": "rpg-adventure",
+    "name": "RPG Adventure",
+    "description": "Fantasy RPG music with multiple melodic and harmonic layers",
+    "file": "rpg-adventure.yaml"
+  }
+]
