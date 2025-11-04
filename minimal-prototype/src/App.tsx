@@ -7,6 +7,7 @@ import { noteNameToMIDI } from './utils/noteConversion';
 import { TrackerGrid } from './components/TrackerGrid';
 import { PatchTest } from './components/PatchTest';
 import { InstrumentSelector } from './components/InstrumentSelector';
+import { InstrumentEditor } from './components/InstrumentEditor';
 import { InstrumentTester } from './components/InstrumentTester';
 import { ChannelManagerTest } from './components/ChannelManagerTest';
 import { DualVoiceTest } from './components/DualVoiceTest';
@@ -42,6 +43,10 @@ function App() {
       .fill(null)
       .map(() => Array(4).fill('---'))
   );
+
+  // Instrument editor modal state
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [editingTrackId, setEditingTrackId] = useState<number>(0);
 
   // Initialize audio engine
   useEffect(() => {
@@ -345,11 +350,64 @@ function App() {
   };
 
   /**
-   * Handle edit button click (placeholder for M6)
+   * Open instrument editor for a specific track
    */
   const handleEditClick = (trackIndex: number) => {
-    console.log(`Edit clicked for track ${trackIndex}`);
-    alert(`Instrument editor coming in Milestone 6!\n\nTrack: ${trackIndex + 1}\nCurrent: ${instrumentBank[trackInstruments[trackIndex]]?.name}`);
+    console.log(`[App] Opening editor for track ${trackIndex}`);
+    setEditingTrackId(trackIndex);
+    setEditorOpen(true);
+  };
+
+  /**
+   * Save edited instrument
+   */
+  const handleSaveInstrument = (trackId: number, patch: OPLPatch) => {
+    console.log(`[App] Saving instrument for track ${trackId}:`, patch.name);
+
+    // Find the patch ID in the instrument bank
+    const patchIndex = instrumentBank.findIndex(p => p.id === patch.id);
+
+    if (patchIndex >= 0) {
+      // If patch already exists in bank, update track instruments to use it
+      setTrackInstruments(prev => {
+        const next = [...prev];
+        next[trackId] = patchIndex;
+        return next;
+      });
+
+      // Update the patch in the bank if it's custom
+      if (patch.isCustom) {
+        setInstrumentBank(prev => {
+          const next = [...prev];
+          next[patchIndex] = patch;
+          return next;
+        });
+      }
+    } else {
+      // New custom patch - add to bank
+      setInstrumentBank(prev => [...prev, patch]);
+      setTrackInstruments(prevTracks => {
+        const next = [...prevTracks];
+        next[trackId] = instrumentBank.length; // Will be the new patch's index
+        return next;
+      });
+    }
+
+    // Load the patch to the synth
+    if (synth) {
+      synth.setTrackPatch(trackId, patch);
+    }
+
+    // Close modal
+    setEditorOpen(false);
+  };
+
+  /**
+   * Cancel editing
+   */
+  const handleCancelEdit = () => {
+    console.log('[App] Cancelled editing');
+    setEditorOpen(false);
   };
 
   // Show loading/error screen if not ready
@@ -572,6 +630,21 @@ function App() {
       <Route path="/opl3-test">
         <OPL3MigrationTest />
       </Route>
+
+      {/* Instrument Editor Modal */}
+      {editorOpen && synth && (
+        <InstrumentEditor
+          trackId={editingTrackId}
+          currentPatch={
+            instrumentBank[trackInstruments[editingTrackId]] ||
+            instrumentBank[0]
+          }
+          availablePatches={instrumentBank}
+          onSave={handleSaveInstrument}
+          onCancel={handleCancelEdit}
+          synth={synth}
+        />
+      )}
     </div>
   );
 }
