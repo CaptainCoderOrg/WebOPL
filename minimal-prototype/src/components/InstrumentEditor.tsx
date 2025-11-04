@@ -310,6 +310,7 @@ export function InstrumentEditor({
               <p className="editor-param-hint">How fast sound fades after release</p>
             </div>
           </div>
+
         </div>
 
         {/* Footer */}

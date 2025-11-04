@@ -1,0 +1,140 @@
+# Piano Keyboard Component
+
+A reusable, interactive piano keyboard component for WebOPL.
+
+## Quick Start
+
+```typescript
+import { PianoKeyboard } from './components/PianoKeyboard';
+
+// Basic usage - 1 octave interactive keyboard
+<PianoKeyboard
+  startNote={60}  // C-4
+  endNote={72}    // C-5
+  onNoteOn={(note) => synth.noteOn(channel, note)}
+  onNoteOff={(note) => synth.noteOff(channel, note)}
+/>
+```
+
+## Features
+
+- 🎹 **Dynamic Range**: Display any range of notes (e.g., C-4 to C-5, C-3 to C-6)
+- 🖱️ **Interactive**: Click/touch keys to play notes
+- 👁️ **Visualization**: Highlight notes being played by the tracker
+- 📐 **Responsive**: Automatically scales to fit container
+- 🎨 **Modes**: Standard and compact sizing options
+- ♿ **Accessible**: Keyboard navigation and ARIA labels
+
+## Documentation
+
+- [DESIGN.md](./DESIGN.md) - Complete design specification
+- [IMPLEMENTATION.md](./IMPLEMENTATION.md) - Step-by-step implementation guide
+
+## Status
+
+**Current Phase**: Design Complete ✅
+**Next Step**: Begin Phase 1 implementation
+
+## Use Cases
+
+### 1. Instrument Editor Preview
+Allow users to test instruments by clicking piano keys:
+```typescript
+<PianoKeyboard
+  startNote={60}
+  endNote={72}
+  height={100}
+  showLabels={true}
+  onNoteOn={(note) => synth.noteOn(8, note)}
+  onNoteOff={(note) => synth.noteOff(8, note)}
+/>
+```
+
+### 2. Pattern Playback Visualization
+Show which notes are currently playing:
+```typescript
+<PianoKeyboard
+  startNote={48}
+  endNote={84}
+  activeNotes={currentlyPlayingNotes}
+  compact={true}
+  disabled={true}  // Visualization only
+/>
+```
+
+### 3. Note Input Tool
+Alternative method for entering notes into the tracker:
+```typescript
+<PianoKeyboard
+  startNote={60}
+  endNote={84}
+  showLabels={true}
+  onNoteOn={(note) => addNoteToPattern(currentRow, currentTrack, note)}
+/>
+```
+
+## Implementation Timeline
+
+| Phase | Description | Time |
+|-------|-------------|------|
+| 1 | Core component & geometry | 2-3 hours |
+| 2 | Interaction handlers | 1-2 hours |
+| 3 | Visual polish | 1-2 hours |
+| 4 | Integration | 1-2 hours |
+| 5 | Testing | 1-2 hours |
+
+**Total**: 6-11 hours
+
+## Design Decisions
+
+### Why Not Flexbox?
+Our previous attempt using flexbox for white keys had persistent alignment issues with black keys. This implementation uses:
+- **CSS Grid** for container structure
+- **Absolute positioning** with calculated offsets for all keys
+- **Explicit pixel positioning** based on white key boundaries
+
+This approach provides pixel-perfect alignment while still supporting responsive scaling.
+
+### Scaling Strategy
+The component calculates its required width based on:
+```
+totalWidth = (whiteKeyCount × whiteKeyWidth) + ((whiteKeyCount - 1) × gap)
+```
+
+If the container is narrower, the entire keyboard scales down proportionally using CSS `transform: scale()`.
+
+## Props API
+
+```typescript
+interface PianoKeyboardProps {
+  startNote: number;           // MIDI note (0-127)
+  endNote: number;             // MIDI note (0-127)
+  height?: number;             // Pixels (default: 80)
+  activeNotes?: Set<number>;   // Highlighted notes
+  onNoteOn?: (note: number) => void;
+  onNoteOff?: (note: number) => void;
+  disabled?: boolean;          // Disable interaction
+  showLabels?: boolean;        // Show note names
+  compact?: boolean;           // Smaller sizing
+}
+```
+
+## Dependencies
+
+- React (existing)
+- TypeScript (existing)
+- SimpleSynth (existing)
+
+**No external dependencies required** - uses plain CSS and standard React hooks.
+
+## Contributing
+
+Before making changes:
+1. Review [DESIGN.md](./DESIGN.md) for architectural decisions
+2. Follow the implementation plan in [IMPLEMENTATION.md](./IMPLEMENTATION.md)
+3. Run tests before committing
+4. Update documentation for API changes
+
+## License
+
+Part of the WebOPL project. See main project LICENSE for details.
