@@ -39,8 +39,22 @@ export interface PianoKeyboardProps {
   /** Height in pixels (optional, defaults to 80) */
   height?: number;
 
-  /** Currently active notes (MIDI numbers) */
+  /** Currently active notes from user interaction (highlighted in default color) */
   activeNotes?: Set<number>;
+
+  /**
+   * Active notes by track with color mapping
+   * Map of track ID -> { notes: Set<number>, color: string }
+   * Each track's notes are rendered with its specified color
+   * Useful for multi-track playback visualization
+   *
+   * Example:
+   * activeNotesByTrack={new Map([
+   *   [0, { notes: new Set([60, 64]), color: '#ff5555' }],  // Track 0: red
+   *   [1, { notes: new Set([67, 72]), color: '#55ff55' }],  // Track 1: green
+   * ])}
+   */
+  activeNotesByTrack?: Map<number, { notes: Set<number>; color: string }>;
 
   /** Called when user presses a key */
   onNoteOn?: (midiNote: number) => void;
@@ -72,14 +86,32 @@ export interface PianoKeyboardProps {
   onNoteOff={(note) => synth.noteOff(8, note)}
 />
 
-// Pattern Player - visualization only
+// Pattern Player - multi-track visualization with colors
 <PianoKeyboard
   startNote={48}   // C-3
   endNote={84}     // C-6
-  activeNotes={currentlyPlayingNotes}
+  activeNotesByTrack={new Map([
+    [0, { notes: new Set([60, 64]), color: '#ff5555' }],  // Bass - red
+    [1, { notes: new Set([67]),      color: '#55ff55' }],  // Lead - green
+    [2, { notes: new Set([72, 76]),  color: '#5555ff' }],  // Chord - blue
+    [3, { notes: new Set([48]),      color: '#ffff55' }],  // Sub - yellow
+  ])}
   height={60}
   compact={true}
-  disabled={true}  // No interaction, just visualization
+  disabled={true}  // Visualization only
+/>
+
+// Pattern Player - show only specific tracks
+<PianoKeyboard
+  startNote={48}
+  endNote={84}
+  activeNotesByTrack={new Map([
+    [0, { notes: trackNotes[0], color: '#ff5555' }],  // Only bass
+    [2, { notes: trackNotes[2], color: '#5555ff' }],  // Only chord
+  ])}
+  height={60}
+  compact={true}
+  disabled={true}
 />
 
 // Note Input Tool - 2 octaves
@@ -187,6 +219,75 @@ const blackKeyLeft = whiteKeysBeforeBlack * (whiteKeyWidth + gap) + whiteKeyWidt
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Default Track Colors */
+/* Used when rendering multiple tracks simultaneously */
+:root {
+  --track-0-color: #ff5555; /* Red - typically bass/low */
+  --track-1-color: #55ff55; /* Green - typically lead/melody */
+  --track-2-color: #5555ff; /* Blue - typically chords/harmony */
+  --track-3-color: #ffff55; /* Yellow - typically percussion/effects */
+}
+
+/* Track Indicator Bars */
+.track-indicators {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.track-indicator {
+  height: 4px;
+  width: 100%;
+  /* Background color set dynamically via inline style */
+}
+```
+
+**Rendering Strategy for Track Visualization:**
+
+Instead of changing the key's background color, each active track displays a **small colored indicator bar** on the key.
+
+**Visual Design:**
+- Each key maintains its normal appearance (white/black)
+- Active tracks shown as colored rectangles at bottom of key
+- Each track gets its own indicator (4px tall, full key width)
+- Multiple tracks stack vertically
+- Maximum 4 indicators per key (one per track)
+
+**Example:**
+```
+┌─────────────┐
+│             │  White Key
+│             │
+│             │
+│█████████████│  Track 0 indicator (red, 4px tall)
+│█████████████│  Track 2 indicator (blue, 4px tall)
+└─────────────┘
+
+┌──────┐
+│      │  Black Key
+│      │
+│██████│  Track 1 indicator (green)
+│██████│  Track 3 indicator (yellow)
+└──────┘
+```
+
+**Advantages:**
+1. ✅ See exactly which tracks are playing (no information loss)
+2. ✅ Up to 4 tracks clearly visible per note
+3. ✅ Key appearance unchanged (better contrast)
+4. ✅ Works well at small sizes
+5. ✅ Intuitive - similar to DAW piano rolls
+
+**User-Pressed Keys:**
+- Still use full-key highlight color (#4a9eff / #ffc800)
+- Track indicators appear on top of user highlight
+- Clear distinction between user input and playback visualization
 ```
 
 ---
@@ -289,6 +390,28 @@ export function countWhiteKeys(startNote: number, endNote: number): number {
   }
   return count;
 }
+
+/**
+ * Get track indicators for a specific note
+ * Returns array of { trackId, color } for tracks playing this note
+ */
+export function getTrackIndicators(
+  midiNote: number,
+  activeNotesByTrack?: Map<number, { notes: Set<number>; color: string }>
+): Array<{ trackId: number; color: string }> {
+  if (!activeNotesByTrack) return [];
+
+  const indicators: Array<{ trackId: number; color: string }> = [];
+
+  activeNotesByTrack.forEach(({ notes, color }, trackId) => {
+    if (notes.has(midiNote)) {
+      indicators.push({ trackId, color });
+    }
+  });
+
+  // Sort by track ID for consistent rendering order
+  return indicators.sort((a, b) => a.trackId - b.trackId);
+}
 ```
 
 ### State Management
@@ -296,11 +419,26 @@ export function countWhiteKeys(startNote: number, endNote: number): number {
 ```typescript
 const [pressedKeys, setPressedKeys] = useState<Set<number>>(new Set());
 
-// Combine pressed keys with active notes from player
+// User-pressed keys (for standard highlight)
 const displayedActiveKeys = new Set([
   ...pressedKeys,
   ...(activeNotes || [])
 ]);
+
+// Track indicators (for multi-track visualization)
+// Calculate which track indicators to show for each note
+const noteTrackIndicators = useMemo(() => {
+  const indicatorMap = new Map<number, Array<{ trackId: number; color: string }>>();
+
+  for (let note = startNote; note <= endNote; note++) {
+    const indicators = getTrackIndicators(note, activeNotesByTrack);
+    if (indicators.length > 0) {
+      indicatorMap.set(note, indicators);
+    }
+  }
+
+  return indicatorMap;
+}, [startNote, endNote, activeNotesByTrack]);
 ```
 
 ### Mouse/Touch Handling
@@ -411,6 +549,92 @@ The component will:
 - Standard size
 - Adds notes to pattern on click
 
+### Test Page (`/test-keyboard`)
+- **Purpose**: Comprehensive testing and demonstration of all keyboard features
+- **Location**: `minimal-prototype/src/components/PianoKeyboardTest.tsx`
+- **Route**: `/test-keyboard` in App.tsx
+
+**Features:**
+- Configuration panel at top of page
+- Live keyboard with all props configurable
+- Audio integration for testing sound
+- Multiple test scenarios (presets)
+
+**Configuration Options:**
+```typescript
+// Range Configuration
+- Start Note: Dropdown or number input (C-0 to B-9)
+- End Note: Dropdown or number input (C-0 to B-9)
+- Preset Ranges: [1 Octave, 2 Octaves, 3 Octaves, Full Range]
+
+// Visual Options
+- Height: Slider (40-200px)
+- Show Labels: Checkbox
+- Compact Mode: Checkbox
+
+// Interaction Options
+- Disabled: Checkbox (visualization only)
+- Play Sound: Checkbox (enable/disable audio)
+- Channel: Dropdown (0-8, which channel to play on)
+
+// Multi-Track Visualization
+- Track 0: [Checkbox: Visible] [Color Picker: #ff5555 red]
+- Track 1: [Checkbox: Visible] [Color Picker: #55ff55 green]
+- Track 2: [Checkbox: Visible] [Color Picker: #5555ff blue]
+- Track 3: [Checkbox: Visible] [Color Picker: #ffff55 yellow]
+- "Play Test Song" Button - Plays 8-bar demo with 4 tracks
+- "Stop Song" Button - Stops playback
+- Active Notes Display: Shows currently active notes per track
+
+// Test Song (8 bars, 4 tracks, ~10 seconds)
+Track 0 (Bass):     C-3 → G-2 → A-2 → F-2 (whole notes)
+Track 1 (Lead):     [C-5 E-5 G-5] melody pattern (quarter notes)
+Track 2 (Chords):   [C-4 E-4 G-4] → [G-3 B-3 D-4] (half notes)
+Track 3 (Accent):   High notes on beats (C-6, E-6, G-6)
+
+// Test Scenarios (Preset Buttons)
+1. "Instrument Editor" - 1 octave, labels, interactive
+2. "Multi-Track Viz" - 3 octaves, compact, all tracks visible with colors
+3. "Bass + Lead Only" - 3 octaves, compact, tracks 0 & 1 visible
+4. "Note Input" - 2 octaves, labels, interactive
+5. "Full Range" - All keys, compact, interactive
+```
+
+**Layout:**
+```
+┌──────────────────────────────────────────────────────┐
+│  Piano Keyboard Test                                 │
+│  ┌────────────────────────────────────────────────┐  │
+│  │ Configuration Panel                            │  │
+│  │ [Range] [Visual] [Interaction] [Tracks]       │  │
+│  │ [▶ Play Test Song] [⏹ Stop] [Presets...]     │  │
+│  └────────────────────────────────────────────────┘  │
+│                                                       │
+│  ┌────────────────────────────────────────────────┐  │
+│  │ Track Visualization Controls                   │  │
+│  │ ☑ Track 0 [🔴] Bass    ☑ Track 1 [🟢] Lead    │  │
+│  │ ☑ Track 2 [🔵] Chords  ☑ Track 3 [🟡] Accent  │  │
+│  └────────────────────────────────────────────────┘  │
+│                                                       │
+│  ┌────────────────────────────────────────────────┐  │
+│  │ PianoKeyboard Component                        │  │
+│  │ ░🔴░🟢░🔵░🟡░ (colored keys showing tracks)    │  │
+│  │ ████████████████████████████████████████████  │  │
+│  └────────────────────────────────────────────────┘  │
+│                                                       │
+│  Current Configuration:                               │
+│  • Range: C3-C6 (37 keys)                            │
+│  • Height: 60px • Compact: Yes • Labels: No          │
+│  • Visible Tracks: [0, 1, 2, 3]                      │
+│                                                       │
+│  Active Notes by Track:                               │
+│  • Track 0 (🔴): [48, 55]                            │
+│  • Track 1 (🟢): [72, 76, 79]                        │
+│  • Track 2 (🔵): [60, 64, 67]                        │
+│  • Track 3 (🟡): [84]                                 │
+└──────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## 8. Performance Considerations
@@ -433,7 +657,7 @@ const keyGeometries = useMemo(() => {
 
 ---
 
-## 9. Testing Strategy
+## 9. Testing Strategy & Test Page
 
 ### Unit Tests
 - [ ] Key geometry calculations for all notes
