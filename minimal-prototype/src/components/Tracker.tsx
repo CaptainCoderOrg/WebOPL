@@ -49,9 +49,12 @@ export function Tracker({
   // Track count (dynamic)
   const [numTracks, setNumTracks] = useState(4);
 
-  // Pattern state: 16 rows × numTracks tracks
+  // Row count (dynamic, 8-64, increments of 4)
+  const [numRows, setNumRows] = useState(16);
+
+  // Pattern state: numRows rows × numTracks tracks
   const [pattern, setPattern] = useState<string[][]>(() =>
-    Array(16)
+    Array(numRows)
       .fill(null)
       .map(() => Array(numTracks).fill('---'))
   );
@@ -191,7 +194,7 @@ export function Tracker({
   const loadExample = () => {
     console.log('Loading example pattern...');
 
-    const example: string[][] = Array(16)
+    const example: string[][] = Array(numRows)
       .fill(null)
       .map(() => Array(numTracks).fill('---'));
 
@@ -226,7 +229,7 @@ export function Tracker({
    */
   const clearPattern = () => {
     setPattern(
-      Array(16)
+      Array(numRows)
         .fill(null)
         .map(() => Array(numTracks).fill('---'))
     );
@@ -323,6 +326,52 @@ export function Tracker({
     console.log(`Track ${trackIndex + 1} deleted`);
   };
 
+  /**
+   * Increase number of rows
+   */
+  const increaseRows = () => {
+    if (isPlaying || numRows >= 64) return;
+
+    const newNumRows = Math.min(numRows + 4, 64);
+    console.log(`Increasing rows from ${numRows} to ${newNumRows}...`);
+
+    // Add new rows to the pattern
+    const newPattern = [...pattern];
+    for (let i = 0; i < (newNumRows - numRows); i++) {
+      newPattern.push(Array(numTracks).fill('---'));
+    }
+    setPattern(newPattern);
+    setNumRows(newNumRows);
+  };
+
+  /**
+   * Decrease number of rows
+   */
+  const decreaseRows = () => {
+    if (isPlaying || numRows <= 8) return;
+
+    const newNumRows = Math.max(numRows - 4, 8);
+    console.log(`Decreasing rows from ${numRows} to ${newNumRows}...`);
+
+    // Check if any of the rows we're removing have notes
+    const rowsToRemove = pattern.slice(newNumRows);
+    const hasNotes = rowsToRemove.some(row =>
+      row.some(cell => cell !== '---' && cell.trim() !== '')
+    );
+
+    if (hasNotes) {
+      const confirmed = window.confirm(
+        `Rows ${newNumRows + 1}-${numRows} contain notes.\n\nAre you sure you want to remove them?`
+      );
+      if (!confirmed) return;
+    }
+
+    // Remove rows from the pattern
+    const newPattern = pattern.slice(0, newNumRows);
+    setPattern(newPattern);
+    setNumRows(newNumRows);
+  };
+
   return (
     <div className="tracker">
       {/* Controls */}
@@ -348,8 +397,26 @@ export function Tracker({
             />
           </label>
 
-          <div className="position-display">
-            Row: {currentRow.toString().padStart(2, '0')} / 16
+          <div className="position-control">
+            <button
+              onClick={decreaseRows}
+              disabled={isPlaying || numRows <= 8}
+              className="row-control-button"
+              title="Decrease rows by 4"
+            >
+              −
+            </button>
+            <div className="position-display">
+              Row: {currentRow.toString().padStart(2, '0')} / {numRows}
+            </div>
+            <button
+              onClick={increaseRows}
+              disabled={isPlaying || numRows >= 64}
+              className="row-control-button"
+              title="Increase rows by 4"
+            >
+              +
+            </button>
           </div>
         </div>
 
@@ -400,7 +467,7 @@ export function Tracker({
       {/* Tracker Grid */}
       <div className="tracker-section">
         <TrackerGrid
-          rows={16}
+          rows={numRows}
           tracks={numTracks}
           pattern={pattern}
           onUpdate={setPattern}
