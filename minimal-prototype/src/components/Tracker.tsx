@@ -46,15 +46,20 @@ export function Tracker({
   const [currentRow, setCurrentRow] = useState(0);
   const [bpm, setBpm] = useState(120);
 
-  // Pattern state: 16 rows × 4 tracks
+  // Track count (dynamic)
+  const [numTracks, setNumTracks] = useState(4);
+
+  // Pattern state: 16 rows × numTracks tracks
   const [pattern, setPattern] = useState<string[][]>(() =>
     Array(16)
       .fill(null)
-      .map(() => Array(4).fill('---'))
+      .map(() => Array(numTracks).fill('---'))
   );
 
-  // Instrument selection: Track 0-3 → Patch index in instrumentBank
-  const [trackInstruments, setTrackInstruments] = useState<number[]>([0, 1, 2, 3]);
+  // Instrument selection: Track 0-(numTracks-1) → Patch index in instrumentBank
+  const [trackInstruments, setTrackInstruments] = useState<number[]>(
+    Array(numTracks).fill(0).map((_, i) => Math.min(i, 3))
+  );
 
   // Quick guide collapsed state
   const [guideCollapsed, setGuideCollapsed] = useState(false);
@@ -188,7 +193,7 @@ export function Tracker({
 
     const example: string[][] = Array(16)
       .fill(null)
-      .map(() => Array(4).fill('---'));
+      .map(() => Array(numTracks).fill('---'));
 
     // Track 0: C major scale
     example[0][0] = 'C-4';
@@ -223,9 +228,42 @@ export function Tracker({
     setPattern(
       Array(16)
         .fill(null)
-        .map(() => Array(4).fill('---'))
+        .map(() => Array(numTracks).fill('---'))
     );
     console.log('Pattern cleared');
+  };
+
+  /**
+   * Add a new track
+   */
+  const addTrack = () => {
+    if (isPlaying) return;
+
+    // Limit to 18 tracks (OPL3 has 18 channels)
+    if (numTracks >= 18) {
+      console.warn('Maximum track limit reached (18 tracks)');
+      alert('Maximum track limit reached!\n\nThe OPL3 synthesizer supports up to 18 simultaneous channels.');
+      return;
+    }
+
+    console.log('Adding new track...');
+
+    // Add a new column to each row
+    const newPattern = pattern.map(row => [...row, '---']);
+    setPattern(newPattern);
+
+    // Add a new instrument (cycle through 0-3 for visual distinction)
+    const newInstruments = [...trackInstruments, numTracks % 4];
+    setTrackInstruments(newInstruments);
+
+    // Initialize patch for new track
+    if (synth && bankLoaded && instrumentBank[numTracks % 4]) {
+      synth.setTrackPatch(numTracks, instrumentBank[numTracks % 4]);
+    }
+
+    // Increment track count
+    setNumTracks(numTracks + 1);
+    console.log(`Track ${numTracks + 1} added`);
   };
 
   /**
@@ -289,6 +327,17 @@ export function Tracker({
           >
             {compactMode ? '📏 Full' : '📐 Compact'}
           </button>
+          <button
+            onClick={addTrack}
+            disabled={isPlaying || numTracks >= 18}
+            title={
+              numTracks >= 18
+                ? 'Maximum track limit reached (18 tracks)'
+                : 'Add a new track'
+            }
+          >
+            + Track
+          </button>
         </div>
       </div>
 
@@ -312,7 +361,7 @@ export function Tracker({
       <div className="tracker-section">
         <TrackerGrid
           rows={16}
-          tracks={4}
+          tracks={numTracks}
           pattern={pattern}
           onUpdate={setPattern}
           currentRow={isPlaying ? currentRow : undefined}
