@@ -39,8 +39,7 @@ export function InstrumentEditor({
   // Local state for editing (not applied until Save)
   const [editedPatch, setEditedPatch] = useState<OPLPatch>(currentPatch);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
-  const [isSoloPlaying, setIsSoloPlaying] = useState(false);
-  const [isChordsPlaying, setIsChordsPlaying] = useState(false);
+  const [demoMode, setDemoMode] = useState<'none' | 'solo' | 'chords'>('none');
   const [currentSoloNote, setCurrentSoloNote] = useState<number | null>(null);
   const [currentChordNotes, setCurrentChordNotes] = useState<Set<number>>(new Set());
 
@@ -79,37 +78,74 @@ export function InstrumentEditor({
 
   // Solo melody playback
   useEffect(() => {
-    if (!isSoloPlaying || !synth) {
+    if (demoMode !== 'solo' || !synth) {
       setCurrentSoloNote(null);
       return;
     }
 
     const PREVIEW_CHANNEL = 8;
 
-    // Simple recognizable melody: "Twinkle Twinkle Little Star" (first line)
-    // C C G G A A G - F F E E D D C
+    // 12-bar blues melody in C using blues scale (C Eb F F# G Bb)
+    // Generic blues lick pattern over 12 bars
     const melody = [
-      { note: 60, duration: 400 }, // C
-      { note: 60, duration: 400 }, // C
-      { note: 67, duration: 400 }, // G
-      { note: 67, duration: 400 }, // G
-      { note: 69, duration: 400 }, // A
-      { note: 69, duration: 400 }, // A
-      { note: 67, duration: 800 }, // G (longer)
-      { note: 65, duration: 400 }, // F
-      { note: 65, duration: 400 }, // F
-      { note: 64, duration: 400 }, // E
-      { note: 64, duration: 400 }, // E
-      { note: 62, duration: 400 }, // D
-      { note: 62, duration: 400 }, // D
-      { note: 60, duration: 800 }, // C (longer)
+      // Bar 1-2 (C7) - Opening blues phrase
+      { note: 60, duration: 300 }, // C
+      { note: 63, duration: 300 }, // Eb
+      { note: 65, duration: 300 }, // F
+      { note: 67, duration: 600 }, // G (hold)
+      { note: 65, duration: 300 }, // F
+      { note: 63, duration: 300 }, // Eb
+      { note: 60, duration: 600 }, // C (hold)
+
+      // Bar 3-4 (C7) - Repeat with variation
+      { note: 60, duration: 300 }, // C
+      { note: 63, duration: 300 }, // Eb
+      { note: 65, duration: 300 }, // F
+      { note: 66, duration: 150 }, // F# (blues note)
+      { note: 67, duration: 750 }, // G (hold longer)
+
+      // Bar 5-6 (F7) - Up to F
+      { note: 65, duration: 300 }, // F
+      { note: 68, duration: 300 }, // Ab
+      { note: 70, duration: 300 }, // Bb
+      { note: 72, duration: 600 }, // C (high)
+      { note: 70, duration: 300 }, // Bb
+      { note: 68, duration: 300 }, // Ab
+      { note: 65, duration: 600 }, // F (hold)
+
+      // Bar 7-8 (C7) - Back to C
+      { note: 60, duration: 300 }, // C
+      { note: 63, duration: 300 }, // Eb
+      { note: 65, duration: 300 }, // F
+      { note: 67, duration: 900 }, // G (hold)
+
+      // Bar 9 (G7) - Turnaround setup
+      { note: 67, duration: 300 }, // G
+      { note: 70, duration: 300 }, // Bb
+      { note: 72, duration: 300 }, // C (high)
+      { note: 74, duration: 300 }, // D
+
+      // Bar 10 (F7) - Descending
+      { note: 72, duration: 300 }, // C
+      { note: 70, duration: 300 }, // Bb
+      { note: 68, duration: 300 }, // Ab
+      { note: 65, duration: 300 }, // F
+
+      // Bar 11-12 (C7 - G7) - Final phrase
+      { note: 60, duration: 300 }, // C
+      { note: 63, duration: 300 }, // Eb
+      { note: 65, duration: 300 }, // F
+      { note: 67, duration: 300 }, // G
+      { note: 65, duration: 300 }, // F
+      { note: 63, duration: 300 }, // Eb
+      { note: 60, duration: 600 }, // C (resolve)
     ];
 
     let currentNoteIndex = 0;
     let timeoutId: number;
 
     const playNextNote = () => {
-      if (!isSoloPlaying) return;
+      if (demoMode !== 'solo') return;
 
       // Load edited patch (use ref to get latest patch without restarting melody)
       synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
@@ -149,11 +185,11 @@ export function InstrumentEditor({
       });
       setCurrentSoloNote(null);
     };
-  }, [isSoloPlaying, synth]);
+  }, [demoMode, synth]);
 
   // Chord progression playback (C blues)
   useEffect(() => {
-    if (!isChordsPlaying || !synth) {
+    if (demoMode !== 'chords' || !synth) {
       setCurrentChordNotes(new Set());
       return;
     }
@@ -182,7 +218,7 @@ export function InstrumentEditor({
     let timeoutId: number;
 
     const playNextChord = () => {
-      if (!isChordsPlaying) return;
+      if (demoMode !== 'chords') return;
 
       const currentChord = chordProgression[currentChordIndex];
 
@@ -231,7 +267,7 @@ export function InstrumentEditor({
       });
       setCurrentChordNotes(new Set());
     };
-  }, [isChordsPlaying, synth]);
+  }, [demoMode, synth]);
 
   /**
    * Preview the current edited patch
@@ -518,17 +554,31 @@ export function InstrumentEditor({
                     <div className="editor-demos-options">
                       <label className="editor-demo-option">
                         <input
-                          type="checkbox"
-                          checked={isSoloPlaying}
-                          onChange={(e) => setIsSoloPlaying(e.target.checked)}
+                          type="radio"
+                          name="demo-mode"
+                          value="none"
+                          checked={demoMode === 'none'}
+                          onChange={() => setDemoMode('none')}
+                        />
+                        <span>None</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="solo"
+                          checked={demoMode === 'solo'}
+                          onChange={() => setDemoMode('solo')}
                         />
                         <span>Solo</span>
                       </label>
                       <label className="editor-demo-option">
                         <input
-                          type="checkbox"
-                          checked={isChordsPlaying}
-                          onChange={(e) => setIsChordsPlaying(e.target.checked)}
+                          type="radio"
+                          name="demo-mode"
+                          value="chords"
+                          checked={demoMode === 'chords'}
+                          onChange={() => setDemoMode('chords')}
                         />
                         <span>Chords</span>
                       </label>

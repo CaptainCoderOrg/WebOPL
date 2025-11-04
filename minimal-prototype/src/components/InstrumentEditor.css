@@ -374,7 +374,7 @@
   user-select: none;
 }
 
-.editor-demo-option input[type="checkbox"] {
+.editor-demo-option input[type="radio"] {
   cursor: pointer;
   width: 16px;
   height: 16px;
