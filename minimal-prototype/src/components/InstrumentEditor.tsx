@@ -39,10 +39,16 @@ export function InstrumentEditor({
   // Local state for editing (not applied until Save)
   const [editedPatch, setEditedPatch] = useState<OPLPatch>(currentPatch);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
-  const [demoMode, setDemoMode] = useState<'none' | 'solo' | 'chords' | 'arpeggios'>('none');
+  const [demoMode, setDemoMode] = useState<'none' | 'solo' | 'chords' | 'arpeggios' | 'percussion' | 'sustain' | 'bass' | 'trill' | 'chromatic' | 'octave-jump'>('none');
   const [currentSoloNote, setCurrentSoloNote] = useState<number | null>(null);
   const [currentChordNotes, setCurrentChordNotes] = useState<Set<number>>(new Set());
   const [currentArpeggioNote, setCurrentArpeggioNote] = useState<number | null>(null);
+  const [currentPercussionNote, setCurrentPercussionNote] = useState<number | null>(null);
+  const [currentSustainNotes, setCurrentSustainNotes] = useState<Set<number>>(new Set());
+  const [currentBassNote, setCurrentBassNote] = useState<number | null>(null);
+  const [currentTrillNote, setCurrentTrillNote] = useState<number | null>(null);
+  const [currentChromaticNote, setCurrentChromaticNote] = useState<number | null>(null);
+  const [currentOctaveJumpNote, setCurrentOctaveJumpNote] = useState<number | null>(null);
   const [octaveOffset, setOctaveOffset] = useState<number>(0); // 0 = base octave (C3-C5)
 
   // Ref to track current edited patch for Solo/Chords playback (avoids restarting)
@@ -414,6 +420,403 @@ export function InstrumentEditor({
     };
   }, [demoMode, synth, octaveOffset]);
 
+  // Percussion demo (fast staccato drum-like pattern)
+  useEffect(() => {
+    if (demoMode !== 'percussion' || !synth) {
+      setCurrentPercussionNote(null);
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12;
+
+    // Drum-like rhythm pattern (kick-snare-hihat)
+    const pattern = [
+      { note: 48, duration: 100 }, // Kick (C)
+      { note: 48, duration: 100 }, // Kick
+      { note: 62, duration: 80 },  // Snare (D)
+      { note: 72, duration: 60 },  // Hihat (C high)
+      { note: 48, duration: 100 }, // Kick
+      { note: 72, duration: 60 },  // Hihat
+      { note: 62, duration: 80 },  // Snare
+      { note: 72, duration: 60 },  // Hihat
+      { note: 48, duration: 100 }, // Kick
+      { note: 72, duration: 60 },  // Hihat
+      { note: 48, duration: 100 }, // Kick
+      { note: 62, duration: 80 },  // Snare
+      { note: 72, duration: 60 },  // Hihat
+      { note: 72, duration: 60 },  // Hihat
+      { note: 62, duration: 80 },  // Snare
+      { note: 72, duration: 60 },  // Hihat
+    ];
+
+    let currentNoteIndex = 0;
+    let timeoutId: number;
+
+    const playNextNote = () => {
+      if (demoMode !== 'percussion') return;
+
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentNote = pattern[currentNoteIndex];
+      const transposedNote = currentNote.note + transpose;
+
+      setCurrentPercussionNote(transposedNote);
+      synth.noteOn(PREVIEW_CHANNEL, transposedNote);
+
+      // Very short duration for percussive effect
+      setTimeout(() => {
+        synth.noteOff(PREVIEW_CHANNEL, transposedNote);
+        setCurrentPercussionNote(null);
+      }, currentNote.duration * 0.5);
+
+      currentNoteIndex = (currentNoteIndex + 1) % pattern.length;
+      timeoutId = window.setTimeout(playNextNote, currentNote.duration);
+    };
+
+    playNextNote();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      pattern.forEach(({ note }) => {
+        synth.noteOff(PREVIEW_CHANNEL, note + transpose);
+      });
+      setCurrentPercussionNote(null);
+    };
+  }, [demoMode, synth, octaveOffset]);
+
+  // Sustain/Pad demo (long held notes)
+  useEffect(() => {
+    if (demoMode !== 'sustain' || !synth) {
+      setCurrentSustainNotes(new Set());
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12;
+
+    // Ambient pad progression - C major -> F major -> G major -> C major
+    const chordProgression = [
+      { notes: [60, 64, 67], duration: 4000 }, // C major (C E G)
+      { notes: [65, 69, 72], duration: 4000 }, // F major (F A C)
+      { notes: [67, 71, 74], duration: 4000 }, // G major (G B D)
+      { notes: [60, 64, 67], duration: 4000 }, // C major (C E G)
+    ];
+
+    let currentChordIndex = 0;
+    let timeoutId: number;
+
+    const playNextChord = () => {
+      if (demoMode !== 'sustain') return;
+
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentChord = chordProgression[currentChordIndex];
+      const transposedNotes = currentChord.notes.map(note => note + transpose);
+
+      setCurrentSustainNotes(new Set(transposedNotes));
+
+      // Play all notes in the chord
+      transposedNotes.forEach(note => {
+        synth.noteOn(PREVIEW_CHANNEL, note);
+      });
+
+      // Hold for full duration
+      setTimeout(() => {
+        transposedNotes.forEach(note => {
+          synth.noteOff(PREVIEW_CHANNEL, note);
+        });
+        setCurrentSustainNotes(new Set());
+      }, currentChord.duration * 0.95);
+
+      currentChordIndex = (currentChordIndex + 1) % chordProgression.length;
+      timeoutId = window.setTimeout(playNextChord, currentChord.duration);
+    };
+
+    playNextChord();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      chordProgression.forEach(chord => {
+        chord.notes.forEach(note => {
+          synth.noteOff(PREVIEW_CHANNEL, note + transpose);
+        });
+      });
+      setCurrentSustainNotes(new Set());
+    };
+  }, [demoMode, synth, octaveOffset]);
+
+  // Bass Line demo (walking bass in low register)
+  useEffect(() => {
+    if (demoMode !== 'bass' || !synth) {
+      setCurrentBassNote(null);
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12;
+
+    // Funky walking bass line
+    const bassLine = [
+      { note: 36, duration: 400 }, // C (low)
+      { note: 43, duration: 400 }, // G
+      { note: 41, duration: 400 }, // F
+      { note: 38, duration: 400 }, // D
+      { note: 36, duration: 400 }, // C
+      { note: 38, duration: 400 }, // D
+      { note: 40, duration: 400 }, // E
+      { note: 41, duration: 400 }, // F
+      { note: 43, duration: 400 }, // G
+      { note: 41, duration: 400 }, // F
+      { note: 40, duration: 400 }, // E
+      { note: 38, duration: 400 }, // D
+      { note: 36, duration: 800 }, // C (hold)
+    ];
+
+    let currentNoteIndex = 0;
+    let timeoutId: number;
+
+    const playNextNote = () => {
+      if (demoMode !== 'bass') return;
+
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentNote = bassLine[currentNoteIndex];
+      const transposedNote = currentNote.note + transpose;
+
+      setCurrentBassNote(transposedNote);
+      synth.noteOn(PREVIEW_CHANNEL, transposedNote);
+
+      setTimeout(() => {
+        synth.noteOff(PREVIEW_CHANNEL, transposedNote);
+        setCurrentBassNote(null);
+      }, currentNote.duration * 0.9);
+
+      currentNoteIndex = (currentNoteIndex + 1) % bassLine.length;
+      timeoutId = window.setTimeout(playNextNote, currentNote.duration);
+    };
+
+    playNextNote();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      bassLine.forEach(({ note }) => {
+        synth.noteOff(PREVIEW_CHANNEL, note + transpose);
+      });
+      setCurrentBassNote(null);
+    };
+  }, [demoMode, synth, octaveOffset]);
+
+  // Trill demo (rapid alternation between two notes)
+  useEffect(() => {
+    if (demoMode !== 'trill' || !synth) {
+      setCurrentTrillNote(null);
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12;
+
+    // Fast trill pattern between adjacent notes
+    const trillPattern = [
+      { note: 60, duration: 120 }, // C
+      { note: 62, duration: 120 }, // D
+      { note: 60, duration: 120 }, // C
+      { note: 62, duration: 120 }, // D
+      { note: 60, duration: 120 }, // C
+      { note: 62, duration: 120 }, // D
+      { note: 60, duration: 120 }, // C
+      { note: 62, duration: 120 }, // D
+      // Change to different interval
+      { note: 64, duration: 120 }, // E
+      { note: 65, duration: 120 }, // F
+      { note: 64, duration: 120 }, // E
+      { note: 65, duration: 120 }, // F
+      { note: 64, duration: 120 }, // E
+      { note: 65, duration: 120 }, // F
+      { note: 64, duration: 120 }, // E
+      { note: 65, duration: 120 }, // F
+      // Descending trill
+      { note: 67, duration: 120 }, // G
+      { note: 65, duration: 120 }, // F
+      { note: 67, duration: 120 }, // G
+      { note: 65, duration: 120 }, // F
+      { note: 67, duration: 120 }, // G
+      { note: 65, duration: 120 }, // F
+      { note: 67, duration: 200 }, // G (slightly longer)
+      { note: 60, duration: 400 }, // C (resolve)
+    ];
+
+    let currentNoteIndex = 0;
+    let timeoutId: number;
+
+    const playNextNote = () => {
+      if (demoMode !== 'trill') return;
+
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentNote = trillPattern[currentNoteIndex];
+      const transposedNote = currentNote.note + transpose;
+
+      setCurrentTrillNote(transposedNote);
+      synth.noteOn(PREVIEW_CHANNEL, transposedNote);
+
+      setTimeout(() => {
+        synth.noteOff(PREVIEW_CHANNEL, transposedNote);
+        setCurrentTrillNote(null);
+      }, currentNote.duration * 0.7);
+
+      currentNoteIndex = (currentNoteIndex + 1) % trillPattern.length;
+      timeoutId = window.setTimeout(playNextNote, currentNote.duration);
+    };
+
+    playNextNote();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      trillPattern.forEach(({ note }) => {
+        synth.noteOff(PREVIEW_CHANNEL, note + transpose);
+      });
+      setCurrentTrillNote(null);
+    };
+  }, [demoMode, synth, octaveOffset]);
+
+  // Chromatic Scale demo (all 12 notes)
+  useEffect(() => {
+    if (demoMode !== 'chromatic' || !synth) {
+      setCurrentChromaticNote(null);
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12;
+
+    // Chromatic scale up and down
+    const chromaticPattern = [
+      // Ascending
+      { note: 60, duration: 250 }, // C
+      { note: 61, duration: 250 }, // C#
+      { note: 62, duration: 250 }, // D
+      { note: 63, duration: 250 }, // D#
+      { note: 64, duration: 250 }, // E
+      { note: 65, duration: 250 }, // F
+      { note: 66, duration: 250 }, // F#
+      { note: 67, duration: 250 }, // G
+      { note: 68, duration: 250 }, // G#
+      { note: 69, duration: 250 }, // A
+      { note: 70, duration: 250 }, // A#
+      { note: 71, duration: 250 }, // B
+      { note: 72, duration: 400 }, // C (high, hold)
+      // Descending
+      { note: 71, duration: 250 }, // B
+      { note: 70, duration: 250 }, // A#
+      { note: 69, duration: 250 }, // A
+      { note: 68, duration: 250 }, // G#
+      { note: 67, duration: 250 }, // G
+      { note: 66, duration: 250 }, // F#
+      { note: 65, duration: 250 }, // F
+      { note: 64, duration: 250 }, // E
+      { note: 63, duration: 250 }, // D#
+      { note: 62, duration: 250 }, // D
+      { note: 61, duration: 250 }, // C#
+      { note: 60, duration: 600 }, // C (resolve)
+    ];
+
+    let currentNoteIndex = 0;
+    let timeoutId: number;
+
+    const playNextNote = () => {
+      if (demoMode !== 'chromatic') return;
+
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentNote = chromaticPattern[currentNoteIndex];
+      const transposedNote = currentNote.note + transpose;
+
+      setCurrentChromaticNote(transposedNote);
+      synth.noteOn(PREVIEW_CHANNEL, transposedNote);
+
+      setTimeout(() => {
+        synth.noteOff(PREVIEW_CHANNEL, transposedNote);
+        setCurrentChromaticNote(null);
+      }, currentNote.duration * 0.8);
+
+      currentNoteIndex = (currentNoteIndex + 1) % chromaticPattern.length;
+      timeoutId = window.setTimeout(playNextNote, currentNote.duration);
+    };
+
+    playNextNote();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      chromaticPattern.forEach(({ note }) => {
+        synth.noteOff(PREVIEW_CHANNEL, note + transpose);
+      });
+      setCurrentChromaticNote(null);
+    };
+  }, [demoMode, synth, octaveOffset]);
+
+  // Octave Jump demo (wide interval leaps)
+  useEffect(() => {
+    if (demoMode !== 'octave-jump' || !synth) {
+      setCurrentOctaveJumpNote(null);
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+    const transpose = octaveOffset * 12;
+
+    // Pattern with large interval jumps
+    const jumpPattern = [
+      { note: 48, duration: 400 }, // C (low)
+      { note: 72, duration: 400 }, // C (high) - octave jump
+      { note: 52, duration: 400 }, // E (low)
+      { note: 76, duration: 400 }, // E (high) - octave jump
+      { note: 55, duration: 400 }, // G (low)
+      { note: 79, duration: 400 }, // G (high) - octave jump
+      { note: 60, duration: 400 }, // C (mid)
+      { note: 84, duration: 400 }, // C (very high) - two octaves
+      { note: 55, duration: 400 }, // G (low)
+      { note: 67, duration: 400 }, // G (mid) - octave jump
+      { note: 52, duration: 400 }, // E (low)
+      { note: 64, duration: 400 }, // E (mid) - octave jump
+      { note: 48, duration: 800 }, // C (low) - resolve
+    ];
+
+    let currentNoteIndex = 0;
+    let timeoutId: number;
+
+    const playNextNote = () => {
+      if (demoMode !== 'octave-jump') return;
+
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentNote = jumpPattern[currentNoteIndex];
+      const transposedNote = currentNote.note + transpose;
+
+      setCurrentOctaveJumpNote(transposedNote);
+      synth.noteOn(PREVIEW_CHANNEL, transposedNote);
+
+      setTimeout(() => {
+        synth.noteOff(PREVIEW_CHANNEL, transposedNote);
+        setCurrentOctaveJumpNote(null);
+      }, currentNote.duration * 0.85);
+
+      currentNoteIndex = (currentNoteIndex + 1) % jumpPattern.length;
+      timeoutId = window.setTimeout(playNextNote, currentNote.duration);
+    };
+
+    playNextNote();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      jumpPattern.forEach(({ note }) => {
+        synth.noteOff(PREVIEW_CHANNEL, note + transpose);
+      });
+      setCurrentOctaveJumpNote(null);
+    };
+  }, [demoMode, synth, octaveOffset]);
+
   /**
    * Preview the current edited patch
    * Temporarily loads it to channel 8 (unused by tracker)
@@ -711,7 +1114,13 @@ export function InstrumentEditor({
                         const activeNotes = new Set<number>();
                         if (currentSoloNote !== null) activeNotes.add(currentSoloNote);
                         if (currentArpeggioNote !== null) activeNotes.add(currentArpeggioNote);
+                        if (currentPercussionNote !== null) activeNotes.add(currentPercussionNote);
+                        if (currentBassNote !== null) activeNotes.add(currentBassNote);
+                        if (currentTrillNote !== null) activeNotes.add(currentTrillNote);
+                        if (currentChromaticNote !== null) activeNotes.add(currentChromaticNote);
+                        if (currentOctaveJumpNote !== null) activeNotes.add(currentOctaveJumpNote);
                         currentChordNotes.forEach(note => activeNotes.add(note));
+                        currentSustainNotes.forEach(note => activeNotes.add(note));
                         return activeNotes.size > 0 ? activeNotes : undefined;
                       })()}
                       onNoteOn={(note) => {
@@ -777,6 +1186,66 @@ export function InstrumentEditor({
                           onChange={() => setDemoMode('arpeggios')}
                         />
                         <span>Arpeggios</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="percussion"
+                          checked={demoMode === 'percussion'}
+                          onChange={() => setDemoMode('percussion')}
+                        />
+                        <span>Percussion</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="sustain"
+                          checked={demoMode === 'sustain'}
+                          onChange={() => setDemoMode('sustain')}
+                        />
+                        <span>Sustain</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="bass"
+                          checked={demoMode === 'bass'}
+                          onChange={() => setDemoMode('bass')}
+                        />
+                        <span>Bass</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="trill"
+                          checked={demoMode === 'trill'}
+                          onChange={() => setDemoMode('trill')}
+                        />
+                        <span>Trill</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="chromatic"
+                          checked={demoMode === 'chromatic'}
+                          onChange={() => setDemoMode('chromatic')}
+                        />
+                        <span>Chromatic</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="octave-jump"
+                          checked={demoMode === 'octave-jump'}
+                          onChange={() => setDemoMode('octave-jump')}
+                        />
+                        <span>Octave Jump</span>
                       </label>
                     </div>
                   </div>
