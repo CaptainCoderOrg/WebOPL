@@ -1,0 +1,131 @@
+/**
+ * Piano Keyboard Component Styles
+ */
+
+/* Container */
+.piano-keyboard-container {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none; /* Prevent scrolling on touch */
+}
+
+/* Base key styles */
+.piano-key {
+  position: absolute;
+  border: 1px solid #3d3d3d;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  padding: 0 !important;
+  margin: 0;
+  min-width: 0 !important;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+}
+
+.piano-key:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* White keys */
+.piano-key.white {
+  bottom: 0;
+  background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+  color: #333;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 4px 4px;
+}
+
+.piano-key.white:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);
+}
+
+.piano-key.white:active:not(:disabled) {
+  background: linear-gradient(to bottom, #e8e8e8 0%, #d8d8d8 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.piano-key.white.active {
+  background: linear-gradient(to bottom, #4a9eff 0%, #3d8ee6 100%);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(74, 158, 255, 0.5);
+}
+
+/* Black keys */
+.piano-key.black {
+  top: 0;
+  background: linear-gradient(to bottom, #1a1a1a 0%, #000000 100%);
+  color: #ffffff;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  border-radius: 0 0 4px 4px;
+}
+
+.piano-key.black:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
+}
+
+.piano-key.black:active:not(:disabled) {
+  background: linear-gradient(to bottom, #0a0a0a 0%, #000000 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.piano-key.black.active {
+  background: linear-gradient(to bottom, #ffc800 0%, #e6b800 100%);
+  color: #000000;
+  box-shadow: 0 0 10px rgba(255, 200, 0, 0.6);
+}
+
+/* Key labels */
+.key-label {
+  padding: 2px 4px;
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* Track indicator bars (for multi-track visualization) */
+.track-indicators {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.track-indicator {
+  height: 4px;
+  width: 100%;
+  /* Background color set dynamically via inline style */
+}
+
+/* Default track colors (CSS variables) */
+:root {
+  --track-0-color: #ff5555; /* Red - typically bass/low */
+  --track-1-color: #55ff55; /* Green - typically lead/melody */
+  --track-2-color: #5555ff; /* Blue - typically chords/harmony */
+  --track-3-color: #ffff55; /* Yellow - typically percussion/effects */
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .piano-key {
+    font-size: 9px;
+  }
+
+  .key-label {
+    font-size: 8px;
+  }
+}
