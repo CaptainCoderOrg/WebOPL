@@ -189,7 +189,7 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
       }
     }
 
-    // Debug logging
+    // Debug logging (reduced verbosity)
     this.sampleCount++;
     if (hasNonZero) {
       this.nonZeroSampleCount++;
@@ -198,8 +198,9 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
       }
     }
 
-    // Log stats every 1000 buffers (about every 21 seconds at 48kHz with 128 sample buffers)
-    if (this.sampleCount % 1000 === 0) {
+    // Only log stats when audio is actually playing (not when idle)
+    // This prevents console spam when the synth is idle
+    if (hasNonZero && this.sampleCount % 5000 === 0) {
       console.log(`[OPLWorkletProcessor] Stats: ${this.nonZeroSampleCount}/${this.sampleCount} buffers with audio`);
     }
 
