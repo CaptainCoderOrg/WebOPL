@@ -13,6 +13,7 @@ import type { OPLPatch, OPLOperator } from './types/OPLPatch';
 import { defaultPatches } from './data/defaultPatches';
 import { getOPLParams } from './constants/midiToOPL';
 import { ChannelManager } from './utils/ChannelManager';
+import { OPL3Wrapper } from './utils/OPL3Wrapper';
 
 // Feature flag: Toggle between AudioWorklet and ScriptProcessorNode
 const USE_AUDIO_WORKLET = true;
@@ -40,24 +41,10 @@ export class SimpleSynth {
   // AudioWorklet properties
   private workletNode: AudioWorkletNode | null = null;
   private workletReady: boolean = false;
-  private wasmLoaded: boolean = false;
 
   // ScriptProcessorNode properties (fallback)
-  private opl: any = null;
+  private opl: OPL3Wrapper | null = null;
   private scriptNode: ScriptProcessorNode | null = null;
-
-  /**
-   * Load a script dynamically
-   */
-  private loadScript(src: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-      document.head.appendChild(script);
-    });
-  }
 
   /**
    * Initialize OPL3 and Web Audio
@@ -102,26 +89,10 @@ export class SimpleSynth {
 
     console.log('[SimpleSynth] Using AudioWorklet mode...');
 
-    // Load WASM modules in main thread
-    console.log('[SimpleSynth] Loading WASM modules...');
-    let oplCode = await this.fetchScript('/lib/opl.js');
-    let wrapperCode = await this.fetchScript('/opl-wrapper.js');
-
-    // Fetch WASM binary
-    const wasmBinary = await this.fetchBinary('/lib/opl.wasm');
-    console.log('[SimpleSynth] ✅ WASM binary fetched');
-
-    // Patch opl.js to use the pre-loaded WASM binary instead of trying to fetch it
-    // This replaces the file system read operations with the binary we already have
-    oplCode = oplCode.replace(
-      'function getBinaryPromise(){',
-      `function getBinaryPromise(){return Promise.resolve(new Uint8Array(${JSON.stringify(Array.from(wasmBinary))}));`
-    );
-
-    // Patch wrapper code to use globalThis instead of window for AudioWorklet compatibility
-    wrapperCode = wrapperCode.replace(/window\.OPL/g, 'globalThis.OPL');
-
-    console.log('[SimpleSynth] ✅ WASM modules fetched and patched');
+    // Load OPL3 JavaScript code
+    console.log('[SimpleSynth] Loading OPL3 code...');
+    const opl3Code = await this.fetchOPL3Code();
+    console.log('[SimpleSynth] ✅ OPL3 code loaded');
 
     // Load AudioWorklet module
     console.log('[SimpleSynth] Loading AudioWorklet processor...');
@@ -140,21 +111,11 @@ export class SimpleSynth {
     this.workletNode.connect(this.audioContext.destination);
     console.log('[SimpleSynth] ✅ AudioWorkletNode connected');
 
-    // Send WASM code to worklet
-    console.log('[SimpleSynth] Sending WASM code to worklet...');
+    // Send OPL3 code to worklet
+    console.log('[SimpleSynth] Sending OPL3 code to worklet...');
     this.workletNode.port.postMessage({
-      type: 'load-wasm',
-      payload: { oplCode, wrapperCode }
-    });
-
-    // Wait for WASM to load in worklet
-    await this.waitForWASMLoaded();
-
-    // Initialize OPL in the worklet
-    console.log('[SimpleSynth] Initializing OPL3 in worklet...');
-    this.workletNode.port.postMessage({
-      type: 'init',
-      payload: { sampleRate: this.audioContext.sampleRate }
+      type: 'load-opl3',
+      payload: { opl3Code }
     });
 
     // Wait for worklet to be ready
@@ -168,8 +129,8 @@ export class SimpleSynth {
       console.log(`[SimpleSynth] Channel ${ch}: ${patch.name}`);
     }
 
-    // Channels 4-8 get piano as default (for future use)
-    for (let ch = 4; ch < 9; ch++) {
+    // Channels 4-17 get piano as default
+    for (let ch = 4; ch < 18; ch++) {
       this.loadPatch(ch, defaultPatches[0]);
     }
 
@@ -177,27 +138,69 @@ export class SimpleSynth {
   }
 
   /**
-   * Fetch script content as text
+   * Fetch OPL3 JavaScript code
    */
-  private async fetchScript(url: string): Promise<string> {
-    const response = await fetch(url);
+  private async fetchOPL3Code(): Promise<string> {
+    const response = await fetch('/node_modules/opl3/lib/opl3.js');
     if (!response.ok) {
-      throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+      throw new Error(`Failed to fetch OPL3 code: ${response.statusText}`);
     }
-    return response.text();
+    let code = await response.text();
+
+    // Wrap the code to expose OPL3 on globalThis
+    // Provide polyfills for Node.js modules (util, require)
+    code = `
+      (function() {
+        // Polyfill for util.inherits (used for class inheritance in opl3.js)
+        var util = {
+          inherits: function(ctor, superCtor) {
+            ctor.super_ = superCtor;
+            ctor.prototype = Object.create(superCtor.prototype, {
+              constructor: {
+                value: ctor,
+                enumerable: false,
+                writable: true,
+                configurable: true
+              }
+            });
+          }
+        };
+
+        // Polyfill for extend (object merging used by opl3.js)
+        function extend(target) {
+          for (var i = 1; i < arguments.length; i++) {
+            var source = arguments[i];
+            if (source) {
+              for (var key in source) {
+                if (source.hasOwnProperty(key)) {
+                  target[key] = source[key];
+                }
+              }
+            }
+          }
+          return target;
+        }
+
+        // Minimal require() implementation for opl3.js
+        function require(name) {
+          if (name === 'util') {
+            return util;
+          }
+          if (name === 'extend') {
+            return extend;
+          }
+          throw new Error('Module not found: ' + name);
+        }
+
+        var module = { exports: {} };
+        ${code}
+        globalThis.OPL3 = module.exports;
+      })();
+    `;
+
+    return code;
   }
 
-  /**
-   * Fetch binary content as Uint8Array
-   */
-  private async fetchBinary(url: string): Promise<Uint8Array> {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
-    }
-    const arrayBuffer = await response.arrayBuffer();
-    return new Uint8Array(arrayBuffer);
-  }
 
   /**
    * Initialize using ScriptProcessorNode (fallback for older browsers)
@@ -209,55 +212,10 @@ export class SimpleSynth {
 
     console.log('[SimpleSynth] Using ScriptProcessorNode mode (fallback)...');
 
-    // Load WASM modules
-    console.log('[SimpleSynth] Loading OPL WASM module...');
-    await this.loadScript('/lib/opl.js');
-    console.log('[SimpleSynth] ✅ WASM module loaded');
-
-    console.log('[SimpleSynth] Loading OPL wrapper...');
-    await this.loadScript('/opl-wrapper.js');
-    console.log('[SimpleSynth] ✅ OPL wrapper loaded');
-
-    if (!window.OPL || typeof window.OPL.create !== 'function') {
-      throw new Error('OPL class not found on window object');
-    }
-
-    // Create OPL instance
-    console.log('[SimpleSynth] Creating OPL instance...');
-    this.opl = await window.OPL.create(this.audioContext.sampleRate, 2);
-    console.log('[SimpleSynth] ✅ OPL instance created');
-
-    // Proper OPL3 initialization sequence
-    console.log('[SimpleSynth] Starting OPL3 initialization sequence...');
-
-    // Step 1: Reset Timer 1 and Timer 2
-    this.opl.write(0x04, 0x60);
-
-    // Step 2: Reset IRQ
-    this.opl.write(0x04, 0x80);
-
-    // Step 3: Turn off CSW mode and enable waveform select
-    this.opl.write(0x01, 0x20);
-
-    // Step 4: Set melodic mode (disable rhythm mode)
-    this.opl.write(0xBD, 0x00);
-
-    // Step 5: Enable OPL3 mode
-    console.log('[SimpleSynth] Enabling OPL3 mode (register 0x105)...');
-    this.opl.write(0x105, 0x01);
-
-    // Step 6: Disable 4-operator mode (all channels in 2-op mode)
-    console.log('[SimpleSynth] Disabling 4-op mode (register 0x104)...');
-    this.opl.write(0x104, 0x00);
-
-    // Step 7: Write to feedback/connection registers to activate the 4-op change
-    // (DOSBox bug workaround: register 0x104 changes ignored until 0xC0-0xC8 written)
-    for (let ch = 0; ch < 9; ch++) {
-      this.opl.write(0xC0 + ch, 0x00);        // Bank 0 channels 0-8
-      this.opl.write(0x100 + 0xC0 + ch, 0x00); // Bank 1 channels 9-17
-    }
-
-    console.log('[SimpleSynth] ✅ OPL3 mode enabled with all channels in 2-op mode');
+    // Create OPL3 instance (pure JavaScript, no WASM)
+    console.log('[SimpleSynth] Creating OPL3 instance...');
+    this.opl = new OPL3Wrapper();
+    console.log('[SimpleSynth] ✅ OPL3 instance created and initialized');
 
     // Load default instruments
     console.log('[SimpleSynth] Loading default instruments...');
@@ -267,8 +225,8 @@ export class SimpleSynth {
       console.log(`[SimpleSynth] Channel ${ch}: ${patch.name}`);
     }
 
-    // Channels 4-8 get piano as default
-    for (let ch = 4; ch < 9; ch++) {
+    // Channels 4-17 get piano as default
+    for (let ch = 4; ch < 18; ch++) {
       this.loadPatch(ch, defaultPatches[0]);
     }
 
@@ -280,28 +238,6 @@ export class SimpleSynth {
     this.scriptNode.onaudioprocess = this.processAudio.bind(this);
     this.scriptNode.connect(this.audioContext.destination);
     console.log('[SimpleSynth] ✅ Audio processor connected');
-  }
-
-  /**
-   * Wait for WASM modules to load in worklet
-   */
-  private waitForWASMLoaded(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        reject(new Error('WASM loading timeout'));
-      }, 10000);
-
-      const checkReady = () => {
-        if (this.wasmLoaded) {
-          clearTimeout(timeout);
-          resolve();
-        } else {
-          setTimeout(checkReady, 100);
-        }
-      };
-
-      checkReady();
-    });
   }
 
   /**
@@ -333,11 +269,6 @@ export class SimpleSynth {
     const { type, payload } = data;
 
     switch (type) {
-      case 'wasm-loaded':
-        console.log('[SimpleSynth] ✅ WASM modules loaded in worklet');
-        this.wasmLoaded = true;
-        break;
-
       case 'ready':
         console.log('[SimpleSynth] ✅ OPL3 initialized in worklet');
         this.workletReady = true;
@@ -524,20 +455,13 @@ export class SimpleSynth {
     const outputR = event.outputBuffer.getChannelData(1);
     const numSamples = outputL.length;
 
-    const maxChunkSize = 512;
-    let offset = 0;
+    // Generate stereo samples (returns interleaved [L, R, L, R, ...])
+    const samples = this.opl.generate(numSamples);
 
-    while (offset < numSamples) {
-      const chunkSize = Math.min(maxChunkSize, numSamples - offset);
-      const samples = this.opl.generate(chunkSize, Int16Array);
-
-      for (let i = 0; i < chunkSize; i++) {
-        const sample = samples[i] / 32768.0;
-        outputL[offset + i] = sample;
-        outputR[offset + i] = sample;
-      }
-
-      offset += chunkSize;
+    // De-interleave stereo samples
+    for (let i = 0; i < numSamples; i++) {
+      outputL[i] = samples[i * 2] / 32768.0;      // Left channel
+      outputR[i] = samples[i * 2 + 1] / 32768.0;  // Right channel
     }
   }
 
