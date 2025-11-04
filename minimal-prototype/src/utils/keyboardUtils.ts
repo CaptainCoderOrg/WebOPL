@@ -30,11 +30,15 @@ export function getWhiteKeyIndex(midiNote: number, startNote: number): number {
   // 0  0 1  1 2 3  3 4  4 5  5 6
   const whiteKeyPattern = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
 
-  const notesFromStart = midiNote - startNote;
-  const octavesFromStart = Math.floor(notesFromStart / 12);
-  const noteInOctave = notesFromStart % 12;
+  // Calculate absolute white key count from MIDI note 0
+  const getAbsoluteWhiteKeyCount = (note: number) => {
+    const octave = Math.floor(note / 12);
+    const noteInOctave = note % 12;
+    return octave * 7 + whiteKeyPattern[noteInOctave];
+  };
 
-  return octavesFromStart * 7 + whiteKeyPattern[noteInOctave];
+  // Return relative position
+  return getAbsoluteWhiteKeyCount(midiNote) - getAbsoluteWhiteKeyCount(startNote);
 }
 
 /**
