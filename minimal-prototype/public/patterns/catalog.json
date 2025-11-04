@@ -10,5 +10,11 @@
     "name": "RPG Adventure",
     "description": "Fantasy RPG music with multiple melodic and harmonic layers",
     "file": "rpg-adventure.yaml"
+  },
+  {
+    "id": "cave-exploration",
+    "name": "Cave Exploration",
+    "description": "Dark atmospheric cave music with mysterious melodies and deep bass",
+    "file": "cave-exploration.yaml"
   }
 ]
