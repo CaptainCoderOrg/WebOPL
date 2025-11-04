@@ -19,11 +19,14 @@ import { PianoKeyboard } from './components/PianoKeyboard';
 ## Features
 
 - 🎹 **Dynamic Range**: Display any range of notes (e.g., C-4 to C-5, C-3 to C-6)
-- 🖱️ **Interactive**: Click/touch keys to play notes
+- 🖱️ **Interactive**: Click keys to play notes
+- 🎵 **Drag-to-Play**: Hold and drag across keys for glissando effect
 - 👁️ **Visualization**: Highlight notes being played by the tracker
+- 🎨 **Track Indicators**: Show active tracks with colored bars
 - 📐 **Responsive**: Automatically scales to fit container
 - 🎨 **Modes**: Standard and compact sizing options
-- ♿ **Accessible**: Keyboard navigation and ARIA labels
+- 🎛️ **Test Page**: Comprehensive test interface at `/test-keyboard`
+- ♿ **Accessible**: ARIA labels and keyboard-friendly design
 
 ## Documentation
 
@@ -32,8 +35,8 @@ import { PianoKeyboard } from './components/PianoKeyboard';
 
 ## Status
 
-**Current Phase**: Design Complete ✅
-**Next Step**: Begin Phase 1 implementation
+**Current Phase**: Phase 1 & 2 Complete ✅
+**Next Step**: Phase 3 (Visual Polish) - Touch support, animations, responsive refinements
 
 ## Use Cases
 
@@ -75,15 +78,16 @@ Alternative method for entering notes into the tracker:
 
 ## Implementation Timeline
 
-| Phase | Description | Time |
-|-------|-------------|------|
-| 1 | Core component & geometry | 2-3 hours |
-| 2 | Interaction handlers | 1-2 hours |
-| 3 | Visual polish | 1-2 hours |
-| 4 | Integration | 1-2 hours |
-| 5 | Testing | 1-2 hours |
+| Phase | Description | Time | Status |
+|-------|-------------|------|--------|
+| 1 | Core component & geometry | 2-3 hours | ✅ Complete |
+| 2 | Interaction handlers | 1-2 hours | ✅ Complete |
+| 3 | Visual polish | 1-2 hours | ⏸️ Not Started |
+| 4 | Integration | 1-2 hours | ⏸️ Not Started |
+| 5 | Testing | 1-2 hours | ⏸️ Not Started |
 
 **Total**: 6-11 hours
+**Completed**: ~3-4 hours
 
 ## Design Decisions
 

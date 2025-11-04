@@ -1,5 +1,214 @@
 # Piano Keyboard Component - Changelog
 
+## 2025-01-04 (Phase 1 & 2 Complete) - Core Implementation and Interaction
+
+### Phase 1 & 2: Complete ✅
+
+**Implemented:** Full keyboard component with mouse interaction, drag-to-play, and audio integration
+
+#### Files Created
+- `minimal-prototype/src/utils/keyboardUtils.ts` (~117 lines)
+- `minimal-prototype/src/components/PianoKeyboard/PianoKeyboard.tsx` (~267 lines)
+- `minimal-prototype/src/components/PianoKeyboard/PianoKeyboard.css` (~100 lines)
+- `minimal-prototype/src/components/PianoKeyboard/index.ts` (exports)
+- `minimal-prototype/src/components/PianoKeyboardTest.tsx` (~267 lines)
+- `minimal-prototype/src/components/PianoKeyboardTest.css` (~122 lines)
+
+#### Features Implemented
+
+**Core Rendering:**
+- Absolute positioning for all keys (no flexbox issues!)
+- Dynamic range support (any MIDI note range)
+- White and black keys with correct geometry
+- Compact and standard sizing modes
+- Note labels on white keys
+- Track indicator visualization (stacked bars)
+
+**Mouse Interaction:**
+- Click to play notes (mouseDown/mouseUp)
+- Drag-to-play (hold and drag across keys for glissando)
+- Global mouse up handler prevents stuck notes
+- Visual feedback (active state highlighting)
+- Hover states
+
+**Audio Integration:**
+- Synth integration via callbacks (onNoteOn/onNoteOff)
+- Instrument selector in test page
+- Channel 8 for preview
+- Active notes tracking
+
+**Test Page:**
+- Comprehensive configuration controls
+- Range adjustment (start/end notes)
+- Visual options (height, labels, compact)
+- Interaction options (disabled, playSound)
+- Instrument selection
+- Test scenario presets
+- Current configuration display
+
+---
+
+### Bug Fixes
+
+#### 1. Start Note Positioning Bug
+**Issue:** When changing start note, keyboard rendered incorrectly with broken alignment
+- Example: Start=59 showed "C4, D4, C#4, EMPTY SPACE, D#4..." instead of "B3, C4, C#4, D4..."
+
+**Root Cause:** `getWhiteKeyIndex()` calculated `noteInOctave = (midiNote - startNote) % 12`, giving relative position instead of absolute position within octave
+
+**Fix:** Changed to calculate absolute white key count from MIDI note 0
+```typescript
+// Calculate absolute white key count from MIDI note 0
+const getAbsoluteWhiteKeyCount = (note: number) => {
+  const octave = Math.floor(note / 12);
+  const noteInOctave = note % 12;  // Absolute position
+  return octave * 7 + whiteKeyPattern[noteInOctave];
+};
+
+// Return relative position
+return getAbsoluteWhiteKeyCount(midiNote) - getAbsoluteWhiteKeyCount(startNote);
+```
+
+**Result:** ✅ All start note values now work correctly
+
+---
+
+#### 2. Drag-to-Play Implementation
+**Feature Request:** Allow holding mouse button and dragging across keys to change notes (glissando effect)
+
+**Implementation:**
+- Added `isMouseDown` state to track global mouse button state
+- Added `lastDragNote` state to track current note being played
+- Changed from `onMouseUp` to `onMouseEnter` for note triggering during drag
+- Added global window `mouseup` listener for cleanup
+
+**Mouse Handlers:**
+```typescript
+// Track global mouse state
+const [isMouseDown, setIsMouseDown] = useState(false);
+const [lastDragNote, setLastDragNote] = useState<number | null>(null);
+
+// Global cleanup on mouse up
+useEffect(() => {
+  const handleGlobalMouseUp = () => {
+    setIsMouseDown(false);
+    setLastDragNote(null);
+    setPressedKeys(prev => {
+      prev.forEach(note => onNoteOff?.(note));
+      return new Set();
+    });
+  };
+  window.addEventListener('mouseup', handleGlobalMouseUp);
+  return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+}, [onNoteOff]);
+
+// Play note on mouse enter if dragging
+const handleMouseEnter = (midiNote: number) => {
+  if (isMouseDown && !pressedKeys.has(midiNote)) {
+    // Release previous note
+    if (lastDragNote !== null && lastDragNote !== midiNote) {
+      setPressedKeys(prev => {
+        const next = new Set(prev);
+        next.delete(lastDragNote);
+        return next;
+      });
+      onNoteOff?.(lastDragNote);
+    }
+    // Play new note
+    setLastDragNote(midiNote);
+    setPressedKeys(prev => new Set(prev).add(midiNote));
+    onNoteOn?.(midiNote);
+  }
+};
+```
+
+**Result:** ✅ Smooth drag-to-play functionality working
+
+---
+
+#### 3. Stuck Notes During Fast Mouse Movement
+**Issue:** When moving mouse too quickly during drag-to-play, browser would miss `onMouseLeave` events, leaving notes stuck in "on" state
+
+**Root Cause:** Browser event system can miss `onMouseLeave` when mouse moves very fast across elements
+
+**Fix:** Two-layer cleanup approach
+1. **Global mouse up cleanup**: Release ALL pressed keys when mouse button is released anywhere
+2. **Explicit previous note cleanup**: When entering new key during drag, explicitly release the previous drag note before playing new one
+
+**Implementation:**
+```typescript
+// Global cleanup releases ALL pressed keys
+const handleGlobalMouseUp = () => {
+  setIsMouseDown(false);
+  setLastDragNote(null);
+  setPressedKeys(prev => {
+    // Call noteOff for EVERY pressed key
+    prev.forEach(note => {
+      onNoteOff?.(note);
+    });
+    return new Set();
+  });
+};
+
+// Explicit previous note cleanup during drag
+if (lastDragNote !== null && lastDragNote !== midiNote) {
+  setPressedKeys(prev => {
+    const next = new Set(prev);
+    next.delete(lastDragNote);
+    return next;
+  });
+  onNoteOff?.(lastDragNote);
+}
+```
+
+**Result:** ✅ No stuck notes even during very fast mouse dragging
+
+---
+
+### Testing Results
+
+**Visual Tests:**
+- ✅ White keys render in correct positions
+- ✅ Black keys properly centered between white keys
+- ✅ No alignment issues at any start note value
+- ✅ Consistent gaps and sizing
+- ✅ Labels display correctly
+
+**Interaction Tests:**
+- ✅ Click to play notes (white and black keys)
+- ✅ Drag across keys changes notes smoothly
+- ✅ No stuck notes during fast dragging
+- ✅ Visual feedback matches audio state
+- ✅ Instrument changes affect playback
+
+**Technical Tests:**
+- ✅ TypeScript compiles without errors
+- ✅ No console warnings
+- ✅ Props properly typed
+- ✅ Memoization working (geometry calculations cached)
+
+---
+
+### Next Steps
+
+**Phase 3: Visual Polish** (Not Started)
+- Touch interaction (onTouchStart, onTouchEnd)
+- Refined animations and transitions
+- Color refinement
+- Responsive adjustments
+
+**Phase 4: Integration** (Not Started)
+- Add keyboard to InstrumentEditor
+- Integration with existing UI
+
+**Phase 5: Testing** (Not Started)
+- Browser testing (Chrome, Firefox, Safari)
+- Device testing (desktop, tablet, mobile)
+- Edge case testing
+- Performance profiling
+
+---
+
 ## 2025-01-04 (Update 3) - Stacked Track Indicators
 
 ### Major Visualization Change: Track Indicator Bars
