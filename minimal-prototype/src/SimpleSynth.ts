@@ -5,8 +5,9 @@
  * Uses AudioWorklet for modern, low-latency audio processing
  */
 
-import type { OPLPatch, OPLOperator } from './types/OPLPatch';
+import type { OPLPatch, OPLOperator, OPLVoice } from './types/OPLPatch';
 import { getOPLParams } from './constants/midiToOPL';
+import { ChannelManager } from './utils/ChannelManager';
 
 export class SimpleSynth {
   private audioContext: AudioContext | null = null;
@@ -14,6 +15,13 @@ export class SimpleSynth {
   private workletReady: boolean = false;
   private isInitialized: boolean = false;
   private channelPatches: Map<number, OPLPatch> = new Map(); // Track loaded patches per channel
+  private channelManager: ChannelManager = new ChannelManager(); // Channel allocation for dual-voice
+  private activeNotes: Map<number, {
+    noteId: string;
+    channels: number[];
+    note: number;
+    isDualVoice: boolean;
+  }> = new Map(); // MIDI channel → active note info
 
   /**
    * Initialize OPL3 and Web Audio
@@ -275,8 +283,36 @@ export class SimpleSynth {
   }
 
   /**
+   * Program a single voice to a hardware channel (for dual-voice support)
+   */
+  private programVoice(
+    oplChannel: number,
+    voice: OPLVoice,
+    patch: OPLPatch
+  ): void {
+    const [modOffset, carOffset] = this.getOperatorOffsets(oplChannel);
+
+    // Program modulator (operator 1)
+    this.writeOperatorRegisters(modOffset, voice.modulator);
+
+    // Program carrier (operator 2)
+    this.writeOperatorRegisters(carOffset, voice.carrier);
+
+    // Program feedback + connection
+    const c0Register = this.getChannelRegister(0xC0, oplChannel);
+    this.writeOPL(c0Register, 0x00); // Reset first (DOSBox workaround)
+
+    const feedbackByte = (voice.feedback << 1) | (voice.connection === 'additive' ? 1 : 0);
+    const regC0 = feedbackByte | 0x30; // 0x30 = stereo output
+    this.writeOPL(c0Register, regC0);
+
+    // Store patch reference for this channel
+    this.channelPatches.set(oplChannel, patch);
+  }
+
+  /**
    * Play a note on a specific channel
-   * Uses the pattern from opl3-chip-test.html
+   * Supports both single-voice and dual-voice instruments
    */
   noteOn(channel: number, midiNote: number, _velocity: number = 100): void {
     if (!this.isInitialized) {
@@ -294,20 +330,97 @@ export class SimpleSynth {
       return;
     }
 
-    console.log(`[SimpleSynth] Note ON: channel=${channel}, note=${midiNote}`);
+    // Get patch for this MIDI channel (use channel 0 as default for now)
+    const patch = this.channelPatches.get(0);
+    if (!patch) {
+      console.warn(`[SimpleSynth] No patch loaded for MIDI channel ${channel}`);
+      return;
+    }
 
-    // Get OPL3 frequency parameters
-    const { fnum, block } = getOPLParams(midiNote);
+    // Apply GENMIDI note offset if present (for pitch correction)
+    let adjustedNote = midiNote;
+    if (patch.noteOffset !== undefined) {
+      adjustedNote = midiNote - patch.noteOffset;
+      adjustedNote = Math.max(0, Math.min(127, adjustedNote));
+    }
 
-    // Write frequency low byte (A0-A8)
-    this.writeOPL(this.getChannelRegister(0xA0, channel), fnum & 0xFF);
+    // Generate unique note ID for channel manager
+    const noteId = `ch${channel}-note${midiNote}`;
 
-    // Write frequency high byte + block + key-on (B0-B8)
-    // Bit 5 (0x20) = Key ON
-    // Bits 2-4 = Block (octave)
-    // Bits 0-1 = F-number high bits
-    const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
-    this.writeOPL(this.getChannelRegister(0xB0, channel), keyOnByte);
+    // Check if dual-voice is enabled AND both voices exist
+    const isDualVoice = patch.dualVoiceEnabled && patch.voice1 && patch.voice2;
+
+    if (isDualVoice) {
+      // === DUAL-VOICE PATH ===
+      const channels = this.channelManager.allocateDualChannels(noteId);
+      if (!channels) {
+        console.warn(`[SimpleSynth] Failed to allocate dual channels for ${noteId}`);
+        return;
+      }
+
+      const [ch1, ch2] = channels;
+      console.log(`[SimpleSynth] Dual-voice: ${noteId} -> OPL channels [${ch1}, ${ch2}]`);
+
+      // Program Voice 1 on channel 1
+      this.programVoice(ch1, patch.voice1!, patch);
+
+      // Program Voice 2 on channel 2 (if we got 2 different channels)
+      if (ch1 !== ch2) {
+        this.programVoice(ch2, patch.voice2!, patch);
+      } else {
+        // Degraded mode: only 1 channel available, use Voice 1 only
+        console.warn(`[SimpleSynth] Dual-voice degraded to single channel for ${noteId}`);
+      }
+
+      // Trigger both channels with same note
+      const { fnum, block } = getOPLParams(adjustedNote);
+
+      // Trigger channel 1
+      this.writeOPL(this.getChannelRegister(0xA0, ch1), fnum & 0xFF);
+      const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
+      this.writeOPL(this.getChannelRegister(0xB0, ch1), keyOnByte);
+
+      // Trigger channel 2 (if different)
+      if (ch1 !== ch2) {
+        this.writeOPL(this.getChannelRegister(0xA0, ch2), fnum & 0xFF);
+        this.writeOPL(this.getChannelRegister(0xB0, ch2), keyOnByte);
+      }
+
+      // Track active note
+      this.activeNotes.set(channel, {
+        noteId,
+        channels: [ch1, ch2],
+        note: adjustedNote,
+        isDualVoice: true
+      });
+
+    } else {
+      // === SINGLE-VOICE PATH (backward compatible) ===
+      const oplChannel = this.channelManager.allocateChannel(noteId);
+      if (oplChannel === null) {
+        console.warn(`[SimpleSynth] Failed to allocate channel for ${noteId}`);
+        return;
+      }
+
+      console.log(`[SimpleSynth] Single-voice: ${noteId} -> OPL channel ${oplChannel}`);
+
+      // Use backward-compatible single-voice programming
+      this.loadPatch(oplChannel, patch);
+
+      // Trigger note
+      const { fnum, block } = getOPLParams(adjustedNote);
+      this.writeOPL(this.getChannelRegister(0xA0, oplChannel), fnum & 0xFF);
+      const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
+      this.writeOPL(this.getChannelRegister(0xB0, oplChannel), keyOnByte);
+
+      // Track active note
+      this.activeNotes.set(channel, {
+        noteId,
+        channels: [oplChannel],
+        note: adjustedNote,
+        isDualVoice: false
+      });
+    }
   }
 
   /**
@@ -317,10 +430,20 @@ export class SimpleSynth {
     if (!this.isInitialized) return;
     if (channel < 0 || channel >= 9) return;
 
-    console.log(`[SimpleSynth] Note OFF: channel=${channel}, note=${midiNote}`);
+    const activeNote = this.activeNotes.get(channel);
+    if (!activeNote) return;
 
-    // Clear key-on bit (bit 5) by writing 0x00 to B0 register
-    this.writeOPL(this.getChannelRegister(0xB0, channel), 0x00);
+    // Release all allocated OPL channels for this note
+    for (const oplChannel of activeNote.channels) {
+      console.log(`[SimpleSynth] Note OFF: MIDI ch=${channel}, OPL ch=${oplChannel}, note=${midiNote}`);
+      this.writeOPL(this.getChannelRegister(0xB0, oplChannel), 0x00);
+    }
+
+    // Release from channel manager
+    this.channelManager.releaseNote(activeNote.noteId);
+
+    // Remove from active notes
+    this.activeNotes.delete(channel);
   }
 
   /**
@@ -329,10 +452,14 @@ export class SimpleSynth {
   allNotesOff(): void {
     console.log('[SimpleSynth] All notes off');
 
-    // Clear key-on bit for all 18 OPL3 channels
+    // Release all OPL hardware channels
     for (let channel = 0; channel < 18; channel++) {
       this.writeOPL(this.getChannelRegister(0xB0, channel), 0x00);
     }
+
+    // Clear tracking
+    this.activeNotes.clear();
+    this.channelManager.reset();
   }
 
   /**
@@ -376,13 +503,13 @@ export class SimpleSynth {
    * Get number of active notes
    */
   getActiveNoteCount(): number {
-    return 0;
+    return this.activeNotes.size;
   }
 
   /**
    * Get channel manager stats (for debugging)
    */
   getChannelManagerStats() {
-    return { free: 18, allocated: 0, dualVoiceNotes: 0 };
+    return this.channelManager.getStats();
   }
 }
