@@ -40,9 +40,11 @@ export function InstrumentEditor({
   const [editedPatch, setEditedPatch] = useState<OPLPatch>(currentPatch);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
   const [isSoloPlaying, setIsSoloPlaying] = useState(false);
+  const [isChordsPlaying, setIsChordsPlaying] = useState(false);
   const [currentSoloNote, setCurrentSoloNote] = useState<number | null>(null);
+  const [currentChordNotes, setCurrentChordNotes] = useState<Set<number>>(new Set());
 
-  // Ref to track current edited patch for Solo playback (avoids restarting melody)
+  // Ref to track current edited patch for Solo/Chords playback (avoids restarting)
   const editedPatchRef = useRef<OPLPatch>(editedPatch);
 
   // Reset local state when currentPatch changes
@@ -148,6 +150,84 @@ export function InstrumentEditor({
       setCurrentSoloNote(null);
     };
   }, [isSoloPlaying, synth]);
+
+  // Chord progression playback (C blues)
+  useEffect(() => {
+    if (!isChordsPlaying || !synth) {
+      setCurrentChordNotes(new Set());
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+
+    // C Blues chord progression (12-bar blues)
+    // Each chord is defined as [root, third, fifth, seventh]
+    const chordProgression = [
+      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7 (C, E, G, Bb)
+      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
+      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
+      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
+      { name: 'F7', notes: [53, 57, 60, 63], duration: 1000 },   // F7 (F, A, C, Eb)
+      { name: 'F7', notes: [53, 57, 60, 63], duration: 1000 },   // F7
+      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
+      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
+      { name: 'G7', notes: [55, 59, 62, 65], duration: 1000 },   // G7 (G, B, D, F)
+      { name: 'F7', notes: [53, 57, 60, 63], duration: 1000 },   // F7
+      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
+      { name: 'G7', notes: [55, 59, 62, 65], duration: 1000 },   // G7 (turnaround)
+    ];
+
+    let currentChordIndex = 0;
+    let timeoutId: number;
+
+    const playNextChord = () => {
+      if (!isChordsPlaying) return;
+
+      // Load edited patch (use ref to get latest patch without restarting progression)
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentChord = chordProgression[currentChordIndex];
+
+      // Highlight the notes being played
+      setCurrentChordNotes(new Set(currentChord.notes));
+
+      // Play all notes in the chord
+      currentChord.notes.forEach(note => {
+        synth.noteOn(PREVIEW_CHANNEL, note);
+      });
+
+      // Stop chord after duration (with slight gap for articulation)
+      setTimeout(() => {
+        currentChord.notes.forEach(note => {
+          synth.noteOff(PREVIEW_CHANNEL, note);
+        });
+        setCurrentChordNotes(new Set());
+      }, currentChord.duration * 0.9);
+
+      // Move to next chord
+      currentChordIndex = (currentChordIndex + 1) % chordProgression.length;
+
+      // Schedule next chord
+      timeoutId = window.setTimeout(playNextChord, currentChord.duration);
+    };
+
+    // Start playing
+    playNextChord();
+
+    // Cleanup
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      // Stop any playing notes
+      chordProgression.forEach(chord => {
+        chord.notes.forEach(note => {
+          synth.noteOff(PREVIEW_CHANNEL, note);
+        });
+      });
+      setCurrentChordNotes(new Set());
+    };
+  }, [isChordsPlaying, synth]);
 
   /**
    * Preview the current edited patch
@@ -412,7 +492,12 @@ export function InstrumentEditor({
                     height={100}
                     showLabels={true}
                     compact={true}
-                    activeNotes={currentSoloNote !== null ? new Set([currentSoloNote]) : undefined}
+                    activeNotes={(() => {
+                      const activeNotes = new Set<number>();
+                      if (currentSoloNote !== null) activeNotes.add(currentSoloNote);
+                      currentChordNotes.forEach(note => activeNotes.add(note));
+                      return activeNotes.size > 0 ? activeNotes : undefined;
+                    })()}
                     onNoteOn={(note) => {
                       // Load edited patch to preview channel before playing
                       const PREVIEW_CHANNEL = 8;
@@ -424,15 +509,26 @@ export function InstrumentEditor({
                       synth.noteOff(PREVIEW_CHANNEL, note);
                     }}
                   />
-                  <div className="editor-solo-control">
-                    <label className="editor-solo-label">
-                      <input
-                        type="checkbox"
-                        checked={isSoloPlaying}
-                        onChange={(e) => setIsSoloPlaying(e.target.checked)}
-                      />
-                      <span>Solo (auto-play melody)</span>
-                    </label>
+                  <div className="editor-demos-control">
+                    <label className="editor-demos-title">Demos</label>
+                    <div className="editor-demos-options">
+                      <label className="editor-demo-option">
+                        <input
+                          type="checkbox"
+                          checked={isSoloPlaying}
+                          onChange={(e) => setIsSoloPlaying(e.target.checked)}
+                        />
+                        <span>Solo</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="checkbox"
+                          checked={isChordsPlaying}
+                          onChange={(e) => setIsChordsPlaying(e.target.checked)}
+                        />
+                        <span>Chords</span>
+                      </label>
+                    </div>
                   </div>
                 </>
               ) : (

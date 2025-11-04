@@ -342,13 +342,29 @@
   padding: 20px;
 }
 
-/* Solo control */
-.editor-solo-control {
+/* Demos control */
+.editor-demos-control {
   text-align: center;
   width: 100%;
 }
 
-.editor-solo-label {
+.editor-demos-title {
+  display: block;
+  color: #cccccc;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.editor-demos-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.editor-demo-option {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -358,7 +374,7 @@
   user-select: none;
 }
 
-.editor-solo-label input[type="checkbox"] {
+.editor-demo-option input[type="checkbox"] {
   cursor: pointer;
   width: 16px;
   height: 16px;
