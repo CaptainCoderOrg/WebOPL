@@ -13,6 +13,7 @@ import { ChannelManagerTest } from './components/ChannelManagerTest';
 import { DualVoiceTest } from './components/DualVoiceTest';
 import { OPL3MigrationTest } from './components/OPL3MigrationTest';
 import { PianoKeyboardTest } from './components/PianoKeyboardTest';
+import { VolumeControl } from './components/VolumeControl';
 import { validatePattern, formatValidationErrors } from './utils/patternValidation';
 import { defaultPatches } from './data/defaultPatches';
 import { loadGENMIDI } from './utils/genmidiParser';
@@ -448,6 +449,7 @@ function App() {
           <h1>🎵 WebOrchestra</h1>
           <div className="subtitle">Minimal Tracker Prototype</div>
         </div>
+        <VolumeControl synth={synth} initialVolume={6} />
         <nav className="nav-links">
           <Link href="/" className="nav-link">
             🎹 Tracker

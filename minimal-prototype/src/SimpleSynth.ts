@@ -12,6 +12,7 @@ import { ChannelManager } from './utils/ChannelManager';
 export class SimpleSynth {
   private audioContext: AudioContext | null = null;
   private workletNode: AudioWorkletNode | null = null;
+  private masterGainNode: GainNode | null = null;
   private workletReady: boolean = false;
   private isInitialized: boolean = false;
   private trackPatches: Map<number, OPLPatch> = new Map(); // Track/MIDI channel (0-17) -> Patch (user selections)
@@ -59,9 +60,14 @@ export class SimpleSynth {
         this.handleWorkletMessage(event.data);
       };
 
-      // Connect to audio output
-      this.workletNode.connect(this.audioContext.destination);
-      console.log('[SimpleSynth] ✅ AudioWorkletNode connected');
+      // Create master gain node for volume control
+      this.masterGainNode = this.audioContext.createGain();
+      this.masterGainNode.gain.value = 1.0; // Default volume (100%)
+
+      // Connect: worklet -> master gain -> destination
+      this.workletNode.connect(this.masterGainNode);
+      this.masterGainNode.connect(this.audioContext.destination);
+      console.log('[SimpleSynth] ✅ AudioWorkletNode connected with master volume control');
 
       // Send OPL3 code to worklet
       console.log('[SimpleSynth] Sending OPL3 code to worklet...');
@@ -545,5 +551,30 @@ export class SimpleSynth {
    */
   getChannelManagerStats() {
     return this.channelManager.getStats();
+  }
+
+  /**
+   * Set master volume (0.0 to 1.0, or higher for boost)
+   * @param volume Volume level (0.0 = silent, 1.0 = 100%, 2.0 = 200%, etc.)
+   */
+  setMasterVolume(volume: number): void {
+    if (!this.masterGainNode) {
+      console.warn('[SimpleSynth] Master gain node not initialized');
+      return;
+    }
+    // Clamp to reasonable range (0.0 to 12.0 for 1200% max boost)
+    const clampedVolume = Math.max(0, Math.min(12, volume));
+    this.masterGainNode.gain.value = clampedVolume;
+    console.log(`[SimpleSynth] Master volume set to ${(clampedVolume * 100).toFixed(0)}%`);
+  }
+
+  /**
+   * Get current master volume (0.0 to 1.0+)
+   */
+  getMasterVolume(): number {
+    if (!this.masterGainNode) {
+      return 1.0;
+    }
+    return this.masterGainNode.gain.value;
   }
 }

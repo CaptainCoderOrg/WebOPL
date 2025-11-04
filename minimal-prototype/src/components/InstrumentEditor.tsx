@@ -6,6 +6,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { OPLPatch } from '../types/OPLPatch';
 import { PianoKeyboard } from './PianoKeyboard';
+import { VolumeControl } from './VolumeControl';
 import './InstrumentEditor.css';
 
 export interface InstrumentEditorProps {
@@ -890,6 +891,7 @@ export function InstrumentEditor({
         {/* Header */}
         <div className="editor-header">
           <h2>Edit Instrument - Track {trackId + 1}</h2>
+          <VolumeControl synth={synth} initialVolume={6} />
           <button
             className="editor-close"
             onClick={onCancel}
