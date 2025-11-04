@@ -11,7 +11,6 @@ import type { OPLPatch } from '../types/OPLPatch';
 import { noteNameToMIDI } from '../utils/noteConversion';
 import { validatePattern, formatValidationErrors } from '../utils/patternValidation';
 import { TrackerGrid } from './TrackerGrid';
-import { InstrumentSelector } from './InstrumentSelector';
 import './Tracker.css';
 
 export interface TrackerProps {
@@ -299,16 +298,6 @@ export function Tracker({
         </div>
       )}
 
-      {/* Instrument Selector */}
-      {bankLoaded && (
-        <InstrumentSelector
-          trackInstruments={trackInstruments}
-          instrumentBank={instrumentBank}
-          onInstrumentChange={handleInstrumentChange}
-          onEditClick={onEditInstrument}
-        />
-      )}
-
       {/* Tracker Grid */}
       <div className="tracker-section">
         <TrackerGrid
@@ -317,6 +306,10 @@ export function Tracker({
           pattern={pattern}
           onUpdate={setPattern}
           currentRow={isPlaying ? currentRow : undefined}
+          trackInstruments={bankLoaded ? trackInstruments : undefined}
+          instrumentBank={bankLoaded ? instrumentBank : undefined}
+          onInstrumentChange={bankLoaded ? handleInstrumentChange : undefined}
+          onEditClick={bankLoaded ? onEditInstrument : undefined}
         />
       </div>
 

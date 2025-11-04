@@ -7,6 +7,7 @@
 import React, { useEffect } from 'react';
 import './TrackerGrid.css';
 import { validateNote } from '../utils/patternValidation';
+import type { OPLPatch } from '../types/OPLPatch';
 
 interface TrackerGridProps {
   rows: number;               // Number of rows (e.g., 16)
@@ -14,6 +15,27 @@ interface TrackerGridProps {
   pattern: string[][];        // [row][track] = "C-4" or "---"
   onUpdate: (pattern: string[][]) => void;
   currentRow?: number;        // Current playback row (for highlighting)
+  trackInstruments?: number[]; // Array of patch IDs (one per track)
+  instrumentBank?: OPLPatch[]; // All available patches
+  onInstrumentChange?: (trackIndex: number, patchId: number) => void;
+  onEditClick?: (trackIndex: number) => void;
+}
+
+/**
+ * Abbreviate instrument name to fit in header
+ * 1. Remove numbers and dashes
+ * 2. If still too long (>12 chars), truncate with ellipsis
+ */
+function abbreviateInstrumentName(name: string, maxLength: number = 12): string {
+  // Step 1: Remove numbers and dashes
+  let abbreviated = name.replace(/[0-9\-]/g, '').trim();
+
+  // Step 2: If still too long, truncate
+  if (abbreviated.length > maxLength) {
+    abbreviated = abbreviated.substring(0, maxLength - 1) + '…';
+  }
+
+  return abbreviated;
 }
 
 export function TrackerGrid({
@@ -22,7 +44,13 @@ export function TrackerGrid({
   pattern,
   onUpdate,
   currentRow,
+  trackInstruments,
+  instrumentBank,
+  onInstrumentChange,
+  onEditClick,
 }: TrackerGridProps) {
+  // Track colors for visual distinction
+  const trackColors = ['#00ff00', '#00aaff', '#ffaa00', '#ff00ff'];
   /**
    * Check if a note is invalid
    */
@@ -142,11 +170,47 @@ export function TrackerGrid({
         <thead>
           <tr>
             <th className="row-header">Row</th>
-            {Array.from({ length: tracks }, (_, i) => (
-              <th key={i} className="track-header">
-                Track {i + 1}
-              </th>
-            ))}
+            {Array.from({ length: tracks }, (_, i) => {
+              const trackColor = trackColors[i];
+              const showInstruments = trackInstruments && instrumentBank && onInstrumentChange && onEditClick;
+              const patchId = trackInstruments?.[i] ?? 0;
+              const currentPatch = instrumentBank?.[patchId];
+
+              return (
+                <th key={i} className="track-header" style={{ borderTopColor: trackColor }}>
+                  <div className="track-header-content">
+                    <span className="track-number" style={{ color: trackColor }}>
+                      Track {i + 1}
+                    </span>
+                    {showInstruments && currentPatch && (
+                      <div className="track-instrument-selector">
+                        <select
+                          value={patchId}
+                          onChange={(e) => onInstrumentChange(i, parseInt(e.target.value, 10))}
+                          className="track-instrument-dropdown"
+                          title={currentPatch.name}
+                          aria-label={`Instrument for Track ${i + 1}`}
+                        >
+                          {instrumentBank.map((p, idx) => (
+                            <option key={idx} value={idx}>
+                              {abbreviateInstrumentName(p.name)}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={() => onEditClick(i)}
+                          className="track-edit-button"
+                          title={`Edit ${currentPatch.name}`}
+                          aria-label={`Edit instrument for Track ${i + 1}`}
+                        >
+                          ✏️
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>

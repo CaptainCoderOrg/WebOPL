@@ -39,7 +39,72 @@
 .track-header {
   background-color: #2a2a2a;
   color: #ffaa00;
-  min-width: 80px;
+  min-width: 120px;
+  padding: 8px 6px;
+  border-top: 3px solid #00ff00;
+}
+
+.track-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.track-number {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.track-instrument-selector {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+}
+
+.track-instrument-dropdown {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 4px;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.track-instrument-dropdown:hover {
+  background-color: #252525;
+  border-color: #555;
+}
+
+.track-instrument-dropdown:focus {
+  outline: 1px solid #00ff00;
+  outline-offset: 1px;
+}
+
+.track-edit-button {
+  padding: 2px 4px;
+  font-size: 12px;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.track-edit-button:hover {
+  background-color: #3a3a3a;
+  border-color: #555;
+  transform: scale(1.05);
+}
+
+.track-edit-button:active {
+  transform: scale(0.95);
 }
 
 /* Row styling */
