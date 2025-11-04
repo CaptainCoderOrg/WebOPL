@@ -322,10 +322,11 @@ export function InstrumentEditor({
             <div className="editor-keyboard-container">
               {synth ? (
                 <PianoKeyboard
-                  startNote={60}
+                  startNote={48}
                   endNote={72}
                   height={100}
                   showLabels={true}
+                  compact={true}
                   onNoteOn={(note) => {
                     // Load edited patch to preview channel before playing
                     const PREVIEW_CHANNEL = 8;
