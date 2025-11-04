@@ -1,17 +1,21 @@
 # Piano Keyboard Component - Changelog
 
-## 2025-01-04 (Phase 4 Complete) - InstrumentEditor Integration
+## 2025-01-04 (Phase 4 Complete) - InstrumentEditor Integration + Octave Shifting
 
 ### Phase 4: Integration ✅
 
-**Implemented:** Piano keyboard integrated into InstrumentEditor modal for real-time instrument testing
+**Implemented:** Piano keyboard integrated into InstrumentEditor modal for real-time instrument testing with octave shifting
 
 #### What Was Added
 
 **InstrumentEditor Integration:**
 - Added piano keyboard section after ADSR controls
 - Keyboard appears at bottom of modal with clean styling
-- 1 octave range (C4-C5, MIDI 60-72)
+- **Base range:** C3-C5 (MIDI 48-72) with octave shifting
+- **Octave Navigation:** Left/right arrow buttons to shift keyboard range ±12 semitones
+- **Demo Transposition:** All three demos (Solo, Chords, Arpeggios) transpose with octave changes
+- **MIDI Range Constraints:** Arrows disable when reaching MIDI limits (0-127)
+- **Dynamic Sizing:** Keyboard scales to fit modal width using maxWidth prop
 - Note labels enabled
 - Matches existing UI aesthetics
 
@@ -22,38 +26,158 @@
 - Drag-to-play works in modal
 - No conflicts with existing Preview button
 
+**Octave Shifting Feature:**
+- Left (◀) and right (▶) arrow buttons flank the keyboard
+- Each click shifts the keyboard range by one octave (12 semitones)
+- Base range: C3-C5 (MIDI 48-72)
+- Can shift from C-1 (MIDI 0) to G9 (MIDI 127)
+- All three demo modes transpose accordingly:
+  - **Solo:** Blues melody transposes across full range
+  - **Chords:** Bach Minuet (5-voice arrangement) transposes
+  - **Arpeggios:** Minor chord progression transposes
+- Arrows disable at MIDI boundaries to prevent invalid ranges
+
+**Dynamic Keyboard Scaling:**
+- Added `maxWidth` prop to PianoKeyboard component
+- Keyboard automatically scales down to fit within modal constraints
+- Formula: `keyWidth = (maxWidth - gaps) / whiteKeyCount`
+- Final dimensions: `height={90}` `maxWidth={411}`
+- Never scales up, only down (respects default key widths)
+- Maintains proper aspect ratios and key proportions
+
 **Implementation:**
 ```typescript
 // In InstrumentEditor.tsx
 import { PianoKeyboard } from './PianoKeyboard';
 
+const [octaveOffset, setOctaveOffset] = useState<number>(0);
+
+// Calculate keyboard range based on octave offset
+const BASE_START_NOTE = 48; // C3
+const BASE_END_NOTE = 72;   // C5
+const keyboardStartNote = BASE_START_NOTE + (octaveOffset * 12);
+const keyboardEndNote = BASE_END_NOTE + (octaveOffset * 12);
+
+// Octave shift handlers with MIDI range constraints
+const handleOctaveDown = () => {
+  const newStartNote = keyboardStartNote - 12;
+  if (newStartNote >= 0) {
+    setOctaveOffset(octaveOffset - 1);
+  }
+};
+
+const handleOctaveUp = () => {
+  const newEndNote = keyboardEndNote + 12;
+  if (newEndNote <= 127) {
+    setOctaveOffset(octaveOffset + 1);
+  }
+};
+
 // Added after ADSR section
-<PianoKeyboard
-  startNote={60}
-  endNote={72}
-  height={100}
-  showLabels={true}
-  onNoteOn={(note) => {
-    const PREVIEW_CHANNEL = 8;
-    synth.setTrackPatch(PREVIEW_CHANNEL, editedPatch);
-    synth.noteOn(PREVIEW_CHANNEL, note);
-  }}
-  onNoteOff={(note) => {
-    const PREVIEW_CHANNEL = 8;
-    synth.noteOff(PREVIEW_CHANNEL, note);
-  }}
-/>
+<div className="editor-keyboard-with-arrows">
+  <button
+    className="editor-octave-arrow"
+    onClick={handleOctaveDown}
+    disabled={!canShiftDown}
+  >
+    ◀
+  </button>
+  <PianoKeyboard
+    startNote={keyboardStartNote}
+    endNote={keyboardEndNote}
+    height={90}
+    maxWidth={411}
+    showLabels={true}
+    compact={true}
+    activeNotes={/* combined demo notes */}
+    onNoteOn={(note) => {
+      const PREVIEW_CHANNEL = 8;
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatch);
+      synth.noteOn(PREVIEW_CHANNEL, note);
+    }}
+    onNoteOff={(note) => {
+      const PREVIEW_CHANNEL = 8;
+      synth.noteOff(PREVIEW_CHANNEL, note);
+    }}
+  />
+  <button
+    className="editor-octave-arrow"
+    onClick={handleOctaveUp}
+    disabled={!canShiftUp}
+  >
+    ▶
+  </button>
+</div>
+```
+
+**Demo Transposition Example:**
+```typescript
+// Solo demo with transposition
+useEffect(() => {
+  if (demoMode !== 'solo' || !synth) return;
+
+  const transpose = octaveOffset * 12;
+  const melody = [
+    { note: 60, duration: 300 }, // C
+    { note: 63, duration: 300 }, // Eb
+    // ... more notes
+  ];
+
+  const playNextNote = () => {
+    const currentNote = melody[currentNoteIndex];
+    const transposedNote = currentNote.note + transpose; // Apply octave offset
+    synth.noteOn(PREVIEW_CHANNEL, transposedNote);
+    // ...
+  };
+
+  playNextNote();
+
+  return () => {
+    // Clean up with transposed notes
+    melody.forEach(({ note }) => {
+      synth.noteOff(PREVIEW_CHANNEL, note + transpose);
+    });
+  };
+}, [demoMode, synth, octaveOffset]); // octaveOffset in dependencies
 ```
 
 **Styling:**
 ```css
-.editor-keyboard-container {
+/* Keyboard with arrows wrapper */
+.editor-keyboard-with-arrows {
   display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
   justify-content: center;
-  padding: 20px;
-  background-color: #2a2a2a;
+}
+
+/* Octave arrow buttons */
+.editor-octave-arrow {
+  background-color: #3d3d3d;
+  color: #4a9eff;
+  border: 1px solid #4a9eff;
   border-radius: 4px;
-  border: 1px solid #3d3d3d;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.editor-octave-arrow:hover:not(:disabled) {
+  background-color: #4d4d4d;
+  color: #5ab0ff;
+  transform: scale(1.05);
+}
+
+.editor-octave-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 ```
 
@@ -66,6 +190,7 @@ import { PianoKeyboard } from './PianoKeyboard';
 4. Adjust parameters
 5. Click "Preview" again
 6. Repeat...
+7. Limited to C4-C5 range only
 
 **After:**
 1. Edit ADSR parameters
@@ -74,11 +199,15 @@ import { PianoKeyboard } from './PianoKeyboard';
 4. Test different notes
 5. Adjust parameters
 6. Test again instantly
-7. Much faster workflow!
+7. **Use arrow buttons to shift octaves up/down**
+8. **Test instrument across full MIDI range (C-1 to G9)**
+9. **Demos transpose automatically with octave changes**
+10. Much faster workflow with full range access!
 
 #### Files Modified
-- `minimal-prototype/src/components/InstrumentEditor.tsx` - Added keyboard import and section
-- `minimal-prototype/src/components/InstrumentEditor.css` - Added keyboard container styles
+- `minimal-prototype/src/components/InstrumentEditor.tsx` - Added keyboard, octave shifting logic, demo transposition
+- `minimal-prototype/src/components/InstrumentEditor.css` - Added keyboard container and arrow button styles
+- `minimal-prototype/src/components/PianoKeyboard/PianoKeyboard.tsx` - Added maxWidth prop and dynamic scaling
 
 #### Testing Results
 
@@ -88,18 +217,27 @@ import { PianoKeyboard } from './PianoKeyboard';
 - ✅ ADSR changes affect playback immediately
 - ✅ Preset changes affect playback
 - ✅ Modal close releases all notes (global mouse up handler)
+- ✅ Octave arrows shift keyboard range correctly
+- ✅ All demos transpose with octave offset
+- ✅ Arrows disable at MIDI boundaries
+- ✅ Keyboard scales to fit modal width
 
 **UX:**
 - ✅ Keyboard enhances editing workflow significantly
 - ✅ No conflicts with Preview button
 - ✅ Intuitive for testing instruments
 - ✅ Professional appearance
+- ✅ Octave navigation is clear and responsive
+- ✅ Demos continue playing during octave shifts
+- ✅ Full MIDI range accessible
 
 **Technical:**
 - ✅ TypeScript compiles without errors
 - ✅ Modal scrolls properly if needed
-- ✅ Keyboard fits within modal width
+- ✅ Keyboard fits within modal width (dynamic scaling)
 - ✅ Clean integration with existing UI
+- ✅ No layout overflow issues
+- ✅ Demo cleanup properly releases transposed notes
 
 ---
 

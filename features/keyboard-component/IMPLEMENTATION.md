@@ -185,6 +185,9 @@ export interface PianoKeyboardProps {
   /** Height in pixels (default: 80) */
   height?: number;
 
+  /** Maximum width in pixels (keyboard will scale to fit) */
+  maxWidth?: number;
+
   /** Currently active notes from user interaction (highlighted in default color) */
   activeNotes?: Set<number>;
 
@@ -216,6 +219,7 @@ export function PianoKeyboard({
   startNote,
   endNote,
   height = 80,
+  maxWidth,
   activeNotes = new Set(),
   activeNotesByTrack,
   onNoteOn,
@@ -243,12 +247,29 @@ export function PianoKeyboard({
   }, [startNote, endNote, activeNotesByTrack]);
 
   // Dimensions
-  const whiteKeyWidth = compact ? 30 : 40;
   const gap = compact ? 1 : 2;
   const whiteKeyCount = useMemo(
     () => countWhiteKeys(startNote, endNote),
     [startNote, endNote]
   );
+
+  // Calculate white key width - scale to fit maxWidth if provided
+  const whiteKeyWidth = useMemo(() => {
+    const defaultWidth = compact ? 30 : 40;
+
+    if (maxWidth) {
+      // Calculate the maximum key width that fits within maxWidth
+      // Formula: maxWidth = whiteKeyCount * keyWidth + (whiteKeyCount - 1) * gap
+      // Solving for keyWidth: keyWidth = (maxWidth - (whiteKeyCount - 1) * gap) / whiteKeyCount
+      const calculatedWidth = (maxWidth - (whiteKeyCount - 1) * gap) / whiteKeyCount;
+
+      // Use the smaller of calculated width or default width (never scale up)
+      return Math.min(calculatedWidth, defaultWidth);
+    }
+
+    return defaultWidth;
+  }, [compact, maxWidth, whiteKeyCount, gap]);
+
   const containerWidth = whiteKeyCount * whiteKeyWidth + (whiteKeyCount - 1) * gap;
 
   // Pre-calculate all key geometries (memoized)
@@ -1100,23 +1121,41 @@ import { PianoKeyboard } from './PianoKeyboard';
     Click keys to test the current instrument
   </p>
 
-  <PianoKeyboard
-    startNote={60}   // C-4
-    endNote={72}     // C-5
-    height={100}
-    showLabels={true}
-    onNoteOn={(note) => {
-      if (synth) {
-        synth.setTrackPatch(8, editedPatch);
-        synth.noteOn(8, note);
-      }
-    }}
-    onNoteOff={(note) => {
-      if (synth) {
-        synth.noteOff(8, note);
-      }
-    }}
-  />
+  <div className="editor-keyboard-with-arrows">
+    <button
+      className="editor-octave-arrow"
+      onClick={handleOctaveDown}
+      disabled={!canShiftDown}
+    >
+      ◀
+    </button>
+    <PianoKeyboard
+      startNote={keyboardStartNote}
+      endNote={keyboardEndNote}
+      height={90}
+      maxWidth={411}
+      showLabels={true}
+      compact={true}
+      onNoteOn={(note) => {
+        if (synth) {
+          synth.setTrackPatch(8, editedPatch);
+          synth.noteOn(8, note);
+        }
+      }}
+      onNoteOff={(note) => {
+        if (synth) {
+          synth.noteOff(8, note);
+        }
+      }}
+    />
+    <button
+      className="editor-octave-arrow"
+      onClick={handleOctaveUp}
+      disabled={!canShiftUp}
+    >
+      ▶
+    </button>
+  </div>
 </div>
 ```
 

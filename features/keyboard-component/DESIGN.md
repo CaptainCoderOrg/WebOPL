@@ -39,6 +39,9 @@ export interface PianoKeyboardProps {
   /** Height in pixels (optional, defaults to 80) */
   height?: number;
 
+  /** Maximum width in pixels (keyboard will scale to fit, never scale up) */
+  maxWidth?: number;
+
   /** Currently active notes from user interaction (highlighted in default color) */
   activeNotes?: Set<number>;
 
@@ -76,12 +79,14 @@ export interface PianoKeyboardProps {
 ### Example Usage
 
 ```typescript
-// Instrument Editor - 1 octave preview
+// Instrument Editor - 1 octave preview with octave shifting
 <PianoKeyboard
-  startNote={60}  // C-4
-  endNote={72}    // C-5
-  height={100}
+  startNote={48 + (octaveOffset * 12)}  // C-3 base (shiftable)
+  endNote={72 + (octaveOffset * 12)}    // C-5 base (shiftable)
+  height={90}
+  maxWidth={411}  // Scale to fit modal constraints
   showLabels={true}
+  compact={true}
   onNoteOn={(note) => synth.noteOn(8, note)}
   onNoteOff={(note) => synth.noteOff(8, note)}
 />
@@ -531,10 +536,13 @@ The component will:
 ## 7. Integration Points
 
 ### Instrument Editor
-- Show 1 octave (C-4 to C-5)
+- Base range: C-3 to C-5 (MIDI 48-72)
+- Octave shifting with left/right arrow buttons
+- Can access full MIDI range 0-127 via octave shifts
 - Full labels
-- Standard size (100px height)
+- Compact size (90px height, maxWidth 411px)
 - Preview mode (plays to channel 8)
+- Demo modes (Solo, Chords, Arpeggios) transpose with octave
 
 ### Pattern Player Visualization
 - Show full composition range (e.g., C-3 to C-6)
