@@ -51,7 +51,7 @@ export function Tracker({
   // Track count (dynamic)
   const [numTracks, setNumTracks] = useState(4);
 
-  // Row count (dynamic, 8-64, increments of 4)
+  // Row count (dynamic, 8-128, increments of 4)
   const [numRows, setNumRows] = useState(16);
 
   // Pattern state: numRows rows × numTracks tracks
@@ -366,9 +366,9 @@ export function Tracker({
    * Increase number of rows
    */
   const increaseRows = () => {
-    if (isPlaying || numRows >= 64) return;
+    if (isPlaying || numRows >= 128) return;
 
-    const newNumRows = Math.min(numRows + 4, 64);
+    const newNumRows = Math.min(numRows + 4, 128);
     console.log(`Increasing rows from ${numRows} to ${newNumRows}...`);
 
     // Add new rows to the pattern
@@ -447,7 +447,7 @@ export function Tracker({
             </div>
             <button
               onClick={increaseRows}
-              disabled={isPlaying || numRows >= 64}
+              disabled={isPlaying || numRows >= 128}
               className="row-control-button"
               title="Increase rows by 4"
             >
