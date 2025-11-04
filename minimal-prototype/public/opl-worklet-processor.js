@@ -15,6 +15,8 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
     this.chip = null;
     this.isReady = false;
     this.OPL3Class = null;
+    this.sampleCount = 0;
+    this.nonZeroSampleCount = 0;
 
     // Listen for messages from main thread
     this.port.onmessage = (event) => {
@@ -116,7 +118,7 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
    * Handle messages from main thread
    */
   handleMessage(data) {
-    const { type, payload } = data;
+    const { type, payload} = data;
 
     switch (type) {
       case 'load-opl3':
@@ -127,6 +129,13 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
         if (this.isReady) {
           const { register, value } = payload;
           this.chipWrite(register, value);
+
+          // Debug: log key-on register writes (0xB0-0xB8 and 0x1B0-0x1B8)
+          if ((register >= 0xB0 && register <= 0xB8) || (register >= 0x1B0 && register <= 0x1B8)) {
+            console.log(`[OPLWorkletProcessor] Key-on write: reg=0x${register.toString(16)}, val=0x${value.toString(16)}`);
+          }
+        } else {
+          console.warn('[OPLWorkletProcessor] Received write before ready');
         }
         break;
 
@@ -157,20 +166,41 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
       return true;
     }
 
-    // Generate samples directly into a temporary buffer
-    // The chip.read() method fills the buffer with interleaved stereo samples [L, R, L, R, ...]
-    const tempBuffer = new Int16Array(2);
+    // Generate samples ONE AT A TIME (critical for opl3 package!)
+    // The chip.read() method generates samples sequentially, advancing
+    // internal state with each call. We must call it once per sample frame.
+    const tempBuffer = new Int16Array(2); // Single stereo frame
+    let hasNonZero = false;
 
     for (let i = 0; i < numSamples; i++) {
+      // Read one stereo sample
       this.chip.read(tempBuffer);
 
-      // Convert Int16 to Float32 and write to output channels
+      // Convert Int16 to Float32
       const left = tempBuffer[0] / 32768.0;
       const right = tempBuffer[1] / 32768.0;
 
-      // Write to all output channels (usually 2 for stereo)
+      // Write to output channels (usually 2 for stereo)
       if (numChannels >= 1) output[0][i] = left;
       if (numChannels >= 2) output[1][i] = right;
+
+      if (left !== 0 || right !== 0) {
+        hasNonZero = true;
+      }
+    }
+
+    // Debug logging
+    this.sampleCount++;
+    if (hasNonZero) {
+      this.nonZeroSampleCount++;
+      if (this.nonZeroSampleCount === 1) {
+        console.log('[OPLWorkletProcessor] ✅ First non-zero samples generated!');
+      }
+    }
+
+    // Log stats every 1000 buffers (about every 21 seconds at 48kHz with 128 sample buffers)
+    if (this.sampleCount % 1000 === 0) {
+      console.log(`[OPLWorkletProcessor] Stats: ${this.nonZeroSampleCount}/${this.sampleCount} buffers with audio`);
     }
 
     // Return true to keep processor alive

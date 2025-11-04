@@ -46,7 +46,17 @@ export class OPL3Wrapper {
    */
   generate(numSamples: number): Int16Array {
     const output = new Int16Array(numSamples * 2); // Stereo
-    this.chip.read(output);
+
+    // Read samples ONE AT A TIME (critical for opl3 package!)
+    // The chip.read() method generates samples sequentially, advancing
+    // internal state with each call. We must call it once per sample frame.
+    const tempBuffer = new Int16Array(2); // Single stereo frame
+    for (let i = 0; i < numSamples; i++) {
+      this.chip.read(tempBuffer);
+      output[i * 2] = tempBuffer[0];       // Left channel
+      output[i * 2 + 1] = tempBuffer[1];   // Right channel
+    }
+
     return output;
   }
 

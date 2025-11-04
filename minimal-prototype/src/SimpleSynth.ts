@@ -16,7 +16,8 @@ import { ChannelManager } from './utils/ChannelManager';
 import { OPL3Wrapper } from './utils/OPL3Wrapper';
 
 // Feature flag: Toggle between AudioWorklet and ScriptProcessorNode
-const USE_AUDIO_WORKLET = true;
+// TEMP: Set to false to test ScriptProcessor mode
+const USE_AUDIO_WORKLET = false;
 
 // Type definition for the global OPL class
 declare global {
@@ -296,6 +297,11 @@ export class SimpleSynth {
     } else if (this.opl) {
       // Direct write (ScriptProcessorNode mode)
       this.opl.write(register, value);
+
+      // Debug: log key-on register writes (0xB0-0xB8 and 0x1B0-0x1B8)
+      if ((register >= 0xB0 && register <= 0xB8) || (register >= 0x1B0 && register <= 0x1B8)) {
+        console.log(`[SimpleSynth] Key-on write: reg=0x${register.toString(16)}, val=0x${value.toString(16)}`);
+      }
     }
   }
 
@@ -448,6 +454,9 @@ export class SimpleSynth {
   /**
    * Audio processing callback (ScriptProcessorNode mode only)
    */
+  private sampleCount = 0;
+  private nonZeroSampleCount = 0;
+
   private processAudio(event: AudioProcessingEvent): void {
     if (!this.opl) return;
 
@@ -459,9 +468,27 @@ export class SimpleSynth {
     const samples = this.opl.generate(numSamples);
 
     // De-interleave stereo samples
+    let hasNonZero = false;
     for (let i = 0; i < numSamples; i++) {
       outputL[i] = samples[i * 2] / 32768.0;      // Left channel
       outputR[i] = samples[i * 2 + 1] / 32768.0;  // Right channel
+
+      if (samples[i * 2] !== 0 || samples[i * 2 + 1] !== 0) {
+        hasNonZero = true;
+      }
+    }
+
+    // Debug logging
+    this.sampleCount++;
+    if (hasNonZero) {
+      this.nonZeroSampleCount++;
+      if (this.nonZeroSampleCount === 1) {
+        console.log('[SimpleSynth] ✅ First non-zero samples generated!');
+      }
+    }
+
+    if (this.sampleCount % 100 === 0) {
+      console.log(`[SimpleSynth] Stats: ${this.nonZeroSampleCount}/${this.sampleCount} buffers with audio`);
     }
   }
 
@@ -614,6 +641,17 @@ export class SimpleSynth {
     // Clear tracking
     this.activeNotes.clear();
     this.channelManager.reset();
+  }
+
+  /**
+   * Resume audio context (required by browsers after user interaction)
+   */
+  async resumeAudio(): Promise<void> {
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      console.log('[SimpleSynth] Resuming AudioContext (was suspended)');
+      await this.audioContext.resume();
+      console.log('[SimpleSynth] AudioContext state:', this.audioContext.state);
+    }
   }
 
   /**

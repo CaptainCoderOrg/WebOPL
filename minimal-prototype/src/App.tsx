@@ -10,6 +10,7 @@ import { InstrumentSelector } from './components/InstrumentSelector';
 import { InstrumentTester } from './components/InstrumentTester';
 import { ChannelManagerTest } from './components/ChannelManagerTest';
 import { DualVoiceTest } from './components/DualVoiceTest';
+import { OPL3MigrationTest } from './components/OPL3MigrationTest';
 import { validatePattern, formatValidationErrors } from './utils/patternValidation';
 import { defaultPatches } from './data/defaultPatches';
 import { loadGENMIDI } from './utils/genmidiParser';
@@ -376,6 +377,9 @@ function App() {
           <Link href="/dual-voice-test" className="nav-link">
             🎵 Dual-Voice Test
           </Link>
+          <Link href="/opl3-test" className="nav-link">
+            🔬 OPL3 Test
+          </Link>
         </nav>
         <div className="status">
           {isReady ? '✅ Ready' : '⏳ Initializing...'}
@@ -537,6 +541,10 @@ function App() {
 
       <Route path="/dual-voice-test">
         {synth && <DualVoiceTest synth={synth} patches={instrumentBank} />}
+      </Route>
+
+      <Route path="/opl3-test">
+        <OPL3MigrationTest />
       </Route>
     </div>
   );
