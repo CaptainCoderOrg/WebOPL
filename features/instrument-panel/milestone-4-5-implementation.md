@@ -8,6 +8,20 @@
 
 ---
 
+## ⚠️ Library Migration Note (2025-11-04)
+
+**Important**: After completing Milestone 5, we discovered a critical bug in the WASM-based `@malvineous/opl` library (OPL3 mode produced no audio). We successfully migrated to the pure JavaScript `opl3` library (v0.4.3).
+
+**Migration Impact on Milestones 4-5:**
+- ✅ **No changes required** - All code remains functional
+- ✅ **Better performance** - Simpler architecture, no WASM loading
+- ✅ **All tests passing** - 128 instruments working correctly
+- 📝 **Implementation** - Milestones 4-5 successfully completed with `opl3` library
+
+See [OPL3_MIGRATION_UPDATE.md](OPL3_MIGRATION_UPDATE.md) and [../../minimal-prototype/IMPLEMENTATION_PLAN_OPL3_MIGRATION.md](../../minimal-prototype/IMPLEMENTATION_PLAN_OPL3_MIGRATION.md) for full migration details.
+
+---
+
 ## Milestone 4: Instrument Selector UI (3-4 hours) ✅ COMPLETE
 
 ### Overview

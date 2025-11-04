@@ -15,6 +15,19 @@
 
 ---
 
+## ⚠️ Library Migration Note (2025-11-04)
+
+**Important**: During implementation, we migrated from `@malvineous/opl` (WASM) to `opl3` (pure JavaScript) due to a critical bug in OPL3 mode. This migration:
+
+- ✅ **Completed successfully** - All audio working correctly
+- ✅ **Transparent to this feature** - API unchanged
+- ✅ **Better performance** - Simpler architecture, no WASM loading
+- 📝 **Documentation references** to `@malvineous/opl` should read as `opl3`
+
+See [minimal-prototype/IMPLEMENTATION_PLAN_OPL3_MIGRATION.md](../../minimal-prototype/IMPLEMENTATION_PLAN_OPL3_MIGRATION.md) for full migration details.
+
+---
+
 ## Overview
 
 Add comprehensive instrument control to the WebOrchestra tracker:
@@ -1248,10 +1261,12 @@ Not included in this plan but possible later:
 ## Dependencies
 
 ### External Libraries
-- ✅ `@malvineous/opl` - Already installed
+- ✅ `opl3` (v0.4.3) - Pure JavaScript OPL3 emulator - Already installed
 - ✅ React 18 - Already in use
 - ✅ TypeScript - Already configured
 - ❌ No new dependencies needed!
+
+**Note**: Originally planned for `@malvineous/opl` (WASM), successfully migrated to `opl3` (pure JavaScript) during implementation.
 
 ### Assets Required
 - [ ] GENMIDI.json file (128 instruments)

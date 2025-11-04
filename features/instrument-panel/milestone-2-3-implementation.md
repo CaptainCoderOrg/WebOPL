@@ -4,7 +4,9 @@
 
 **Time Estimate:** 3-5 hours total
 
-**Status:** Complete (2025-01-03)
+**Status:** Complete (2025-01-03) - ✅ Implemented with `opl3` library
+
+**Library Note:** Successfully implemented with `opl3` (pure JavaScript) after migration from `@malvineous/opl` (WASM). See [OPL3_MIGRATION_UPDATE.md](OPL3_MIGRATION_UPDATE.md) for details.
 
 ---
 

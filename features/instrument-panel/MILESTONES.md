@@ -447,11 +447,11 @@ If NO to any → Fix before proceeding
 
 ## Current Status
 
-- [x] Milestone 1: Complete (2025-01-03)
-- [x] Milestone 2: Complete (2025-01-03)
-- [x] Milestone 3: Complete (2025-01-03)
-- [x] Milestone 4: Complete (2025-01-03)
-- [x] Milestone 5: Complete (2025-01-03)
+- [x] Milestone 1: Complete (2025-01-03) - ✅ Implemented with `opl3` library
+- [x] Milestone 2: Complete (2025-01-03) - ✅ Implemented with `opl3` library
+- [x] Milestone 3: Complete (2025-01-03) - ✅ Implemented with `opl3` library
+- [x] Milestone 4: Complete (2025-01-03) - ✅ Implemented with `opl3` library
+- [x] Milestone 5: Complete (2025-01-03) - ✅ Implemented with `opl3` library
 - [ ] Milestone 6: Not started
 - [ ] Milestone 7: Not started
 - [ ] Milestone 8: Not started
@@ -460,5 +460,7 @@ If NO to any → Fix before proceeding
 - [ ] Milestone 11: Not started
 - [ ] Milestone 12: Not started
 - [ ] Milestone 13: Not started
+
+**Library Migration Note (2025-11-04):** During Milestone 5, we successfully migrated from `@malvineous/opl` (WASM) to `opl3` (pure JavaScript) due to a critical OPL3 mode bug. All milestones 1-5 completed successfully with the new library. See [OPL3_MIGRATION_UPDATE.md](OPL3_MIGRATION_UPDATE.md) for details.
 
 **Next:** Begin Milestone 6 (Instrument Editor Modal Shell)
