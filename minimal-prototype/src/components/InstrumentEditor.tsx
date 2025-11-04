@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import type { OPLPatch } from '../types/OPLPatch';
+import { PianoKeyboard } from './PianoKeyboard';
 import './InstrumentEditor.css';
 
 export interface InstrumentEditorProps {
@@ -308,6 +309,39 @@ export function InstrumentEditor({
                 <span className="editor-value">{editedPatch.carrier.releaseRate}</span>
               </div>
               <p className="editor-param-hint">How fast sound fades after release</p>
+            </div>
+          </div>
+
+          {/* Piano Keyboard Preview */}
+          <div className="editor-section">
+            <h3 className="editor-section-title">Test Keyboard</h3>
+            <p className="editor-section-desc">
+              Click keys to test the edited instrument
+            </p>
+
+            <div className="editor-keyboard-container">
+              {synth ? (
+                <PianoKeyboard
+                  startNote={60}
+                  endNote={72}
+                  height={100}
+                  showLabels={true}
+                  onNoteOn={(note) => {
+                    // Load edited patch to preview channel before playing
+                    const PREVIEW_CHANNEL = 8;
+                    synth.setTrackPatch(PREVIEW_CHANNEL, editedPatch);
+                    synth.noteOn(PREVIEW_CHANNEL, note);
+                  }}
+                  onNoteOff={(note) => {
+                    const PREVIEW_CHANNEL = 8;
+                    synth.noteOff(PREVIEW_CHANNEL, note);
+                  }}
+                />
+              ) : (
+                <p className="editor-keyboard-disabled">
+                  Synth not available
+                </p>
+              )}
             </div>
           </div>
 

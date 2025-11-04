@@ -13,8 +13,8 @@
 | 0 | Design & Planning | 1-2 hours | ✅ Complete |
 | 1 | Core Component | 2-3 hours | ✅ Complete |
 | 2 | Interaction | 1-2 hours | ✅ Complete |
-| 3 | Visual Polish | 1-2 hours | ⏸️ Not Started |
-| 4 | Integration | 1-2 hours | ⏸️ Not Started |
+| 3 | Visual Polish | 1-2 hours | ⏸️ Skipped |
+| 4 | Integration | 1-2 hours | ✅ Complete |
 | 5 | Testing | 1-2 hours | ⏸️ Not Started |
 
 **Total Estimated Time:** 8-12 hours
@@ -252,62 +252,82 @@
 
 ---
 
-## Milestone 4: Integration
+## Milestone 4: Integration ✅
 
 **Goal:** Integrate keyboard into InstrumentEditor
 **Estimate:** 1-2 hours
-**Status:** ⏸️ Not Started
+**Status:** ✅ Complete
+**Completed:** 2025-01-04
 
 ### Tasks
 
 #### 4.1 Add to InstrumentEditor
-- [ ] Import PianoKeyboard component
-- [ ] Add keyboard section after ADSR controls
-- [ ] Configure props (range, labels, callbacks)
-- [ ] Connect to synth with channel 8
-- [ ] Load edited patch (not saved patch) for preview
+- [x] Import PianoKeyboard component
+- [x] Add keyboard section after ADSR controls
+- [x] Configure props (range, labels, callbacks)
+- [x] Connect to synth with channel 8
+- [x] Load edited patch (not saved patch) for preview
 
 #### 4.2 Layout Integration
-- [ ] Ensure keyboard fits in modal
-- [ ] Add proper spacing/padding
-- [ ] Test with different screen sizes
-- [ ] Verify scrolling behavior
-- [ ] Check z-index stacking
+- [x] Ensure keyboard fits in modal
+- [x] Add proper spacing/padding
+- [x] Test with different screen sizes
+- [x] Verify scrolling behavior
+- [x] Check z-index stacking
 
 #### 4.3 Interaction Testing
-- [ ] Test keyboard while editing ADSR
-- [ ] Verify edited patch is used for preview
-- [ ] Test Preview button alongside keyboard
-- [ ] Ensure no conflicts with Reset/Cancel/Save
-- [ ] Test modal close with active notes
+- [x] Test keyboard while editing ADSR
+- [x] Verify edited patch is used for preview
+- [x] Test Preview button alongside keyboard
+- [x] Ensure no conflicts with Reset/Cancel/Save
+- [x] Test modal close with active notes (handled by global mouse up)
 
 ### Verification Checklist
 
 #### Functional
-- [ ] Keyboard appears in InstrumentEditor
-- [ ] Clicking keys plays edited patch (not saved)
-- [ ] ADSR changes affect keyboard playback immediately
-- [ ] Preset changes affect keyboard playback
-- [ ] Closing modal releases all notes
+- [x] Keyboard appears in InstrumentEditor
+- [x] Clicking keys plays edited patch (not saved)
+- [x] ADSR changes affect keyboard playback immediately
+- [x] Preset changes affect keyboard playback
+- [x] Closing modal releases all notes
 
 #### Layout
-- [ ] Keyboard fits within modal width
-- [ ] Modal scrolls correctly if needed
-- [ ] No layout shift when keyboard added
-- [ ] Keyboard centered or properly aligned
-- [ ] Works on mobile modal view
+- [x] Keyboard fits within modal width
+- [x] Modal scrolls correctly if needed
+- [x] No layout shift when keyboard added
+- [x] Keyboard centered or properly aligned
+- [x] Works on mobile modal view
 
 #### UX
-- [ ] Keyboard enhances editing workflow
-- [ ] Doesn't conflict with existing Preview button
-- [ ] Clear which patch is being played
-- [ ] Intuitive for testing instruments
+- [x] Keyboard enhances editing workflow
+- [x] Doesn't conflict with existing Preview button
+- [x] Clear which patch is being played (edited patch via keyboard, same via Preview button)
+- [x] Intuitive for testing instruments
 
 ### Success Criteria
-- Open InstrumentEditor → see keyboard below ADSR controls
-- Click keyboard keys → hear edited instrument
-- Change ADSR values → keyboard reflects changes immediately
-- Professional integration with existing UI
+- ✅ Open InstrumentEditor → see keyboard below ADSR controls
+- ✅ Click keyboard keys → hear edited instrument
+- ✅ Change ADSR values → keyboard reflects changes immediately
+- ✅ Professional integration with existing UI
+- ✅ Drag-to-play works in modal
+
+### Implementation Details
+**Files Modified:**
+- `InstrumentEditor.tsx` - Added PianoKeyboard import and keyboard section
+- `InstrumentEditor.css` - Added styling for keyboard container
+
+**Configuration:**
+- Range: C4-C5 (MIDI 60-72) - 1 octave
+- Height: 100px
+- Labels: Enabled
+- Channel: 8 (same as Preview button)
+- Patch: Uses `editedPatch` state (not saved patch)
+
+**Key Features:**
+- Keyboard loads edited patch to channel 8 on each note
+- ADSR changes immediately affect keyboard playback
+- Drag-to-play functionality works
+- Clean styling matches modal UI
 
 ---
 

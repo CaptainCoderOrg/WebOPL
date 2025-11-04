@@ -322,6 +322,24 @@
   background-color: #3a3a3a;
 }
 
+/* Keyboard container */
+.editor-keyboard-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: #2a2a2a;
+  border-radius: 4px;
+  border: 1px solid #3d3d3d;
+}
+
+.editor-keyboard-disabled {
+  color: #666;
+  font-size: 13px;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .editor-modal {
