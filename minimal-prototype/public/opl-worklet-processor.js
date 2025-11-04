@@ -1,11 +1,9 @@
 /**
- * OPL3 AudioWorklet Processor (Pure JavaScript Edition)
+ * OPL3 AudioWorklet Processor (Rebuilt from Working Test)
  *
+ * Rebuilt using the exact patterns from opl3-chip-test.html
  * Runs in the audio thread (AudioWorkletGlobalScope)
  * Generates audio samples from the OPL3 emulator
- *
- * This version uses the pure JavaScript opl3 package instead of WASM,
- * simplifying initialization and improving reliability.
  */
 
 class OPLWorkletProcessor extends AudioWorkletProcessor {
@@ -14,7 +12,6 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
 
     this.chip = null;
     this.isReady = false;
-    this.OPL3Class = null;
     this.sampleCount = 0;
     this.nonZeroSampleCount = 0;
 
@@ -27,28 +24,29 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
   }
 
   /**
-   * Load OPL3 code from main thread
+   * Load OPL3 code from main thread (browser bundle)
+   * Uses exact pattern from opl3-chip-test.html
    */
   loadOPL3Code(opl3Code) {
     try {
-      console.log('[OPLWorkletProcessor] Loading OPL3 code...');
+      console.log('[OPLWorkletProcessor] Loading OPL3 browser bundle...');
 
-      // Execute the OPL3 code in global scope
-      // This will define the OPL3 class
+      // Execute the browser bundle code in global scope
+      // The browser bundle exposes globalThis.OPL3.OPL3 as a global
       (0, eval)(opl3Code);
 
-      // Check if OPL3 is now available
-      if (typeof globalThis.OPL3 === 'undefined') {
-        throw new Error('OPL3 class not found after code execution');
+      // Check if OPL3 is now available (browser bundle exposes OPL3.OPL3)
+      if (typeof globalThis.OPL3 === 'undefined' || typeof globalThis.OPL3.OPL3 === 'undefined') {
+        throw new Error('OPL3 class not found after browser bundle execution');
       }
 
-      console.log('[OPLWorkletProcessor] ✅ OPL3 code loaded');
+      console.log('[OPLWorkletProcessor] ✅ OPL3 browser bundle loaded');
 
-      // Create OPL3 chip instance
-      this.chip = new globalThis.OPL3();
+      // Create OPL3 chip instance (browser bundle exposes it as OPL3.OPL3)
+      this.chip = new globalThis.OPL3.OPL3();
       console.log('[OPLWorkletProcessor] ✅ OPL3 chip created');
 
-      // Initialize OPL3 mode
+      // Initialize OPL3 mode using exact sequence from working test
       this.initializeOPL3();
 
     } catch (error) {
@@ -61,12 +59,12 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
   }
 
   /**
-   * Initialize OPL3 mode with proper sequence
+   * Initialize OPL3 mode with exact sequence from opl3-chip-test.html
    */
   initializeOPL3() {
     console.log('[OPLWorkletProcessor] Starting OPL3 initialization sequence...');
 
-    // Reset sequence
+    // Reset sequence (from working test)
     this.chipWrite(0x04, 0x60);  // Reset Timer 1 and Timer 2
     this.chipWrite(0x04, 0x80);  // Reset IRQ
     this.chipWrite(0x01, 0x20);  // Enable waveform select
@@ -80,14 +78,36 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
     console.log('[OPLWorkletProcessor] Disabling 4-op mode (register 0x104)...');
     this.chipWrite(0x104, 0x00);
 
-    // Initialize output routing for all channels
-    // 0x30 = 0b00110000 = CHA (left) + CHB (right) enabled = stereo output
+    // Initialize C0-C8 registers (DOSBox workaround from working test)
+    // IMPORTANT: Initialize to 0x00 first, THEN program them later
+    console.log('[OPLWorkletProcessor] Initializing C0-C8 registers to 0x00...');
     for (let ch = 0; ch < 9; ch++) {
-      this.chipWrite(0xC0 + ch, 0x30);        // Bank 0 channels 0-8: stereo output
-      this.chipWrite(0x100 + 0xC0 + ch, 0x30); // Bank 1 channels 9-17: stereo output
+      this.chipWrite(0xC0 + ch, 0x00);        // Bank 0 channels 0-8
+      this.chipWrite(0x100 + 0xC0 + ch, 0x00); // Bank 1 channels 9-17
     }
 
-    console.log('[OPLWorkletProcessor] ✅ OPL3 mode enabled with all channels in 2-op mode');
+    // Now program default instrument on channel 0 for testing
+    // (Simple sine wave like in opl3-chip-test.html)
+    console.log('[OPLWorkletProcessor] Programming default instrument on channel 0...');
+
+    // Modulator (operator 0x00)
+    this.chipWrite(0x20, 0x01); // AM=0, VIB=0, EGT=0, KSR=0, MULT=1
+    this.chipWrite(0x40, 0x10); // KSL=0, TL=16
+    this.chipWrite(0x60, 0xF0); // AR=15, DR=0
+    this.chipWrite(0x80, 0x77); // SL=7, RR=7
+    this.chipWrite(0xE0, 0x00); // Waveform=0 (sine)
+
+    // Carrier (operator 0x03)
+    this.chipWrite(0x23, 0x01); // AM=0, VIB=0, EGT=0, KSR=0, MULT=1
+    this.chipWrite(0x43, 0x00); // KSL=0, TL=0 (max volume)
+    this.chipWrite(0x63, 0xF0); // AR=15, DR=0
+    this.chipWrite(0x83, 0x77); // SL=7, RR=7
+    this.chipWrite(0xE3, 0x00); // Waveform=0 (sine)
+
+    // Channel 0 settings: 0x30 = stereo output (left + right)
+    this.chipWrite(0xC0, 0x30);
+
+    console.log('[OPLWorkletProcessor] ✅ OPL3 mode enabled and channel 0 programmed');
 
     this.isReady = true;
 
@@ -118,7 +138,7 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
    * Handle messages from main thread
    */
   handleMessage(data) {
-    const { type, payload} = data;
+    const { type, payload } = data;
 
     switch (type) {
       case 'load-opl3':
@@ -146,6 +166,7 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
 
   /**
    * Process audio samples
+   * Uses exact pattern from opl3-chip-test.html: ONE SAMPLE AT A TIME
    *
    * @param {Float32Array[][]} inputs - Input audio (unused)
    * @param {Float32Array[][]} outputs - Output audio buffers
@@ -166,7 +187,7 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
       return true;
     }
 
-    // Generate samples ONE AT A TIME (critical for opl3 package!)
+    // Generate samples ONE AT A TIME (critical pattern from working test!)
     // The chip.read() method generates samples sequentially, advancing
     // internal state with each call. We must call it once per sample frame.
     const tempBuffer = new Int16Array(2); // Single stereo frame
