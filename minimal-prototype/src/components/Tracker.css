@@ -135,6 +135,34 @@
   outline-offset: 1px;
 }
 
+/* Example Selector */
+.example-selector {
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  background-color: #0a0a0a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #00ff00;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.example-selector:hover:not(:disabled) {
+  background-color: #1a1a1a;
+  border-color: #555;
+}
+
+.example-selector:focus {
+  outline: 2px solid #00ff00;
+  outline-offset: 1px;
+}
+
+.example-selector:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Instrument loading states */
 .loading-instruments {
   display: flex;
