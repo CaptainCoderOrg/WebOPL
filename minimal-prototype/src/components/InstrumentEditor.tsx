@@ -39,9 +39,10 @@ export function InstrumentEditor({
   // Local state for editing (not applied until Save)
   const [editedPatch, setEditedPatch] = useState<OPLPatch>(currentPatch);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
-  const [demoMode, setDemoMode] = useState<'none' | 'solo' | 'chords'>('none');
+  const [demoMode, setDemoMode] = useState<'none' | 'solo' | 'chords' | 'arpeggios'>('none');
   const [currentSoloNote, setCurrentSoloNote] = useState<number | null>(null);
   const [currentChordNotes, setCurrentChordNotes] = useState<Set<number>>(new Set());
+  const [currentArpeggioNote, setCurrentArpeggioNote] = useState<number | null>(null);
 
   // Ref to track current edited patch for Solo/Chords playback (avoids restarting)
   const editedPatchRef = useRef<OPLPatch>(editedPatch);
@@ -266,6 +267,98 @@ export function InstrumentEditor({
         });
       });
       setCurrentChordNotes(new Set());
+    };
+  }, [demoMode, synth]);
+
+  // Arpeggio playback (minor chord progression)
+  useEffect(() => {
+    if (demoMode !== 'arpeggios' || !synth) {
+      setCurrentArpeggioNote(null);
+      return;
+    }
+
+    const PREVIEW_CHANNEL = 8;
+
+    // Minor chord progression: Am - Dm - Em - Am
+    // Each chord: root, minor third, fifth (ascending then descending)
+    const arpeggioPattern = [
+      // Am (A, C, E)
+      { note: 57, duration: 200 }, // A
+      { note: 60, duration: 200 }, // C
+      { note: 64, duration: 200 }, // E
+      { note: 69, duration: 200 }, // A (high)
+      { note: 64, duration: 200 }, // E
+      { note: 60, duration: 200 }, // C
+
+      // Dm (D, F, A)
+      { note: 62, duration: 200 }, // D
+      { note: 65, duration: 200 }, // F
+      { note: 69, duration: 200 }, // A
+      { note: 74, duration: 200 }, // D (high)
+      { note: 69, duration: 200 }, // A
+      { note: 65, duration: 200 }, // F
+
+      // Em (E, G, B)
+      { note: 64, duration: 200 }, // E
+      { note: 67, duration: 200 }, // G
+      { note: 71, duration: 200 }, // B
+      { note: 76, duration: 200 }, // E (high)
+      { note: 71, duration: 200 }, // B
+      { note: 67, duration: 200 }, // G
+
+      // Am (A, C, E) - resolution
+      { note: 57, duration: 200 }, // A
+      { note: 60, duration: 200 }, // C
+      { note: 64, duration: 200 }, // E
+      { note: 69, duration: 200 }, // A (high)
+      { note: 64, duration: 200 }, // E
+      { note: 60, duration: 200 }, // C
+      { note: 57, duration: 400 }, // A (hold)
+    ];
+
+    let currentNoteIndex = 0;
+    let timeoutId: number;
+
+    const playNextNote = () => {
+      if (demoMode !== 'arpeggios') return;
+
+      // Load edited patch
+      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
+
+      const currentNote = arpeggioPattern[currentNoteIndex];
+
+      // Highlight the note being played
+      setCurrentArpeggioNote(currentNote.note);
+
+      // Play note
+      synth.noteOn(PREVIEW_CHANNEL, currentNote.note);
+
+      // Stop note after duration (with slight gap for articulation)
+      setTimeout(() => {
+        synth.noteOff(PREVIEW_CHANNEL, currentNote.note);
+        setCurrentArpeggioNote(null);
+      }, currentNote.duration * 0.8);
+
+      // Move to next note
+      currentNoteIndex = (currentNoteIndex + 1) % arpeggioPattern.length;
+
+      // Schedule next note
+      timeoutId = window.setTimeout(playNextNote, currentNote.duration);
+    };
+
+    // Start playing
+    playNextNote();
+
+    // Cleanup
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      // Stop any playing notes
+      arpeggioPattern.forEach(({ note }) => {
+        synth.noteOff(PREVIEW_CHANNEL, note);
+      });
+      setCurrentArpeggioNote(null);
     };
   }, [demoMode, synth]);
 
@@ -518,11 +611,6 @@ export function InstrumentEditor({
 
           {/* Piano Keyboard Preview */}
           <div className="editor-section">
-            <h3 className="editor-section-title">Test Keyboard</h3>
-            <p className="editor-section-desc">
-              Click keys to test the edited instrument
-            </p>
-
             <div className="editor-keyboard-container">
               {synth ? (
                 <>
@@ -535,6 +623,7 @@ export function InstrumentEditor({
                     activeNotes={(() => {
                       const activeNotes = new Set<number>();
                       if (currentSoloNote !== null) activeNotes.add(currentSoloNote);
+                      if (currentArpeggioNote !== null) activeNotes.add(currentArpeggioNote);
                       currentChordNotes.forEach(note => activeNotes.add(note));
                       return activeNotes.size > 0 ? activeNotes : undefined;
                     })()}
@@ -581,6 +670,16 @@ export function InstrumentEditor({
                           onChange={() => setDemoMode('chords')}
                         />
                         <span>Chords</span>
+                      </label>
+                      <label className="editor-demo-option">
+                        <input
+                          type="radio"
+                          name="demo-mode"
+                          value="arpeggios"
+                          checked={demoMode === 'arpeggios'}
+                          onChange={() => setDemoMode('arpeggios')}
+                        />
+                        <span>Arpeggios</span>
                       </label>
                     </div>
                   </div>
