@@ -188,83 +188,125 @@ export function InstrumentEditor({
     };
   }, [demoMode, synth]);
 
-  // Chord progression playback (C blues)
+  // Classical piece playback (Bach's Minuet in G Major - left hand bass + right hand melody)
   useEffect(() => {
     if (demoMode !== 'chords' || !synth) {
       setCurrentChordNotes(new Set());
       return;
     }
 
-    // Use channels 8-11 for 4-note chords (avoiding conflict with tracker channels 0-3)
-    const CHORD_CHANNELS = [8, 9, 10, 11];
+    // Use channels 8-11 for left hand (bass + chords), channel 12 for right hand (melody)
+    const LEFT_HAND_CHANNELS = [8, 9, 10, 11];
+    const RIGHT_HAND_CHANNEL = 12;
 
-    // C Blues chord progression (12-bar blues)
-    // Each chord is defined as [root, third, fifth, seventh]
-    const chordProgression = [
-      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7 (C, E, G, Bb)
-      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
-      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
-      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
-      { name: 'F7', notes: [53, 57, 60, 63], duration: 1000 },   // F7 (F, A, C, Eb)
-      { name: 'F7', notes: [53, 57, 60, 63], duration: 1000 },   // F7
-      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
-      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
-      { name: 'G7', notes: [55, 59, 62, 65], duration: 1000 },   // G7 (G, B, D, F)
-      { name: 'F7', notes: [53, 57, 60, 63], duration: 1000 },   // F7
-      { name: 'C7', notes: [48, 52, 55, 58], duration: 1000 },   // C7
-      { name: 'G7', notes: [55, 59, 62, 65], duration: 1000 },   // G7 (turnaround)
+    // Bach - Minuet in G Major (BWV Anh. 114) - simplified arrangement
+    // Each entry: left hand bass/chord + right hand melody note
+    const arrangement = [
+      // Measure 1: G major - melody ascends
+      { leftHand: [43, 50, 55, 59], melody: 67, duration: 400 },  // G bass, D-G-B chord, G melody
+      { leftHand: [43, 50, 55, 59], melody: 69, duration: 400 },  // A
+      { leftHand: [43, 50, 55, 59], melody: 71, duration: 400 },  // B
+      { leftHand: [43, 50, 55, 59], melody: 72, duration: 400 },  // C
+
+      // Measure 2: D major - melody continues
+      { leftHand: [50, 54, 57, 62], melody: 74, duration: 400 },  // D bass, F#-A-D chord, D melody
+      { leftHand: [50, 54, 57, 62], melody: 67, duration: 400 },  // G
+      { leftHand: [50, 54, 57, 62], melody: 67, duration: 800 },  // G (half note)
+
+      // Measure 3: G major - melody rises again
+      { leftHand: [43, 50, 55, 59], melody: 67, duration: 400 },  // G
+      { leftHand: [43, 50, 55, 59], melody: 69, duration: 400 },  // A
+      { leftHand: [43, 50, 55, 59], melody: 71, duration: 400 },  // B
+      { leftHand: [43, 50, 55, 59], melody: 72, duration: 400 },  // C
+
+      // Measure 4: D major - phrase ending
+      { leftHand: [50, 54, 57, 62], melody: 74, duration: 400 },  // D
+      { leftHand: [50, 54, 57, 62], melody: 71, duration: 400 },  // B
+      { leftHand: [50, 54, 57, 62], melody: 71, duration: 800 },  // B (half note)
+
+      // Measure 5: C major - middle section
+      { leftHand: [48, 52, 55, 60], melody: 72, duration: 400 },  // C bass, E-G-C chord, C melody
+      { leftHand: [48, 52, 55, 60], melody: 74, duration: 400 },  // D
+      { leftHand: [48, 52, 55, 60], melody: 76, duration: 400 },  // E
+      { leftHand: [48, 52, 55, 60], melody: 74, duration: 400 },  // D
+
+      // Measure 6: G major
+      { leftHand: [43, 50, 55, 59], melody: 72, duration: 400 },  // C
+      { leftHand: [43, 50, 55, 59], melody: 71, duration: 400 },  // B
+      { leftHand: [43, 50, 55, 59], melody: 71, duration: 800 },  // B (half note)
+
+      // Measure 7: D major - descending
+      { leftHand: [50, 54, 57, 62], melody: 69, duration: 400 },  // A
+      { leftHand: [50, 54, 57, 62], melody: 71, duration: 400 },  // B
+      { leftHand: [50, 54, 57, 62], melody: 69, duration: 400 },  // A
+      { leftHand: [50, 54, 57, 62], melody: 67, duration: 400 },  // G
+
+      // Measure 8: G major - resolution
+      { leftHand: [43, 50, 55, 59], melody: 66, duration: 400 },  // F#
+      { leftHand: [43, 50, 55, 59], melody: 67, duration: 400 },  // G
+      { leftHand: [43, 50, 55, 59], melody: 67, duration: 800 },  // G (half note - resolution)
     ];
 
-    let currentChordIndex = 0;
+    let currentNoteIndex = 0;
     let timeoutId: number;
 
-    const playNextChord = () => {
+    const playNext = () => {
       if (demoMode !== 'chords') return;
 
-      const currentChord = chordProgression[currentChordIndex];
+      const current = arrangement[currentNoteIndex];
 
-      // Highlight the notes being played
-      setCurrentChordNotes(new Set(currentChord.notes));
+      // Collect all notes being played (left hand + melody)
+      const allNotes = new Set([...current.leftHand, current.melody]);
+      setCurrentChordNotes(allNotes);
 
-      // Play all notes in the chord using separate MIDI channels
-      currentChord.notes.forEach((note, index) => {
-        const channel = CHORD_CHANNELS[index];
-        // Load edited patch (use ref to get latest patch without restarting progression)
-        synth.setTrackPatch(channel, editedPatchRef.current);
+      // Load patch for all channels
+      LEFT_HAND_CHANNELS.forEach(ch => synth.setTrackPatch(ch, editedPatchRef.current));
+      synth.setTrackPatch(RIGHT_HAND_CHANNEL, editedPatchRef.current);
+
+      // Play left hand (bass + chord)
+      current.leftHand.forEach((note, index) => {
+        const channel = LEFT_HAND_CHANNELS[index];
         synth.noteOn(channel, note);
       });
 
-      // Stop chord after duration (with slight gap for articulation)
+      // Play right hand (melody)
+      synth.noteOn(RIGHT_HAND_CHANNEL, current.melody);
+
+      // Stop notes after duration
       setTimeout(() => {
-        currentChord.notes.forEach((note, index) => {
-          const channel = CHORD_CHANNELS[index];
+        current.leftHand.forEach((note, index) => {
+          const channel = LEFT_HAND_CHANNELS[index];
           synth.noteOff(channel, note);
         });
+        synth.noteOff(RIGHT_HAND_CHANNEL, current.melody);
         setCurrentChordNotes(new Set());
-      }, currentChord.duration * 0.9);
+      }, current.duration * 0.9);
 
-      // Move to next chord
-      currentChordIndex = (currentChordIndex + 1) % chordProgression.length;
+      // Move to next note
+      currentNoteIndex = (currentNoteIndex + 1) % arrangement.length;
 
-      // Schedule next chord
-      timeoutId = window.setTimeout(playNextChord, currentChord.duration);
+      // Schedule next
+      timeoutId = window.setTimeout(playNext, current.duration);
     };
 
     // Start playing
-    playNextChord();
+    playNext();
 
     // Cleanup
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      // Stop any playing notes on all chord channels
-      CHORD_CHANNELS.forEach(channel => {
-        chordProgression.forEach(chord => {
-          chord.notes.forEach(note => {
+      // Stop all notes
+      LEFT_HAND_CHANNELS.forEach(channel => {
+        arrangement.forEach(item => {
+          item.leftHand.forEach(note => {
             synth.noteOff(channel, note);
           });
         });
+      });
+      arrangement.forEach(item => {
+        synth.noteOff(RIGHT_HAND_CHANNEL, item.melody);
       });
       setCurrentChordNotes(new Set());
     };
