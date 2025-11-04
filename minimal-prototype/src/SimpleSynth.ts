@@ -14,7 +14,7 @@ export class SimpleSynth {
   private workletNode: AudioWorkletNode | null = null;
   private workletReady: boolean = false;
   private isInitialized: boolean = false;
-  private trackPatches: Map<number, OPLPatch> = new Map(); // Track/MIDI channel (0-8) -> Patch (user selections)
+  private trackPatches: Map<number, OPLPatch> = new Map(); // Track/MIDI channel (0-17) -> Patch (user selections)
   private channelPatches: Map<number, OPLPatch> = new Map(); // OPL hardware channel (0-17) -> Patch (runtime state)
   private channelManager: ChannelManager = new ChannelManager(); // Channel allocation for dual-voice
   private activeNotes: Map<number, {
@@ -224,13 +224,13 @@ export class SimpleSynth {
   }
 
   /**
-   * Set the instrument patch for a track/MIDI channel (0-8)
+   * Set the instrument patch for a track/MIDI channel (0-17)
    * This stores the patch assignment but doesn't program hardware yet.
    * Hardware channels are dynamically allocated during playback.
    */
   public setTrackPatch(trackId: number, patch: OPLPatch): void {
-    if (trackId < 0 || trackId >= 9) {
-      throw new Error(`Invalid track: ${trackId}. Must be 0-8.`);
+    if (trackId < 0 || trackId >= 18) {
+      throw new Error(`Invalid track: ${trackId}. Must be 0-17.`);
     }
 
     console.log(`[SimpleSynth] Setting track ${trackId} to patch "${patch.name}"`);
@@ -354,7 +354,7 @@ export class SimpleSynth {
       return;
     }
 
-    if (channel < 0 || channel >= 9) {
+    if (channel < 0 || channel >= 18) {
       console.error('[SimpleSynth] Invalid MIDI channel:', channel);
       return;
     }
@@ -462,7 +462,7 @@ export class SimpleSynth {
    */
   noteOff(channel: number, midiNote: number): void {
     if (!this.isInitialized) return;
-    if (channel < 0 || channel >= 9) return;
+    if (channel < 0 || channel >= 18) return;
 
     const activeNote = this.activeNotes.get(channel);
     if (!activeNote) return;

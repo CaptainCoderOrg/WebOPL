@@ -158,7 +158,8 @@ export function InstrumentEditor({
       return;
     }
 
-    const PREVIEW_CHANNEL = 8;
+    // Use channels 8-11 for 4-note chords (avoiding conflict with tracker channels 0-3)
+    const CHORD_CHANNELS = [8, 9, 10, 11];
 
     // C Blues chord progression (12-bar blues)
     // Each chord is defined as [root, third, fifth, seventh]
@@ -183,23 +184,24 @@ export function InstrumentEditor({
     const playNextChord = () => {
       if (!isChordsPlaying) return;
 
-      // Load edited patch (use ref to get latest patch without restarting progression)
-      synth.setTrackPatch(PREVIEW_CHANNEL, editedPatchRef.current);
-
       const currentChord = chordProgression[currentChordIndex];
 
       // Highlight the notes being played
       setCurrentChordNotes(new Set(currentChord.notes));
 
-      // Play all notes in the chord
-      currentChord.notes.forEach(note => {
-        synth.noteOn(PREVIEW_CHANNEL, note);
+      // Play all notes in the chord using separate MIDI channels
+      currentChord.notes.forEach((note, index) => {
+        const channel = CHORD_CHANNELS[index];
+        // Load edited patch (use ref to get latest patch without restarting progression)
+        synth.setTrackPatch(channel, editedPatchRef.current);
+        synth.noteOn(channel, note);
       });
 
       // Stop chord after duration (with slight gap for articulation)
       setTimeout(() => {
-        currentChord.notes.forEach(note => {
-          synth.noteOff(PREVIEW_CHANNEL, note);
+        currentChord.notes.forEach((note, index) => {
+          const channel = CHORD_CHANNELS[index];
+          synth.noteOff(channel, note);
         });
         setCurrentChordNotes(new Set());
       }, currentChord.duration * 0.9);
@@ -219,10 +221,12 @@ export function InstrumentEditor({
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      // Stop any playing notes
-      chordProgression.forEach(chord => {
-        chord.notes.forEach(note => {
-          synth.noteOff(PREVIEW_CHANNEL, note);
+      // Stop any playing notes on all chord channels
+      CHORD_CHANNELS.forEach(channel => {
+        chordProgression.forEach(chord => {
+          chord.notes.forEach(note => {
+            synth.noteOff(channel, note);
+          });
         });
       });
       setCurrentChordNotes(new Set());
