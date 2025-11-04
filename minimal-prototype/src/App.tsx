@@ -65,11 +65,7 @@ function App() {
           (window as any).synth = s;
           console.log('[App] Synth exposed as window.synth for testing');
 
-          // Log loaded instruments
-          console.log('%c=== Loaded Instruments ===', 'color: #00ff00; font-weight: bold');
-          s.getAllPatches().slice(0, 4).forEach(([ch, name]) => {
-            console.log(`%cTrack ${ch}: ${name}`, 'color: #ffaa00');
-          });
+          // Log will be done after instruments are loaded
         }
 
         // Initialize player
@@ -92,6 +88,30 @@ function App() {
   }, [synth, isReady]);
 
   /**
+   * Initialize track patches with default instruments
+   */
+  useEffect(() => {
+    if (!synth || !isReady) return;
+
+    // Load initial track patches (only once on startup)
+    console.log('[App] Initializing track patches...');
+    trackInstruments.forEach((patchId, trackIndex) => {
+      if (instrumentBank[patchId]) {
+        synth.setTrackPatch(trackIndex, instrumentBank[patchId]);
+        console.log(`[App] Track ${trackIndex} -> Patch ${patchId}: ${instrumentBank[patchId].name}`);
+      }
+    });
+
+    // Log loaded instruments for debugging
+    if (import.meta.env.DEV) {
+      console.log('%c=== Track Instruments Initialized ===', 'color: #00ff00; font-weight: bold');
+      synth.getAllTrackPatches().forEach(([trackId, name]) => {
+        console.log(`%cTrack ${trackId}: ${name}`, 'color: #ffaa00');
+      });
+    }
+  }, [synth, isReady]); // Only run once when synth becomes ready
+
+  /**
    * Load GENMIDI instrument bank
    */
   useEffect(() => {
@@ -112,7 +132,7 @@ function App() {
         // Re-apply current track instruments with new bank
         trackInstruments.forEach((patchId, trackIndex) => {
           if (synth && bank.patches[patchId]) {
-            synth.loadPatch(trackIndex, bank.patches[patchId]);
+            synth.setTrackPatch(trackIndex, bank.patches[patchId]);
           }
         });
 
@@ -310,9 +330,9 @@ function App() {
     newInstruments[trackIndex] = patchId;
     setTrackInstruments(newInstruments);
 
-    // Load patch to corresponding channel
+    // Set patch for this track
     if (synth && instrumentBank[patchId]) {
-      synth.loadPatch(trackIndex, instrumentBank[patchId]);
+      synth.setTrackPatch(trackIndex, instrumentBank[patchId]);
     }
   };
 

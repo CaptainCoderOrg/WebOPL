@@ -14,7 +14,8 @@ export class SimpleSynth {
   private workletNode: AudioWorkletNode | null = null;
   private workletReady: boolean = false;
   private isInitialized: boolean = false;
-  private channelPatches: Map<number, OPLPatch> = new Map(); // Track loaded patches per channel
+  private trackPatches: Map<number, OPLPatch> = new Map(); // Track/MIDI channel (0-8) -> Patch (user selections)
+  private channelPatches: Map<number, OPLPatch> = new Map(); // OPL hardware channel (0-17) -> Patch (runtime state)
   private channelManager: ChannelManager = new ChannelManager(); // Channel allocation for dual-voice
   private activeNotes: Map<number, {
     noteId: string;
@@ -223,8 +224,41 @@ export class SimpleSynth {
   }
 
   /**
-   * Load an instrument patch to a specific channel
+   * Set the instrument patch for a track/MIDI channel (0-8)
+   * This stores the patch assignment but doesn't program hardware yet.
+   * Hardware channels are dynamically allocated during playback.
+   */
+  public setTrackPatch(trackId: number, patch: OPLPatch): void {
+    if (trackId < 0 || trackId >= 9) {
+      throw new Error(`Invalid track: ${trackId}. Must be 0-8.`);
+    }
+
+    console.log(`[SimpleSynth] Setting track ${trackId} to patch "${patch.name}"`);
+    this.trackPatches.set(trackId, patch);
+  }
+
+  /**
+   * Get the patch assigned to a track/MIDI channel
+   */
+  public getTrackPatch(trackId: number): OPLPatch | null {
+    return this.trackPatches.get(trackId) || null;
+  }
+
+  /**
+   * Get all track patch assignments
+   */
+  public getAllTrackPatches(): Array<[number, string]> {
+    const result: Array<[number, string]> = [];
+    for (const [trackId, patch] of this.trackPatches.entries()) {
+      result.push([trackId, patch.name]);
+    }
+    return result;
+  }
+
+  /**
+   * Load an instrument patch to a specific OPL hardware channel (0-17)
    * Programs modulator, carrier, feedback, and connection
+   * @deprecated Use setTrackPatch() for track assignments. This is for internal use.
    */
   public loadPatch(channelId: number, patch: OPLPatch): void {
     if (channelId < 0 || channelId >= 18) {
@@ -330,10 +364,10 @@ export class SimpleSynth {
       return;
     }
 
-    // Get patch for this MIDI channel (use channel 0 as default for now)
-    const patch = this.channelPatches.get(0);
+    // Get patch for this MIDI channel (track)
+    const patch = this.trackPatches.get(channel);
     if (!patch) {
-      console.warn(`[SimpleSynth] No patch loaded for MIDI channel ${channel}`);
+      console.warn(`[SimpleSynth] No patch loaded for MIDI channel/track ${channel}`);
       return;
     }
 
