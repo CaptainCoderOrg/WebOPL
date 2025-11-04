@@ -4,7 +4,7 @@
  * Displays a grid of note inputs with keyboard navigation.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './TrackerGrid.css';
 import { validateNote } from '../utils/patternValidation';
 import type { OPLPatch } from '../types/OPLPatch';
@@ -38,6 +38,37 @@ export function TrackerGrid({
 }: TrackerGridProps) {
   // Track colors for visual distinction
   const trackColors = ['#00ff00', '#00aaff', '#ffaa00', '#ff00ff'];
+
+  // Refs for auto-scrolling
+  const containerRef = useRef<HTMLDivElement>(null);
+  const currentRowRef = useRef<HTMLTableRowElement>(null);
+
+  /**
+   * Auto-scroll to keep current row centered during playback
+   * Only scrolls the tracker container, not the entire page
+   */
+  useEffect(() => {
+    if (currentRow !== undefined && currentRowRef.current && containerRef.current) {
+      const container = containerRef.current;
+      const row = currentRowRef.current;
+
+      // Get positions
+      const containerRect = container.getBoundingClientRect();
+      const rowRect = row.getBoundingClientRect();
+
+      // Calculate the scroll offset needed to center the row
+      const containerCenter = containerRect.height / 2;
+      const rowCenter = rowRect.top - containerRect.top + container.scrollTop;
+      const scrollTarget = rowCenter - containerCenter + rowRect.height / 2;
+
+      // Smooth scroll the container
+      container.scrollTo({
+        top: scrollTarget,
+        behavior: 'smooth',
+      });
+    }
+  }, [currentRow]);
+
   /**
    * Check if a note is invalid
    */
@@ -152,7 +183,7 @@ export function TrackerGrid({
   };
 
   return (
-    <div className={`tracker-grid-container ${compact ? 'compact-mode' : ''}`}>
+    <div ref={containerRef} className={`tracker-grid-container ${compact ? 'compact-mode' : ''}`}>
       <table className="tracker-grid">
         <thead>
           <tr>
@@ -250,6 +281,7 @@ export function TrackerGrid({
           {Array.from({ length: rows }, (_, row) => (
             <tr
               key={row}
+              ref={row === currentRow ? currentRowRef : null}
               className={
                 row === currentRow ? 'tracker-row current-row' : 'tracker-row'
               }
