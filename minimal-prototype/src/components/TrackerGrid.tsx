@@ -21,23 +21,6 @@ interface TrackerGridProps {
   onEditClick?: (trackIndex: number) => void;
 }
 
-/**
- * Abbreviate instrument name to fit in header
- * 1. Remove numbers and dashes
- * 2. If still too long (>12 chars), truncate with ellipsis
- */
-function abbreviateInstrumentName(name: string, maxLength: number = 12): string {
-  // Step 1: Remove numbers and dashes
-  let abbreviated = name.replace(/[0-9\-]/g, '').trim();
-
-  // Step 2: If still too long, truncate
-  if (abbreviated.length > maxLength) {
-    abbreviated = abbreviated.substring(0, maxLength - 1) + '…';
-  }
-
-  return abbreviated;
-}
-
 export function TrackerGrid({
   rows,
   tracks,
@@ -192,8 +175,8 @@ export function TrackerGrid({
                           aria-label={`Instrument for Track ${i + 1}`}
                         >
                           {instrumentBank.map((p, idx) => (
-                            <option key={idx} value={idx}>
-                              {abbreviateInstrumentName(p.name)}
+                            <option key={idx} value={idx} title={p.name}>
+                              {p.name}
                             </option>
                           ))}
                         </select>

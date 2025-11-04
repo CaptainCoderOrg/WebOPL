@@ -74,6 +74,17 @@
   border: 1px solid #444;
   border-radius: 3px;
   cursor: pointer;
+  /* Text truncation */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Also style the option text to truncate */
+.track-instrument-dropdown option {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .track-instrument-dropdown:hover {
