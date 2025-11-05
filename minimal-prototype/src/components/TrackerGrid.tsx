@@ -275,7 +275,9 @@ export function TrackerGrid({
       }
 
       default:
-        return; // Allow normal input
+        // Block all other keys - only allow explicitly handled keys
+        e.preventDefault();
+        return;
     }
 
     // Focus next cell if navigation occurred
