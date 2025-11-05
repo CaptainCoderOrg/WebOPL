@@ -40,8 +40,15 @@ Notes use tracker notation:
 - Examples: `C-4`, `D#5`, `Gb3`
 - Valid notes: C, C#, D, D#, E, F, F#, G, G#, A, A#, B
 - Valid octaves: 0-9
-- Rest/empty: `---`
+- Sustain: `---` (sustains the previous note)
+- Note Off: `OFF` (explicitly stops the note)
 - Middle C is `C-4` (MIDI note 60)
+
+### Note Behavior
+
+- **New note**: Stops previous note (if any) and plays new note
+- **`---`**: Sustains the previous note (no change)
+- **`OFF`**: Explicitly stops the note on that track
 
 ## Adding New Patterns
 

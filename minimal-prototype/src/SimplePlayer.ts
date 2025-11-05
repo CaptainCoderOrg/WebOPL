@@ -31,6 +31,8 @@ export class SimplePlayer {
   private currentRow: number = 0;
   private intervalId: number | null = null;
   private onRowChange?: (row: number) => void;
+  // Track currently playing notes for each track (for sustain)
+  private activeNotes: Map<number, number> = new Map(); // trackIndex -> MIDI note
 
   constructor(synth: SimpleSynth) {
     this.synth = synth;
@@ -104,6 +106,13 @@ export class SimplePlayer {
   stop(): void {
     this.pause();
     this.currentRow = 0;
+
+    // Release all active notes before clearing
+    for (const [trackIndex, midiNote] of this.activeNotes.entries()) {
+      this.synth.noteOff(trackIndex, midiNote);
+    }
+    this.activeNotes.clear();
+
     console.log('[SimplePlayer] ⏹ Stopped and reset');
 
     // Notify UI of position reset
@@ -170,27 +179,47 @@ export class SimplePlayer {
     // Loop back to start if at end
     if (this.currentRow >= this.pattern.rows.length) {
       this.currentRow = 0;
+
+      // Release all active notes before clearing
+      for (const [trackIndex, midiNote] of this.activeNotes.entries()) {
+        this.synth.noteOff(trackIndex, midiNote);
+      }
+      this.activeNotes.clear();
+
       console.log('[SimplePlayer] 🔁 Looping to row 0');
     }
 
     const row = this.pattern.rows[this.currentRow];
 
-    // Play notes in each track
+    // Process notes in each track
     row.forEach((trackNote, trackIndex) => {
-      if (trackNote.note !== null) {
-        // Use track index as channel (0-3 for 4 tracks)
-        this.synth.noteOn(trackIndex, trackNote.note, 100);
+      const note = trackNote.note;
 
-        // Schedule note off before next row
-        const msPerRow = this.calculateMsPerRow();
-        const noteOffTime = msPerRow * 0.85; // 85% duration, 15% gap
-
-        setTimeout(() => {
-          if (trackNote.note !== null) {
-            this.synth.noteOff(trackIndex, trackNote.note);
-          }
-        }, noteOffTime);
+      if (note === null) {
+        // null = "---" = sustain previous note, do nothing
+        return;
       }
+
+      if (note === -1) {
+        // -1 = "OFF" = stop the note on this track
+        const activeNote = this.activeNotes.get(trackIndex);
+        if (activeNote !== undefined) {
+          this.synth.noteOff(trackIndex, activeNote);
+          this.activeNotes.delete(trackIndex);
+        }
+        return;
+      }
+
+      // note >= 0 = play new note
+      // First, stop any previous note on this track
+      const activeNote = this.activeNotes.get(trackIndex);
+      if (activeNote !== undefined) {
+        this.synth.noteOff(trackIndex, activeNote);
+      }
+
+      // Then play the new note
+      this.synth.noteOn(trackIndex, note, 100);
+      this.activeNotes.set(trackIndex, note);
     });
 
     // Advance to next row

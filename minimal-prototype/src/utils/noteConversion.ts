@@ -11,18 +11,24 @@ const NOTE_NAMES_FLAT = ['C', 'DB', 'D', 'EB', 'E', 'F', 'GB', 'G', 'AB', 'A', '
 /**
  * Convert note name to MIDI number
  * @param noteName - Format: "C-4", "C#4", "D-5", etc.
- * @returns MIDI note number (0-127) or null if invalid
+ * @returns MIDI note number (0-127), null for rest/sustain, or -1 for note off
  *
  * Examples:
  *   "C-4" → 60 (middle C)
  *   "A-4" → 69 (A440)
  *   "C-5" → 72 (one octave above middle C)
- *   "---" → null (rest)
+ *   "---" → null (rest/sustain previous note)
+ *   "OFF" → -1 (note off command)
  */
 export function noteNameToMIDI(noteName: string): number | null {
-  // Handle empty or rest notation
+  // Handle empty or rest notation (sustain)
   if (!noteName || noteName === '---' || noteName === '...' || noteName.trim() === '') {
     return null;
+  }
+
+  // Handle note off command
+  if (noteName.trim().toUpperCase() === 'OFF') {
+    return -1;
   }
 
   // Normalize: trim whitespace and convert to uppercase
@@ -96,11 +102,15 @@ export function midiToNoteName(midiNote: number): string {
 /**
  * Validate note name format
  * @param noteName - Note name to validate
- * @returns True if valid note or rest
+ * @returns True if valid note, rest, or OFF command
  */
 export function isValidNoteName(noteName: string): boolean {
   if (!noteName || noteName === '---' || noteName === '...') {
     return true; // Rest is valid
+  }
+
+  if (noteName.trim().toUpperCase() === 'OFF') {
+    return true; // OFF command is valid
   }
 
   return noteNameToMIDI(noteName) !== null;

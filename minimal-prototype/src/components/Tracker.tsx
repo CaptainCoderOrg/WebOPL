@@ -561,7 +561,10 @@ export function Tracker({
                     <strong>Sharps:</strong> C#4, D#4, F#4, G#4, A#4
                   </li>
                   <li>
-                    <strong>Rest:</strong> --- (or leave empty)
+                    <strong>Sustain:</strong> --- (sustains previous note)
+                  </li>
+                  <li>
+                    <strong>Note Off:</strong> OFF (stops the note)
                   </li>
                   <li>
                     <strong>Middle C:</strong> C-4 = MIDI 60

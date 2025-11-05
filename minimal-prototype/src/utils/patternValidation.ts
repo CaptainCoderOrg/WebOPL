@@ -52,11 +52,15 @@ export function validatePattern(pattern: string[][]): ValidationResult {
 /**
  * Validate a single note
  * @param note - Note string to validate
- * @returns True if valid note or rest
+ * @returns True if valid note, rest, or OFF command
  */
 export function validateNote(note: string): boolean {
   if (!note || note.trim() === '' || note === '---') {
     return true; // Rest is valid
+  }
+
+  if (note.trim().toUpperCase() === 'OFF') {
+    return true; // OFF command is valid
   }
 
   return isValidNoteName(note);
