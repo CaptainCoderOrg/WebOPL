@@ -603,16 +603,30 @@ export function Tracker({
                     <strong>Tab:</strong> Move right
                   </li>
                   <li>
-                    <strong>Delete / -:</strong> Set to --- (sustain)
-                  </li>
-                  <li>
-                    <strong>O:</strong> Set to OFF (note off)
-                  </li>
-                  <li>
                     <strong>Space:</strong> Play/Stop (when not editing)
                   </li>
                   <li>
                     <strong>Escape:</strong> Stop playback
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4>🎼 Note Entry:</h4>
+                <ul>
+                  <li>
+                    <strong>A-G:</strong> Change note letter (or create new)
+                  </li>
+                  <li>
+                    <strong>0-9:</strong> Change octave
+                  </li>
+                  <li>
+                    <strong>#:</strong> Toggle sharp
+                  </li>
+                  <li>
+                    <strong>Delete / -:</strong> Set to --- (advance)
+                  </li>
+                  <li>
+                    <strong>O:</strong> Set to OFF (advance)
                   </li>
                 </ul>
               </div>

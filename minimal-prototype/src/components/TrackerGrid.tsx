@@ -181,6 +181,99 @@ export function TrackerGrid({
         e.preventDefault();
         break;
 
+      case '#': {
+        // Toggle sharp on current note (no auto-advance)
+        const currentValue = pattern[row][track].trim().toUpperCase();
+
+        // Only toggle if it's a note (not ---, OFF, or empty)
+        if (currentValue && currentValue !== '---' && currentValue !== 'OFF') {
+          // Match note format: C-4, C#4, etc.
+          const match = currentValue.match(/^([A-G])(#?)[-]?(\d+)$/);
+
+          if (match) {
+            const [, note, sharp, octave] = match;
+            // E and B cannot have sharps (E# = F, B# = C)
+            if (note === 'E' || note === 'B') {
+              // If already has sharp, remove it; otherwise do nothing
+              if (sharp) {
+                handleCellChange(row, track, `${note}-${octave}`);
+              }
+            } else {
+              // Toggle sharp: if it has #, remove it; if not, add it
+              const newNote = sharp ? `${note}-${octave}` : `${note}#${octave}`;
+              handleCellChange(row, track, newNote);
+            }
+          }
+        }
+        e.preventDefault();
+        break;
+      }
+
+      case 'a': case 'A':
+      case 'b': case 'B':
+      case 'c': case 'C':
+      case 'd': case 'D':
+      case 'e': case 'E':
+      case 'f': case 'F':
+      case 'g': case 'G': {
+        // Change note letter or create new note
+        const noteLetter = e.key.toUpperCase();
+        const currentValue = pattern[row][track].trim().toUpperCase();
+
+        let newNote: string;
+
+        if (currentValue && currentValue !== '---' && currentValue !== 'OFF') {
+          // Modify existing note - keep sharp and octave, change letter
+          const match = currentValue.match(/^([A-G])(#?)[-]?(\d+)$/);
+          if (match) {
+            const [, , sharp, octave] = match;
+            // E and B cannot have sharps
+            if ((noteLetter === 'E' || noteLetter === 'B') && sharp) {
+              newNote = `${noteLetter}-${octave}`;
+            } else {
+              newNote = sharp ? `${noteLetter}#${octave}` : `${noteLetter}-${octave}`;
+            }
+          } else {
+            // Invalid format, create new note at octave 4
+            newNote = `${noteLetter}-4`;
+          }
+        } else {
+          // Create new note - use octave from note above, or 4
+          let octave = '4';
+          if (row > 0) {
+            const noteAbove = pattern[row - 1][track].trim().toUpperCase();
+            const match = noteAbove.match(/^([A-G])(#?)[-]?(\d+)$/);
+            if (match) {
+              octave = match[3];
+            }
+          }
+          newNote = `${noteLetter}-${octave}`;
+        }
+
+        handleCellChange(row, track, newNote);
+        e.preventDefault();
+        break;
+      }
+
+      case '0': case '1': case '2': case '3': case '4':
+      case '5': case '6': case '7': case '8': case '9': {
+        // Set octave on current note
+        const octave = e.key;
+        const currentValue = pattern[row][track].trim().toUpperCase();
+
+        if (currentValue && currentValue !== '---' && currentValue !== 'OFF') {
+          // Modify existing note - keep letter and sharp, change octave
+          const match = currentValue.match(/^([A-G])(#?)[-]?(\d+)$/);
+          if (match) {
+            const [, note, sharp] = match;
+            const newNote = sharp ? `${note}#${octave}` : `${note}-${octave}`;
+            handleCellChange(row, track, newNote);
+          }
+        }
+        e.preventDefault();
+        break;
+      }
+
       default:
         return; // Allow normal input
     }
