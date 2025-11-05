@@ -42,30 +42,53 @@ export function TrackerGrid({
   // Refs for auto-scrolling
   const containerRef = useRef<HTMLDivElement>(null);
   const currentRowRef = useRef<HTMLTableRowElement>(null);
+  const prevRowRef = useRef<number | undefined>(undefined);
 
   /**
-   * Auto-scroll to keep current row centered during playback
-   * Only scrolls the tracker container, not the entire page
+   * Auto-scroll to keep current row visible during playback
+   * Scrolls to top when row goes off the bottom or loops back to start
    */
   useEffect(() => {
     if (currentRow !== undefined && currentRowRef.current && containerRef.current) {
       const container = containerRef.current;
       const row = currentRowRef.current;
 
+      // Detect loop: if previous row was higher and current is low (0 or 1), we've looped
+      const hasLooped = prevRowRef.current !== undefined &&
+                        prevRowRef.current > 2 &&
+                        currentRow <= 1;
+
+      if (hasLooped) {
+        // Scroll to the very top on loop
+        container.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+        prevRowRef.current = currentRow;
+        return;
+      }
+
       // Get positions
       const containerRect = container.getBoundingClientRect();
       const rowRect = row.getBoundingClientRect();
 
-      // Calculate the scroll offset needed to center the row
-      const containerCenter = containerRect.height / 2;
-      const rowCenter = rowRect.top - containerRect.top + container.scrollTop;
-      const scrollTarget = rowCenter - containerCenter + rowRect.height / 2;
+      // Calculate relative position of row within container
+      const rowBottom = rowRect.bottom - containerRect.top;
 
-      // Smooth scroll the container
-      container.scrollTo({
-        top: scrollTarget,
-        behavior: 'smooth',
-      });
+      // Scroll only if row is going off the bottom
+      if (rowBottom > containerRect.height) {
+        // Position row at the top of the container
+        // Calculate the row's position in the scrollable content
+        const scrollTarget = rowRect.top - containerRect.top + container.scrollTop;
+
+        container.scrollTo({
+          top: scrollTarget,
+          behavior: 'smooth',
+        });
+      }
+
+      // Track previous row for loop detection
+      prevRowRef.current = currentRow;
     }
   }, [currentRow]);
 
