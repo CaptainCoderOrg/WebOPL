@@ -18,6 +18,18 @@
     "file": "cave-exploration.yaml"
   },
   {
+    "id": "lunar-horizon",
+    "name": "Lunar Horizon",
+    "description": "Ethereal space music with slow harmonic movement and crystalline textures",
+    "file": "lunar-horizon.yaml"
+  },
+  {
+    "id": "space-battle",
+    "name": "Space Battle",
+    "description": "Epic orchestral battle music with dramatic brass and soaring strings",
+    "file": "space-battle.yaml"
+  },
+  {
     "id": "orchestral-fanfare",
     "name": "Orchestral Fanfare",
     "description": "Triumphant orchestral fanfare with full brass and string sections",
