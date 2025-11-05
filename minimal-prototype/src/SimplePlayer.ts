@@ -179,14 +179,11 @@ export class SimplePlayer {
     // Loop back to start if at end
     if (this.currentRow >= this.pattern.rows.length) {
       this.currentRow = 0;
-
-      // Release all active notes before clearing
-      for (const [trackIndex, midiNote] of this.activeNotes.entries()) {
-        this.synth.noteOff(trackIndex, midiNote);
-      }
-      this.activeNotes.clear();
-
       console.log('[SimplePlayer] 🔁 Looping to row 0');
+      // Don't clear active notes - let row 0 handle them naturally
+      // If row 0 has new notes, they'll replace the old ones
+      // If row 0 has "---", notes will sustain across the loop
+      // If row 0 has "OFF", notes will stop
     }
 
     const row = this.pattern.rows[this.currentRow];
