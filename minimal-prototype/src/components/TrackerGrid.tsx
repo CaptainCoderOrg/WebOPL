@@ -160,8 +160,24 @@ export function TrackerGrid({
         break;
 
       case 'Delete':
-        // Clear cell on delete key
+      case '-':
+        // Clear cell: Delete or dash → "---"
         handleCellChange(row, track, '---');
+        // Move to next row
+        if (row < rows - 1) {
+          nextRow = row + 1;
+        }
+        e.preventDefault();
+        break;
+
+      case 'o':
+      case 'O':
+        // Quick OFF command: 'O' → "OFF"
+        handleCellChange(row, track, 'OFF');
+        // Move to next row
+        if (row < rows - 1) {
+          nextRow = row + 1;
+        }
         e.preventDefault();
         break;
 

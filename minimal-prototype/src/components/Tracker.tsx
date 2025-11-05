@@ -126,6 +126,22 @@ export function Tracker({
   }, [synth, bankLoaded, instrumentBank, trackInstruments]);
 
   /**
+   * Global keyboard handler for Space (Play/Stop)
+   */
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle Space when not focused on an input element
+      if (e.key === ' ' && e.target instanceof HTMLElement && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+        handlePlayStop();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isPlaying, player, pattern, bpm]);
+
+  /**
    * Play/Stop toggle
    */
   const handlePlayStop = () => {
@@ -587,7 +603,10 @@ export function Tracker({
                     <strong>Tab:</strong> Move right
                   </li>
                   <li>
-                    <strong>Delete:</strong> Clear cell
+                    <strong>Delete / -:</strong> Set to --- (sustain)
+                  </li>
+                  <li>
+                    <strong>O:</strong> Set to OFF (note off)
                   </li>
                   <li>
                     <strong>Space:</strong> Play/Stop (when not editing)
