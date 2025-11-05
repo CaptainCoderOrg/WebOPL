@@ -222,13 +222,13 @@ export class SimplePlayer {
       this.activeNotes.set(trackIndex, note);
     });
 
-    // Advance to next row
-    this.currentRow++;
-
-    // Notify UI callback
+    // Notify UI callback with the row that's currently playing
     if (this.onRowChange) {
       this.onRowChange(this.currentRow);
     }
+
+    // Advance to next row for next iteration
+    this.currentRow++;
   }
 
   /**

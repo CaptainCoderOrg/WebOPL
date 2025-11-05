@@ -231,7 +231,7 @@
 
 /* Row styling */
 .tracker-row {
-  transition: background-color 0.1s;
+  /* No transition for instant highlight updates */
 }
 
 .tracker-row:hover {

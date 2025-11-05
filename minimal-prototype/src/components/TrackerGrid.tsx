@@ -53,10 +53,10 @@ export function TrackerGrid({
       const container = containerRef.current;
       const row = currentRowRef.current;
 
-      // Detect loop: if previous row was higher and current is low (0 or 1), we've looped
+      // Detect loop: if previous row was higher and current is 0, we've looped
       const hasLooped = prevRowRef.current !== undefined &&
                         prevRowRef.current > 2 &&
-                        currentRow <= 1;
+                        currentRow === 0;
 
       if (hasLooped) {
         // Scroll to the very top on loop
