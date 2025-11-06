@@ -35,6 +35,9 @@ export interface ExportOptions {
 
   /** Progress callback (0-100) */
   onProgress?: (progress: number, message: string) => void;
+
+  /** Abort signal for cancellation */
+  abortSignal?: AbortSignal;
 }
 
 export interface StandardExportOptions extends ExportOptions {
@@ -90,7 +93,8 @@ async function renderPatternToBuffers(
   instrumentBank: OPLPatch[],
   bpm: number,
   loopCount: number,
-  onProgress?: (progress: number, message: string) => void
+  onProgress?: (progress: number, message: string) => void,
+  abortSignal?: AbortSignal
 ): Promise<{ left: Int16Array; right: Int16Array }> {
   // Report progress
   onProgress?.(0, 'Initializing OPL3...');
@@ -161,7 +165,7 @@ async function renderPatternToBuffers(
   // Render samples
   let eventIndex = 0;
   const sampleBuffer = new Int16Array(2);
-  const progressInterval = Math.floor(totalSamples / 50); // Report progress every 2%
+  const yieldInterval = SAMPLE_RATE; // Yield every 1 second of audio
 
   for (let sampleIndex = 0; sampleIndex < totalSamples; sampleIndex++) {
     // Process events at this sample time
@@ -183,10 +187,19 @@ async function renderPatternToBuffers(
     leftChannel[sampleIndex] = sampleBuffer[0];
     rightChannel[sampleIndex] = sampleBuffer[1];
 
-    // Report progress periodically
-    if (sampleIndex % progressInterval === 0) {
+    // Yield to browser and report progress periodically
+    if (sampleIndex % yieldInterval === 0) {
+      // Check if export was cancelled
+      if (abortSignal?.aborted) {
+        throw new Error('Export cancelled');
+      }
+
+      // Report progress every time we yield
       const progress = 30 + Math.floor((sampleIndex / totalSamples) * 60);
       onProgress?.(progress, 'Rendering audio...');
+
+      // Yield control to browser to update UI
+      await new Promise(resolve => setTimeout(resolve, 0));
     }
   }
 
@@ -305,7 +318,8 @@ export async function exportStandard(options: StandardExportOptions): Promise<vo
     instrumentBank,
     bpm,
     loopCount,
-    onProgress
+    onProgress,
+    options.abortSignal
   );
 
   // Calculate musical duration (where the last row ends)
@@ -377,7 +391,8 @@ export async function exportSeamlessLoop(options: SeamlessLoopExportOptions): Pr
     (progress, message) => {
       // Scale progress to 5-85%
       onProgress?.(5 + Math.floor(progress * 0.8), message);
-    }
+    },
+    options.abortSignal
   );
 
   onProgress?.(85, 'Extracting core loop...');

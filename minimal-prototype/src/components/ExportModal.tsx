@@ -76,6 +76,7 @@ export function ExportModal({
   const [progress, setProgress] = useState(0);
   const [progressMessage, setProgressMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
 
   // Calculate pattern info
   const rows = pattern.length;
@@ -95,6 +96,10 @@ export function ExportModal({
    * Handle export button click
    */
   const handleExport = async () => {
+    // Create abort controller for cancellation
+    const controller = new AbortController();
+    setAbortController(controller);
+
     try {
       setIsExporting(true);
       setProgress(0);
@@ -117,6 +122,7 @@ export function ExportModal({
           loopCount,
           contextRows,
           onProgress,
+          abortSignal: controller.signal,
         });
       } else {
         // Standard export with optional fades
@@ -132,6 +138,7 @@ export function ExportModal({
           fadeOut,
           fadeOutDuration: typeof fadeOutDuration === 'number' ? fadeOutDuration : 1000,
           onProgress,
+          abortSignal: controller.signal,
         });
       }
 
@@ -143,12 +150,28 @@ export function ExportModal({
         setIsExporting(false);
         setProgress(0);
         setProgressMessage('');
+        setAbortController(null);
       }, 1000);
 
     } catch (err) {
       console.error('[ExportModal] Export failed:', err);
-      setError(err instanceof Error ? err.message : 'Export failed');
+      const errorMessage = err instanceof Error ? err.message : 'Export failed';
+      setError(errorMessage);
       setIsExporting(false);
+      setAbortController(null);
+    }
+  };
+
+  /**
+   * Handle cancel export
+   */
+  const handleCancelExport = () => {
+    if (abortController) {
+      abortController.abort();
+      setIsExporting(false);
+      setProgress(0);
+      setProgressMessage('');
+      setAbortController(null);
     }
   };
 
@@ -510,6 +533,14 @@ export function ExportModal({
           <p className="export-progress-text">
             {progress}% - {progressMessage || 'Processing...'}
           </p>
+          <button
+            type="button"
+            onClick={handleCancelExport}
+            className="export-button export-button-secondary"
+            style={{ marginTop: '12px' }}
+          >
+            Cancel Export
+          </button>
         </div>
       )}
 
