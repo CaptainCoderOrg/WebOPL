@@ -6,6 +6,7 @@
  */
 
 import { SimpleSynth } from './SimpleSynth';
+import { CellProcessor } from './core/CellProcessor';
 
 /**
  * Single note in a track
@@ -190,33 +191,38 @@ export class SimplePlayer {
 
     // Process notes in each track
     row.forEach((trackNote, trackIndex) => {
-      const note = trackNote.note;
+      const action = CellProcessor.processTrackerNote(trackNote.note);
 
-      if (note === null) {
-        // null = "---" = sustain previous note, do nothing
-        return;
+      switch (action.type) {
+        case 'sustain':
+          // Do nothing - let note continue playing
+          break;
+
+        case 'note-off':
+          // Stop the active note on this track
+          const activeNoteOff = this.activeNotes.get(trackIndex);
+          if (activeNoteOff !== undefined) {
+            this.synth.noteOff(trackIndex, activeNoteOff);
+            this.activeNotes.delete(trackIndex);
+          }
+          break;
+
+        case 'note-on':
+          // Stop any previous note on this track first
+          const activeNoteOn = this.activeNotes.get(trackIndex);
+          if (activeNoteOn !== undefined) {
+            this.synth.noteOff(trackIndex, activeNoteOn);
+          }
+
+          // Then play the new note
+          this.synth.noteOn(trackIndex, action.midiNote, 100);
+          this.activeNotes.set(trackIndex, action.midiNote);
+          break;
+
+        case 'invalid':
+          // Ignore invalid notes
+          break;
       }
-
-      if (note === -1) {
-        // -1 = "OFF" = stop the note on this track
-        const activeNote = this.activeNotes.get(trackIndex);
-        if (activeNote !== undefined) {
-          this.synth.noteOff(trackIndex, activeNote);
-          this.activeNotes.delete(trackIndex);
-        }
-        return;
-      }
-
-      // note >= 0 = play new note
-      // First, stop any previous note on this track
-      const activeNote = this.activeNotes.get(trackIndex);
-      if (activeNote !== undefined) {
-        this.synth.noteOff(trackIndex, activeNote);
-      }
-
-      // Then play the new note
-      this.synth.noteOn(trackIndex, note, 100);
-      this.activeNotes.set(trackIndex, note);
     });
 
     // Notify UI callback with the row that's currently playing

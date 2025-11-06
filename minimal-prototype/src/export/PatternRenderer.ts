@@ -3,6 +3,8 @@
  * Parses note strings and calculates timing
  */
 
+import { CellProcessor } from '../core/CellProcessor';
+
 export interface NoteEvent {
   type: 'note-on' | 'note-off';
   time: number; // in seconds
@@ -52,36 +54,36 @@ export class PatternRenderer {
       // Process each track in this row
       for (let trackIndex = 0; trackIndex < row.length; trackIndex++) {
         const cell = row[trackIndex];
+        const action = CellProcessor.process(cell);
 
-        if (!cell) continue; // Empty cell
+        switch (action.type) {
+          case 'sustain':
+            // Do nothing - let note continue playing
+            break;
 
-        if (cell === '---') {
-          // Sustain/continue - do nothing, let note keep playing
-          continue;
-        } else if (cell === 'OFF') {
-          // Note off
-          const activeMidiNote = activeNotes.get(trackIndex);
-          if (activeMidiNote !== undefined) {
-            events.push({
-              type: 'note-off',
-              time,
-              track: trackIndex,
-              midiNote: activeMidiNote,
-            });
-            activeNotes.delete(trackIndex);
-          }
-        } else {
-          // Parse note (e.g., "C-4", "C#4", "E-4")
-          const midiNote = this.parseNote(cell);
-          if (midiNote !== null) {
-            // Stop any active note on this track first
-            const activeMidiNote = activeNotes.get(trackIndex);
-            if (activeMidiNote !== undefined) {
+          case 'note-off':
+            // Stop the active note on this track
+            const activeNoteOff = activeNotes.get(trackIndex);
+            if (activeNoteOff !== undefined) {
               events.push({
                 type: 'note-off',
                 time,
                 track: trackIndex,
-                midiNote: activeMidiNote,
+                midiNote: activeNoteOff,
+              });
+              activeNotes.delete(trackIndex);
+            }
+            break;
+
+          case 'note-on':
+            // Stop any active note on this track first
+            const activeNoteOn = activeNotes.get(trackIndex);
+            if (activeNoteOn !== undefined) {
+              events.push({
+                type: 'note-off',
+                time,
+                track: trackIndex,
+                midiNote: activeNoteOn,
               });
             }
 
@@ -90,10 +92,14 @@ export class PatternRenderer {
               type: 'note-on',
               time,
               track: trackIndex,
-              midiNote,
+              midiNote: action.midiNote,
             });
-            activeNotes.set(trackIndex, midiNote);
-          }
+            activeNotes.set(trackIndex, action.midiNote);
+            break;
+
+          case 'invalid':
+            // Ignore invalid cells
+            break;
         }
       }
     }
@@ -113,42 +119,5 @@ export class PatternRenderer {
     }
 
     return { events, duration };
-  }
-
-  /**
-   * Parse note string to MIDI note number
-   * @param noteStr - Note string like "C-4", "C#4", "E-4"
-   * @returns MIDI note number (0-127) or null if invalid
-   */
-  private static parseNote(noteStr: string): number | null {
-    // Format: "C-4" or "C#4" or "Cs4"
-    const match = noteStr.match(/^([A-G])(#|s)?(-)?(\d)$/i);
-    if (!match) return null;
-
-    const noteName = match[1].toUpperCase();
-    const sharp = match[2] === '#' || match[2] === 's';
-    const octave = parseInt(match[4], 10);
-
-    // Map note name to index (C=0, D=2, E=4, F=5, G=7, A=9, B=11)
-    const noteMap: Record<string, number> = {
-      'C': 0,
-      'D': 2,
-      'E': 4,
-      'F': 5,
-      'G': 7,
-      'A': 9,
-      'B': 11,
-    };
-
-    const noteIndex = noteMap[noteName];
-    if (noteIndex === undefined) return null;
-
-    // Calculate MIDI note number
-    const midiNote = (octave + 1) * 12 + noteIndex + (sharp ? 1 : 0);
-
-    // Validate range (0-127)
-    if (midiNote < 0 || midiNote > 127) return null;
-
-    return midiNote;
   }
 }
