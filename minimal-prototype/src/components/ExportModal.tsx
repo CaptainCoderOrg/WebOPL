@@ -700,7 +700,7 @@ export function ExportModal({
                         style={{
                           position: 'absolute',
                           top: '-24px',
-                          left: '25%',
+                          left: 'calc(25% + 4px)',
                           transform: 'translateX(-50%)',
                           fontSize: '11px',
                           color: '#4a9eff',
@@ -714,7 +714,7 @@ export function ExportModal({
                         style={{
                           position: 'absolute',
                           top: '-24px',
-                          left: '75%',
+                          left: 'calc(75% - 4px)',
                           transform: 'translateX(-50%)',
                           fontSize: '11px',
                           color: '#4a9eff',
@@ -730,7 +730,8 @@ export function ExportModal({
                         style={{
                           position: 'absolute',
                           top: '0',
-                          left: '25%',
+                          left: 'calc(25% + 4px)',
+                          transform: 'translateX(-50%)',
                           width: '2px',
                           height: '10px',
                           background: '#4a9eff',
@@ -742,7 +743,8 @@ export function ExportModal({
                         style={{
                           position: 'absolute',
                           top: '0',
-                          left: '75%',
+                          left: 'calc(75% - 4px)',
+                          transform: 'translateX(-50%)',
                           width: '2px',
                           height: '10px',
                           background: '#4a9eff',
