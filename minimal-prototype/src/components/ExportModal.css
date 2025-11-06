@@ -62,6 +62,31 @@
   padding: 16px;
 }
 
+.export-mode-options {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.export-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.export-radio {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.export-radio-text {
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
 .export-mode-description {
   margin: 8px 0 0 0;
   font-size: 14px;
@@ -127,11 +152,18 @@
   color: #e0e0e0;
 }
 
+/* Loop Count Row */
+.export-loop-count-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 /* Loop Count Buttons */
 .export-loop-count-buttons {
   display: flex;
   gap: 8px;
-  margin-top: 8px;
+  flex: 1;
 }
 
 .export-loop-count-button {
@@ -289,6 +321,37 @@
 .export-number-input:focus {
   outline: none;
   border-color: #4a9eff;
+}
+
+/* Fade Combined Row */
+.export-fade-combined-row {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.export-fade-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.export-fade-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-fade-unit {
+  font-size: 14px;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.export-number-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #151515;
 }
 
 /* ============================================

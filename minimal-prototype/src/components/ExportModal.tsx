@@ -273,141 +273,140 @@ export function ExportModal({
         </div>
       </div>
 
-      {/* Export Mode Selection */}
+      {/* Mode Section */}
       <div className="export-mode-section">
-        <h3 className="export-section-title">Export Mode</h3>
-        <label className="export-checkbox-label">
-          <input
-            type="checkbox"
-            checked={seamlessLoop}
-            onChange={(e) => setSeamlessLoop(e.target.checked)}
-            className="export-checkbox"
-          />
-          <span className="export-checkbox-text">
-            Export as Seamless Loop
-          </span>
-        </label>
+        <h3 className="export-section-title">Mode</h3>
+
+        {/* Mode Selection */}
+        <div className="export-mode-options">
+          <label className="export-radio-label">
+            <input
+              type="radio"
+              name="export-mode"
+              checked={!seamlessLoop}
+              onChange={() => setSeamlessLoop(false)}
+              className="export-radio"
+            />
+            <span className="export-radio-text">Normal</span>
+          </label>
+          <label className="export-radio-label">
+            <input
+              type="radio"
+              name="export-mode"
+              checked={seamlessLoop}
+              onChange={() => setSeamlessLoop(true)}
+              className="export-radio"
+            />
+            <span className="export-radio-text">Seamless Loop</span>
+          </label>
+        </div>
         <p className="export-mode-description">
           {seamlessLoop
             ? 'Uses context-aware rendering to create a perfect loop with no audible clicks at the loop boundary.'
             : 'Standard export with optional fade in/out to prevent clicks at start/end.'}
         </p>
-      </div>
 
-      {/* Loop Count (Always Visible) */}
-      <div className="export-options-section">
-        <h3 className="export-section-title">Loop Count</h3>
-        <div className="export-option">
-          <div className="export-loop-count-buttons">
-            {[1, 2, 3, 4].map((count) => (
-              <button
-                key={count}
-                type="button"
-                className={`export-loop-count-button ${
-                  loopCount === count && !editingCustomLoop ? 'active' : ''
-                }`}
-                onClick={() => handleLoopCountClick(count)}
-              >
-                {count}
-              </button>
-            ))}
-            {/* Custom Loop Count (5+) */}
-            {editingCustomLoop ? (
-              <input
-                type="text"
-                value={customLoopInput}
-                onChange={(e) => handleCustomLoopInputChange(e.target.value)}
-                onMouseLeave={handleCustomLoopMouseLeave}
-                onKeyDown={handleCustomLoopKeyDown}
-                className="export-loop-count-input"
-                placeholder="5+"
-                autoFocus
-              />
-            ) : (
-              <button
-                type="button"
-                className={`export-loop-count-button ${
-                  loopCount > 4 ? 'active' : ''
-                }`}
-                onClick={handleCustomLoopClick}
-              >
-                {loopCount > 4 ? loopCount : '5+'}
-              </button>
+        {/* Loop Count */}
+        <div className="export-option" style={{ marginTop: '20px' }}>
+          <div className="export-loop-count-row">
+            <label className="export-option-label">Loop Count</label>
+            <div className="export-loop-count-buttons">
+              {[1, 2, 3, 4].map((count) => (
+                <button
+                  key={count}
+                  type="button"
+                  className={`export-loop-count-button ${
+                    loopCount === count && !editingCustomLoop ? 'active' : ''
+                  }`}
+                  onClick={() => handleLoopCountClick(count)}
+                >
+                  {count}
+                </button>
+              ))}
+              {/* Custom Loop Count (5+) */}
+              {editingCustomLoop ? (
+                <input
+                  type="text"
+                  value={customLoopInput}
+                  onChange={(e) => handleCustomLoopInputChange(e.target.value)}
+                  onMouseLeave={handleCustomLoopMouseLeave}
+                  onKeyDown={handleCustomLoopKeyDown}
+                  className="export-loop-count-input"
+                  placeholder="5+"
+                  autoFocus
+                />
+              ) : (
+                <button
+                  type="button"
+                  className={`export-loop-count-button ${
+                    loopCount > 4 ? 'active' : ''
+                  }`}
+                  onClick={handleCustomLoopClick}
+                >
+                  {loopCount > 4 ? loopCount : '5+'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Seamless Loop Advanced Settings */}
+        {seamlessLoop && (
+          <div className="export-option" style={{ marginTop: '20px' }}>
+            <button
+              type="button"
+              className="export-advanced-toggle"
+              onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
+            >
+              <span className="export-advanced-toggle-icon">
+                {showAdvancedSettings ? '▼' : '▶'}
+              </span>
+              Advanced Settings
+            </button>
+
+            {showAdvancedSettings && (
+              <div style={{ marginTop: '12px' }}>
+                <label className="export-option-label">
+                  Context Rows: <strong>{contextRows}</strong>
+                </label>
+                <input
+                  type="range"
+                  min="4"
+                  max="16"
+                  value={contextRows}
+                  onChange={(e) => setContextRows(parseInt(e.target.value, 10))}
+                  className="export-slider"
+                />
+                <div className="export-slider-labels">
+                  <span>4 (faster)</span>
+                  <span>16 (more context)</span>
+                </div>
+                <p className="export-option-hint">
+                  Renders [last {contextRows} rows | pattern | first {contextRows} rows],
+                  then extracts the core pattern. Higher values provide more musical context
+                  for seamless loops but increase render time slightly. Default: 8 rows.
+                </p>
+              </div>
             )}
           </div>
-          <p className="export-option-hint">
-            {loopCount === 1
-              ? seamlessLoop
-                ? 'Exports 1 iteration (file designed to loop seamlessly)'
-                : 'Exports pattern once with optional fades'
-              : `Exports ${loopCount} iterations (pattern repeats ${loopCount} times in the file)`}
-          </p>
-        </div>
-      </div>
+        )}
 
-      {/* Seamless Loop Advanced Settings */}
-      {seamlessLoop && (
-        <div className="export-options-section">
-          <button
-            type="button"
-            className="export-advanced-toggle"
-            onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
-          >
-            <span className="export-advanced-toggle-icon">
-              {showAdvancedSettings ? '▼' : '▶'}
-            </span>
-            Advanced Settings
-          </button>
-
-          {showAdvancedSettings && (
-            <div className="export-option">
-              <label className="export-option-label">
-                Context Rows: <strong>{contextRows}</strong>
-              </label>
-              <input
-                type="range"
-                min="4"
-                max="16"
-                value={contextRows}
-                onChange={(e) => setContextRows(parseInt(e.target.value, 10))}
-                className="export-slider"
-              />
-              <div className="export-slider-labels">
-                <span>4 (faster)</span>
-                <span>16 (more context)</span>
-              </div>
-              <p className="export-option-hint">
-                Renders [last {contextRows} rows | pattern | first {contextRows} rows],
-                then extracts the core pattern. Higher values provide more musical context
-                for seamless loops but increase render time slightly. Default: 8 rows.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Standard Export Fade Options */}
-      {!seamlessLoop && (
-        <div className="export-options-section">
-          <h3 className="export-section-title">Fade Options</h3>
-
-          {/* Fade In */}
-          <div className="export-option">
-            <label className="export-checkbox-label">
-              <input
-                type="checkbox"
-                checked={fadeIn}
-                onChange={(e) => setFadeIn(e.target.checked)}
-                className="export-checkbox"
-              />
-              <span className="export-checkbox-text">
-                Fade In
-              </span>
-            </label>
-            {fadeIn && (
-              <div className="export-option-controls">
-                <label className="export-number-label">
-                  Duration:
+        {/* Standard Export Fade Options */}
+        {!seamlessLoop && (
+          <div className="export-option" style={{ marginTop: '20px' }}>
+            <div className="export-fade-combined-row">
+              {/* Fade In */}
+              <div className="export-fade-control">
+                <label className="export-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={fadeIn}
+                    onChange={(e) => setFadeIn(e.target.checked)}
+                    className="export-checkbox"
+                  />
+                  <span className="export-checkbox-text">Fade In</span>
+                </label>
+                <div className="export-fade-input-group">
                   <input
                     type="number"
                     min="10"
@@ -423,31 +422,25 @@ export function ExportModal({
                         setFadeInDuration(1000);
                       }
                     }}
+                    disabled={!fadeIn}
                     className="export-number-input"
                   />
-                  ms
-                </label>
+                  <span className="export-fade-unit">ms</span>
+                </div>
               </div>
-            )}
-          </div>
 
-          {/* Fade Out */}
-          <div className="export-option">
-            <label className="export-checkbox-label">
-              <input
-                type="checkbox"
-                checked={fadeOut}
-                onChange={(e) => setFadeOut(e.target.checked)}
-                className="export-checkbox"
-              />
-              <span className="export-checkbox-text">
-                Fade Out
-              </span>
-            </label>
-            {fadeOut && (
-              <div className="export-option-controls">
-                <label className="export-number-label">
-                  Duration:
+              {/* Fade Out */}
+              <div className="export-fade-control">
+                <label className="export-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={fadeOut}
+                    onChange={(e) => setFadeOut(e.target.checked)}
+                    className="export-checkbox"
+                  />
+                  <span className="export-checkbox-text">Fade Out</span>
+                </label>
+                <div className="export-fade-input-group">
                   <input
                     type="number"
                     min="10"
@@ -463,20 +456,16 @@ export function ExportModal({
                         setFadeOutDuration(1000);
                       }
                     }}
+                    disabled={!fadeOut}
                     className="export-number-input"
                   />
-                  ms
-                </label>
+                  <span className="export-fade-unit">ms</span>
+                </div>
               </div>
-            )}
+            </div>
           </div>
-
-          <p className="export-option-hint">
-            Fades create smooth volume transitions at the start/end to prevent clicks.
-            Recommended for songs with definite start and end points.
-          </p>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Export Summary */}
       <div className="export-summary-section">
