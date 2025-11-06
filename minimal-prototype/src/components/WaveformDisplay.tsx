@@ -30,6 +30,8 @@ export function WaveformDisplay({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackPosition, setPlaybackPosition] = useState(0); // 0-1 normalized position
+  const animationFrameRef = useRef<number | null>(null);
 
   // Setup audio element when wavBuffer is provided
   useEffect(() => {
@@ -53,8 +55,42 @@ export function WaveformDisplay({
       URL.revokeObjectURL(url);
       audioRef.current = null;
       setIsPlaying(false);
+      setPlaybackPosition(0);
     };
   }, [wavBuffer]);
+
+  // Update playback position while playing
+  useEffect(() => {
+    if (!isPlaying || !audioRef.current) {
+      // Cancel animation frame if stopped
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      return;
+    }
+
+    const updatePosition = () => {
+      const audio = audioRef.current;
+      if (audio && audio.duration > 0) {
+        const position = audio.currentTime / audio.duration;
+        setPlaybackPosition(position);
+      }
+
+      if (isPlaying) {
+        animationFrameRef.current = requestAnimationFrame(updatePosition);
+      }
+    };
+
+    animationFrameRef.current = requestAnimationFrame(updatePosition);
+
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+  }, [isPlaying]);
 
   // Draw waveform
   useEffect(() => {
@@ -101,7 +137,26 @@ export function WaveformDisplay({
     ctx.moveTo(0, centerY);
     ctx.lineTo(width, centerY);
     ctx.stroke();
-  }, [waveformData, width, height]);
+
+    // Draw playback position indicator
+    if (wavBuffer && playbackPosition > 0) {
+      const xPos = playbackPosition * width;
+
+      // Draw vertical line
+      ctx.strokeStyle = '#ff4444';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(xPos, 0);
+      ctx.lineTo(xPos, height);
+      ctx.stroke();
+
+      // Draw small circle at the top
+      ctx.fillStyle = '#ff4444';
+      ctx.beginPath();
+      ctx.arc(xPos, 0, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }, [waveformData, width, height, wavBuffer, playbackPosition]);
 
   /**
    * Handle click to play/pause audio
