@@ -1,28 +1,28 @@
 /**
- * CrossfadeLoopEncoder - Apply equal-power crossfade to create seamless loops
+ * CrossfadeLoopEncoder - Create seamless loops using context-aware rendering
  *
  * Uses context-aware rendering for musical patterns:
- * Renders [last 8 rows | full pattern | first 8 rows], extracts the middle section,
- * then crossfades the natural loop boundary. This provides proper context for loop points.
+ * Renders [last N rows | full pattern | first N rows], extracts the middle section.
+ * The context ensures natural loop boundaries without audible clicks or transitions.
  */
 
 export class CrossfadeLoopEncoder {
   /**
-   * Apply crossfade to make audio loop seamlessly for music
+   * Extract seamless loop from context-aware rendered audio
    *
    * This method expects audio with lead-in and lead-out context.
    * Algorithm:
-   * 1. Input is [last 8 rows | full pattern | first 8 rows]
+   * 1. Input is [last N rows | full pattern | first N rows]
    * 2. Extract the core pattern (middle section)
-   * 3. Crossfade the end → beginning for seamless loop
+   * 3. Context ensures seamless loop boundary (row end → row 0)
    *
-   * @param leftChannel - Left channel samples (with lead-in/out)
-   * @param rightChannel - Right channel samples (with lead-in/out)
+   * @param leftChannel - Left channel samples (with lead-in/out context)
+   * @param rightChannel - Right channel samples (with lead-in/out context)
    * @param sampleRate - Sample rate in Hz
-   * @param leadInSamples - Number of samples in the lead-in section
-   * @param coreSamples - Number of samples in the core pattern
-   * @param fadeDurationMs - Crossfade duration in milliseconds (default: 200ms)
-   * @returns One seamless loop with crossfade applied
+   * @param leadInSamples - Number of context samples at the beginning (padding before pattern)
+   * @param coreSamples - Number of samples in the core pattern to extract
+   * @param fadeDurationMs - [Unused] Kept for API compatibility (default: 200ms)
+   * @returns Extracted seamless loop (core pattern only)
    */
   static applyCrossfade(
     leftChannel: Int16Array,
@@ -63,6 +63,26 @@ export class CrossfadeLoopEncoder {
     console.log('[CrossfadeLoopEncoder] ✅ Context-aware loop extracted (no crossfade needed)');
 
     return { left: newLeft, right: newRight };
+  }
+
+  /**
+   * Helper: Calculate sample count from musical rows
+   *
+   * @param rows - Number of rows
+   * @param bpm - Beats per minute
+   * @param rowsPerBeat - Rows per beat (typically 4 for 16th note resolution)
+   * @param sampleRate - Sample rate in Hz (default: 49716)
+   * @returns Number of samples
+   */
+  static rowsToSamples(
+    rows: number,
+    bpm: number,
+    rowsPerBeat: number = 4,
+    sampleRate: number = 49716
+  ): number {
+    const secondsPerRow = 60 / (bpm * rowsPerBeat);
+    const duration = rows * secondsPerRow;
+    return Math.floor(duration * sampleRate);
   }
 
   /**

@@ -443,6 +443,14 @@ async function renderPatternToBuffers(pattern: any, trimSilence: boolean = false
   return { left: leftChannel, right: rightChannel };
 }
 
+/**
+ * Configuration: Context rows for seamless loop rendering
+ * Specifies how many rows of context to render before/after the pattern
+ * for seamless loop boundaries. Higher values provide more context but
+ * increase render time. Typical values: 4-16 rows.
+ */
+const DEFAULT_CONTEXT_ROWS = 8;
+
 // Helper: Find where actual audio ends (before trailing silence)
 function findAudioEndPoint(leftChannel: Int16Array, rightChannel: Int16Array): number {
   const SILENCE_THRESHOLD = 50; // Amplitude threshold for silence
@@ -490,10 +498,10 @@ async function exportCrossfadeLoop() {
     result.innerHTML += `  - Name: ${pattern.name}\\n`;
     result.innerHTML += `  - Rows: ${pattern.rows}, Tracks: ${pattern.tracks}, BPM: ${pattern.bpm}\\n\\n`;
 
-    // Step 2: Create context-aware pattern (last 8 + all + first 8)
+    // Step 2: Create context-aware pattern (last N + all + first N rows)
     result.innerHTML += 'Step 2: Creating context-aware pattern...\\n';
     const originalRows = pattern.rows;
-    const contextRows = 8; // Lead-in and lead-out context
+    const contextRows = DEFAULT_CONTEXT_ROWS; // Lead-in and lead-out context
     const totalRows = contextRows + originalRows + contextRows;
 
     const contextPattern = {
