@@ -28,32 +28,45 @@ export function WaveformDisplay({
   height = 100,
 }: WaveformDisplayProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const startTimeRef = useRef<number>(0);
+  const pauseTimeRef = useRef<number>(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackPosition, setPlaybackPosition] = useState(0); // 0-1 normalized position
   const animationFrameRef = useRef<number | null>(null);
 
-  // Setup audio element when wavBuffer is provided
+  // Setup Web Audio API when wavBuffer is provided
   useEffect(() => {
     if (!wavBuffer) return;
 
-    // Create audio element
-    const audio = new Audio();
-    audio.loop = true; // Enable looping
+    const setupAudio = async () => {
+      // Create AudioContext
+      const audioContext = new AudioContext();
+      audioContextRef.current = audioContext;
 
-    // Create blob URL from WAV buffer
-    const blob = new Blob([wavBuffer], { type: 'audio/wav' });
-    const url = URL.createObjectURL(blob);
-    audio.src = url;
+      // Decode the WAV buffer
+      const audioBuffer = await audioContext.decodeAudioData(wavBuffer.slice(0));
+      audioBufferRef.current = audioBuffer;
+    };
 
-    audioRef.current = audio;
+    setupAudio().catch((err) => {
+      console.error('[WaveformDisplay] Failed to setup audio:', err);
+    });
 
     // Cleanup
     return () => {
-      audio.pause();
-      audio.src = '';
-      URL.revokeObjectURL(url);
-      audioRef.current = null;
+      if (sourceNodeRef.current) {
+        sourceNodeRef.current.stop();
+        sourceNodeRef.current.disconnect();
+        sourceNodeRef.current = null;
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+      }
+      audioBufferRef.current = null;
       setIsPlaying(false);
       setPlaybackPosition(0);
     };
@@ -61,7 +74,7 @@ export function WaveformDisplay({
 
   // Update playback position while playing
   useEffect(() => {
-    if (!isPlaying || !audioRef.current) {
+    if (!isPlaying || !audioContextRef.current || !audioBufferRef.current) {
       // Cancel animation frame if stopped
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -71,9 +84,15 @@ export function WaveformDisplay({
     }
 
     const updatePosition = () => {
-      const audio = audioRef.current;
-      if (audio && audio.duration > 0) {
-        const position = audio.currentTime / audio.duration;
+      const audioContext = audioContextRef.current;
+      const audioBuffer = audioBufferRef.current;
+
+      if (audioContext && audioBuffer && audioBuffer.duration > 0) {
+        // Calculate elapsed time since start
+        const elapsed = audioContext.currentTime - startTimeRef.current + pauseTimeRef.current;
+        // Get position within a single loop
+        const loopPosition = elapsed % audioBuffer.duration;
+        const position = loopPosition / audioBuffer.duration;
         setPlaybackPosition(position);
       }
 
@@ -162,16 +181,38 @@ export function WaveformDisplay({
    * Handle click to play/pause audio
    */
   const handleClick = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    const audioContext = audioContextRef.current;
+    const audioBuffer = audioBufferRef.current;
+
+    if (!audioContext || !audioBuffer) return;
 
     if (isPlaying) {
-      audio.pause();
+      // Pause: stop the source and record the pause time
+      if (sourceNodeRef.current) {
+        sourceNodeRef.current.stop();
+        sourceNodeRef.current.disconnect();
+        sourceNodeRef.current = null;
+      }
+
+      // Calculate where we paused
+      const elapsed = audioContext.currentTime - startTimeRef.current + pauseTimeRef.current;
+      pauseTimeRef.current = elapsed % audioBuffer.duration;
+
       setIsPlaying(false);
     } else {
-      audio.play().catch((err) => {
-        console.error('[WaveformDisplay] Failed to play audio:', err);
-      });
+      // Play/Resume: create a new source node with looping
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.loop = true; // Enable seamless looping
+      source.connect(audioContext.destination);
+
+      // Start from pause position (or 0 if first play)
+      source.start(0, pauseTimeRef.current);
+
+      // Record start time
+      startTimeRef.current = audioContext.currentTime - pauseTimeRef.current;
+
+      sourceNodeRef.current = source;
       setIsPlaying(true);
     }
   };
