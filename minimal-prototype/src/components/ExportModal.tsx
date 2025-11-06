@@ -21,7 +21,7 @@ import {
   downloadWAV,
 } from '../export/exportPattern';
 import { generateWaveformFromWAV } from '../utils/waveformGenerator';
-import { normalizeAudio } from '../utils/audioProcessing';
+import { normalizeAudio, applyFades } from '../utils/audioProcessing';
 import { WaveformDisplay } from './WaveformDisplay';
 import './ExportModal.css';
 
@@ -358,7 +358,7 @@ export function ExportModal({
   };
 
   /**
-   * Apply post-processing (normalization) when settings change
+   * Apply post-processing (normalization and fades) when settings change
    */
   useEffect(() => {
     if (!originalWAV) return;
@@ -367,14 +367,21 @@ export function ExportModal({
 
     // Apply normalization if enabled
     if (normalizeEnabled && typeof normalizeDb === 'number') {
-      processedWAV = normalizeAudio(originalWAV, normalizeDb);
+      processedWAV = normalizeAudio(processedWAV, normalizeDb);
+    }
+
+    // Apply fades if enabled
+    if (fadeIn || fadeOut) {
+      const fadeInMs = fadeIn && typeof fadeInDuration === 'number' ? fadeInDuration : 0;
+      const fadeOutMs = fadeOut && typeof fadeOutDuration === 'number' ? fadeOutDuration : 0;
+      processedWAV = applyFades(processedWAV, fadeInMs, fadeOutMs);
     }
 
     // Update the generated WAV and waveform
     setGeneratedWAV(processedWAV);
     const waveform = generateWaveformFromWAV(processedWAV, 1000);
     setWaveformData(waveform);
-  }, [normalizeEnabled, normalizeDb, originalWAV]);
+  }, [normalizeEnabled, normalizeDb, fadeIn, fadeInDuration, fadeOut, fadeOutDuration, originalWAV]);
 
   return (
     <div className="export-modal">
@@ -524,81 +531,6 @@ export function ExportModal({
                 </p>
               </div>
             )}
-          </div>
-        )}
-
-        {/* Standard Export Fade Options */}
-        {!seamlessLoop && (
-          <div className="export-option" style={{ marginTop: '20px' }}>
-            <div className="export-fade-combined-row">
-              {/* Fade In */}
-              <div className="export-fade-control">
-                <label className="export-checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={fadeIn}
-                    onChange={(e) => setFadeIn(e.target.checked)}
-                    className="export-checkbox"
-                  />
-                  <span className="export-checkbox-text">Fade In</span>
-                </label>
-                <div className="export-fade-input-group">
-                  <input
-                    type="number"
-                    min="10"
-                    max="2000"
-                    step="10"
-                    value={fadeInDuration}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setFadeInDuration(val === '' ? '' : parseInt(val, 10));
-                    }}
-                    onBlur={() => {
-                      if (fadeInDuration === '' || isNaN(fadeInDuration) || fadeInDuration < 10) {
-                        setFadeInDuration(1000);
-                      }
-                    }}
-                    disabled={!fadeIn}
-                    className="export-number-input"
-                  />
-                  <span className="export-fade-unit">ms</span>
-                </div>
-              </div>
-
-              {/* Fade Out */}
-              <div className="export-fade-control">
-                <label className="export-checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={fadeOut}
-                    onChange={(e) => setFadeOut(e.target.checked)}
-                    className="export-checkbox"
-                  />
-                  <span className="export-checkbox-text">Fade Out</span>
-                </label>
-                <div className="export-fade-input-group">
-                  <input
-                    type="number"
-                    min="10"
-                    max="2000"
-                    step="10"
-                    value={fadeOutDuration}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setFadeOutDuration(val === '' ? '' : parseInt(val, 10));
-                    }}
-                    onBlur={() => {
-                      if (fadeOutDuration === '' || isNaN(fadeOutDuration) || fadeOutDuration < 10) {
-                        setFadeOutDuration(1000);
-                      }
-                    }}
-                    disabled={!fadeOut}
-                    className="export-number-input"
-                  />
-                  <span className="export-fade-unit">ms</span>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>
@@ -808,6 +740,82 @@ export function ExportModal({
                 </>
               )}
             </div>
+          </div>
+
+          {/* Fade Options */}
+          <div className="export-option" style={{ marginTop: '20px' }}>
+            <div className="export-fade-combined-row">
+              {/* Fade In */}
+              <div className="export-fade-control">
+                <label className="export-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={fadeIn}
+                    onChange={(e) => setFadeIn(e.target.checked)}
+                    className="export-checkbox"
+                  />
+                  <span className="export-checkbox-text">Fade In</span>
+                </label>
+                <div className="export-fade-input-group">
+                  <input
+                    type="number"
+                    min="10"
+                    max="2000"
+                    step="10"
+                    value={fadeInDuration}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFadeInDuration(val === '' ? '' : parseInt(val, 10));
+                    }}
+                    onBlur={() => {
+                      if (fadeInDuration === '' || isNaN(fadeInDuration) || fadeInDuration < 10) {
+                        setFadeInDuration(1000);
+                      }
+                    }}
+                    disabled={!fadeIn}
+                    className="export-number-input"
+                  />
+                  <span className="export-fade-unit">ms</span>
+                </div>
+              </div>
+
+              {/* Fade Out */}
+              <div className="export-fade-control">
+                <label className="export-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={fadeOut}
+                    onChange={(e) => setFadeOut(e.target.checked)}
+                    className="export-checkbox"
+                  />
+                  <span className="export-checkbox-text">Fade Out</span>
+                </label>
+                <div className="export-fade-input-group">
+                  <input
+                    type="number"
+                    min="10"
+                    max="2000"
+                    step="10"
+                    value={fadeOutDuration}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFadeOutDuration(val === '' ? '' : parseInt(val, 10));
+                    }}
+                    onBlur={() => {
+                      if (fadeOutDuration === '' || isNaN(fadeOutDuration) || fadeOutDuration < 10) {
+                        setFadeOutDuration(1000);
+                      }
+                    }}
+                    disabled={!fadeOut}
+                    className="export-number-input"
+                  />
+                  <span className="export-fade-unit">ms</span>
+                </div>
+              </div>
+            </div>
+            <p className="export-option-hint" style={{ margin: '12px 0 0 0' }}>
+              Apply fade in and/or fade out effects to the audio. Fades are applied after normalization.
+            </p>
           </div>
         </div>
       )}

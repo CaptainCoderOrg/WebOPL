@@ -68,3 +68,73 @@ export function normalizeAudio(wavBuffer: ArrayBuffer, targetDb: number): ArrayB
 
   return newBuffer;
 }
+
+/**
+ * Apply fade in and/or fade out to audio
+ * @param wavBuffer - Input WAV file as ArrayBuffer
+ * @param fadeInMs - Fade in duration in milliseconds (0 to skip)
+ * @param fadeOutMs - Fade out duration in milliseconds (0 to skip)
+ * @returns WAV file with fades applied as ArrayBuffer
+ */
+export function applyFades(
+  wavBuffer: ArrayBuffer,
+  fadeInMs: number,
+  fadeOutMs: number
+): ArrayBuffer {
+  // Parse WAV header
+  const dataView = new DataView(wavBuffer);
+  const headerSize = 44;
+
+  // Read header information
+  const sampleRate = dataView.getUint32(24, true);
+  const subchunk2Size = dataView.getUint32(40, true);
+  const bitsPerSample = dataView.getUint16(34, true);
+  const numChannels = dataView.getUint16(22, true);
+
+  // Calculate total samples (per channel)
+  const bytesPerSample = bitsPerSample / 8;
+  const totalSamplesPerChannel = subchunk2Size / (bytesPerSample * numChannels);
+
+  // Convert fade durations to samples
+  const fadeInSamples = Math.floor((fadeInMs / 1000) * sampleRate);
+  const fadeOutSamples = Math.floor((fadeOutMs / 1000) * sampleRate);
+
+  // Create new buffer with faded audio
+  const newBuffer = new ArrayBuffer(wavBuffer.byteLength);
+  const newDataView = new DataView(newBuffer);
+
+  // Copy header
+  for (let i = 0; i < headerSize; i++) {
+    newDataView.setUint8(i, dataView.getUint8(i));
+  }
+
+  // Apply fades to audio data
+  for (let i = 0; i < totalSamplesPerChannel; i++) {
+    let gain = 1.0;
+
+    // Apply fade in
+    if (fadeInSamples > 0 && i < fadeInSamples) {
+      gain *= i / fadeInSamples;
+    }
+
+    // Apply fade out
+    if (fadeOutSamples > 0 && i >= totalSamplesPerChannel - fadeOutSamples) {
+      const fadeOutProgress = (totalSamplesPerChannel - i) / fadeOutSamples;
+      gain *= fadeOutProgress;
+    }
+
+    // Apply gain to all channels
+    for (let ch = 0; ch < numChannels; ch++) {
+      const offset = headerSize + (i * numChannels + ch) * bytesPerSample;
+      const sample = dataView.getInt16(offset, true);
+      const fadedSample = Math.round(sample * gain);
+
+      // Clamp to prevent overflow
+      const clampedSample = Math.max(-32768, Math.min(32767, fadedSample));
+
+      newDataView.setInt16(offset, clampedSample, true);
+    }
+  }
+
+  return newBuffer;
+}

@@ -235,50 +235,6 @@ function findAudioEndPoint(
 }
 
 /**
- * Apply linear fade to audio buffers
- * @param musicalDuration - Duration of the musical content in seconds (where last row ends)
- */
-function applyFades(
-  left: Int16Array,
-  right: Int16Array,
-  fadeInMs: number,
-  fadeOutMs: number,
-  musicalDuration: number
-): void {
-  const fadeInSamples = Math.floor((fadeInMs / 1000) * SAMPLE_RATE);
-  const fadeOutSamples = Math.floor((fadeOutMs / 1000) * SAMPLE_RATE);
-
-  // Apply fade in
-  if (fadeInSamples > 0) {
-    for (let i = 0; i < Math.min(fadeInSamples, left.length); i++) {
-      const gain = i / fadeInSamples;
-      left[i] = Math.round(left[i] * gain);
-      right[i] = Math.round(right[i] * gain);
-    }
-  }
-
-  // Apply fade out - ends at the musical end point, not at buffer end
-  if (fadeOutSamples > 0) {
-    const musicalEndSample = Math.floor(musicalDuration * SAMPLE_RATE);
-    const fadeOutStart = Math.max(0, musicalEndSample - fadeOutSamples);
-    const fadeOutEnd = Math.min(musicalEndSample, left.length);
-
-    for (let i = fadeOutStart; i < fadeOutEnd; i++) {
-      const progress = (i - fadeOutStart) / fadeOutSamples;
-      const gain = 1.0 - progress;
-      left[i] = Math.round(left[i] * gain);
-      right[i] = Math.round(right[i] * gain);
-    }
-
-    // Silence everything after the fade out ends
-    for (let i = fadeOutEnd; i < left.length; i++) {
-      left[i] = 0;
-      right[i] = 0;
-    }
-  }
-}
-
-/**
  * Download WAV file
  */
 export function downloadWAV(buffer: ArrayBuffer, filename: string): void {
@@ -294,7 +250,8 @@ export function downloadWAV(buffer: ArrayBuffer, filename: string): void {
 }
 
 /**
- * Export pattern as standard WAV with optional fades
+ * Export pattern as standard WAV
+ * Note: Fades are now applied as post-processing in the UI
  */
 export async function exportStandard(options: StandardExportOptions): Promise<ArrayBuffer> {
   const {
@@ -304,10 +261,10 @@ export async function exportStandard(options: StandardExportOptions): Promise<Ar
     instrumentBank,
     bpm,
     loopCount,
-    fadeIn,
-    fadeInDuration,
-    fadeOut,
-    fadeOutDuration,
+    fadeIn: _fadeIn,
+    fadeInDuration: _fadeInDuration,
+    fadeOut: _fadeOut,
+    fadeOutDuration: _fadeOutDuration,
     onProgress,
   } = options;
 
@@ -322,25 +279,8 @@ export async function exportStandard(options: StandardExportOptions): Promise<Ar
     options.abortSignal
   );
 
-  // Calculate musical duration (where the last row ends)
-  const rowsPerBeat = 4;
-  const secondsPerRow = 60 / (bpm * rowsPerBeat);
-  const musicalDuration = pattern.length * secondsPerRow * loopCount;
-
-  // Apply fades if enabled
-  if (fadeIn || fadeOut) {
-    onProgress?.(92, 'Applying fades...');
-    applyFades(
-      buffers.left,
-      buffers.right,
-      fadeIn ? fadeInDuration : 0,
-      fadeOut ? fadeOutDuration : 0,
-      musicalDuration
-    );
-  }
-
   // Trim trailing silence
-  onProgress?.(94, 'Trimming silence...');
+  onProgress?.(92, 'Trimming silence...');
   const audioEnd = findAudioEndPoint(buffers.left, buffers.right);
   const trimmedLeft = buffers.left.slice(0, audioEnd);
   const trimmedRight = buffers.right.slice(0, audioEnd);
