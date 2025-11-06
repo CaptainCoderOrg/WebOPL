@@ -15,6 +15,10 @@ import {
   formatDuration,
   sanitizeFilename,
 } from '../utils/exportHelpers';
+import {
+  exportStandard,
+  exportSeamlessLoop,
+} from '../export/exportPattern';
 import './ExportModal.css';
 
 export interface ExportModalProps {
@@ -43,11 +47,11 @@ export interface ExportModalProps {
 export function ExportModal({
   patternName = 'Untitled Pattern',
   pattern,
-  trackInstruments: _trackInstruments, // Will be used in Bundle 2
-  instrumentBank: _instrumentBank,     // Will be used in Bundle 2
+  trackInstruments,
+  instrumentBank,
   bpm,
   onClose,
-  onExportComplete: _onExportComplete, // Will be used in Bundle 2
+  onExportComplete,
 }: ExportModalProps) {
   // Export mode state
   const [seamlessLoop, setSeamlessLoop] = useState(false);
@@ -67,10 +71,11 @@ export function ExportModal({
   const [fadeOut, setFadeOut] = useState(false);
   const [fadeOutDuration, setFadeOutDuration] = useState<number | ''>(1000); // ms
 
-  // Export state (for future phases)
-  const [isExporting] = useState(false);
-  const [progress] = useState(0);
-  const [error] = useState<string | null>(null);
+  // Export state
+  const [isExporting, setIsExporting] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [progressMessage, setProgressMessage] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   // Calculate pattern info
   const rows = pattern.length;
@@ -88,21 +93,63 @@ export function ExportModal({
 
   /**
    * Handle export button click
-   * (Implementation in Bundle 2)
    */
-  const handleExport = () => {
-    console.log('[ExportModal] Export clicked (not implemented yet)');
-    console.log('Mode:', seamlessLoop ? 'Seamless Loop' : 'Standard');
-    console.log('Duration:', finalDuration);
-    console.log('File size:', fileSize);
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+      setProgress(0);
+      setProgressMessage('Starting export...');
+      setError(null);
 
-    // TODO: Implement in Bundle 2 (Phases 3-4)
-    alert('Export functionality will be implemented in Bundle 2!\n\n' +
-          `Would export:\n` +
-          `  Filename: ${filename}\n` +
-          `  Duration: ${formatDuration(finalDuration)}\n` +
-          `  Size: ${formatFileSize(fileSize)}\n` +
-          `  Mode: ${seamlessLoop ? 'Seamless Loop' : 'Standard'}`);
+      const onProgress = (progress: number, message: string) => {
+        setProgress(progress);
+        setProgressMessage(message);
+      };
+
+      if (seamlessLoop) {
+        // Seamless loop export
+        await exportSeamlessLoop({
+          patternName,
+          pattern,
+          trackInstruments,
+          instrumentBank,
+          bpm,
+          loopCount,
+          contextRows,
+          onProgress,
+        });
+      } else {
+        // Standard export with optional fades
+        await exportStandard({
+          patternName,
+          pattern,
+          trackInstruments,
+          instrumentBank,
+          bpm,
+          loopCount,
+          fadeIn,
+          fadeInDuration: typeof fadeInDuration === 'number' ? fadeInDuration : 1000,
+          fadeOut,
+          fadeOutDuration: typeof fadeOutDuration === 'number' ? fadeOutDuration : 1000,
+          onProgress,
+        });
+      }
+
+      // Call success callback
+      onExportComplete?.(filename);
+
+      // Keep modal open for a moment to show success
+      setTimeout(() => {
+        setIsExporting(false);
+        setProgress(0);
+        setProgressMessage('');
+      }, 1000);
+
+    } catch (err) {
+      console.error('[ExportModal] Export failed:', err);
+      setError(err instanceof Error ? err.message : 'Export failed');
+      setIsExporting(false);
+    }
   };
 
   /**
@@ -451,7 +498,7 @@ export function ExportModal({
         </button>
       </div>
 
-      {/* Progress Section (for Bundle 2) */}
+      {/* Progress Section */}
       {isExporting && (
         <div className="export-progress-section">
           <div className="export-progress-bar">
@@ -460,11 +507,13 @@ export function ExportModal({
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="export-progress-text">{progress}% - Rendering audio...</p>
+          <p className="export-progress-text">
+            {progress}% - {progressMessage || 'Processing...'}
+          </p>
         </div>
       )}
 
-      {/* Error Section (for Bundle 2) */}
+      {/* Error Section */}
       {error && (
         <div className="export-error-section">
           <p className="export-error-text">❌ {error}</p>
