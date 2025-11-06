@@ -178,6 +178,16 @@ export function WaveformDisplay({
   }, [waveformData, width, height, wavBuffer, playbackPosition]);
 
   /**
+   * Format time as MM:SS:MS (milliseconds as 2 digits)
+   */
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    const ms = Math.floor((seconds % 1) * 100);
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}:${String(ms).padStart(2, '0')}`;
+  };
+
+  /**
    * Handle play/pause button click
    */
   const handlePlayPauseClick = () => {
@@ -263,38 +273,50 @@ export function WaveformDisplay({
     }
   };
 
+  // Calculate current time and total duration for display
+  const audioBuffer = audioBufferRef.current;
+  const currentTime = audioBuffer ? playbackPosition * audioBuffer.duration : 0;
+  const totalDuration = audioBuffer ? audioBuffer.duration : 0;
+
   return (
-    <>
-      {/* Play/Pause Button */}
-      {wavBuffer && (
-        <button
-          className="waveform-play-button"
-          onClick={handlePlayPauseClick}
-          title={isPlaying ? 'Pause' : 'Play'}
-          type="button"
-        >
-          {isPlaying ? (
-            // Pause icon
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <rect x="6" y="5" width="4" height="14" fill="currentColor" />
-              <rect x="14" y="5" width="4" height="14" fill="currentColor" />
-            </svg>
-          ) : (
-            // Play icon
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M8 5v14l11-7z" fill="currentColor" />
-            </svg>
-          )}
-        </button>
-      )}
-      <div className="waveform-display">
-        <canvas
-          ref={canvasRef}
-          className="waveform-canvas"
-          onClick={handleWaveformClick}
-          style={{ cursor: wavBuffer ? 'pointer' : 'default' }}
-        />
+    <div className="waveform-wrapper">
+      <div className="waveform-row">
+        {/* Play/Pause Button */}
+        {wavBuffer && (
+          <button
+            className="waveform-play-button"
+            onClick={handlePlayPauseClick}
+            title={isPlaying ? 'Pause' : 'Play'}
+            type="button"
+          >
+            {isPlaying ? (
+              // Pause icon
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="6" y="5" width="4" height="14" fill="currentColor" />
+                <rect x="14" y="5" width="4" height="14" fill="currentColor" />
+              </svg>
+            ) : (
+              // Play icon
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M8 5v14l11-7z" fill="currentColor" />
+              </svg>
+            )}
+          </button>
+        )}
+        <div className="waveform-display-container">
+          <canvas
+            ref={canvasRef}
+            className="waveform-canvas"
+            onClick={handleWaveformClick}
+            style={{ cursor: wavBuffer ? 'pointer' : 'default' }}
+          />
+        </div>
       </div>
-    </>
+      {wavBuffer && (
+        <div className="waveform-time-tracker">
+          {formatTime(currentTime)} / {formatTime(totalDuration)}
+        </div>
+      )}
+    </div>
   );
 }
