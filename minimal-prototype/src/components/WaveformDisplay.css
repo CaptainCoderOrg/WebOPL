@@ -5,15 +5,47 @@
 .waveform-display {
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 12px;
   background: #1a1a1a;
   border-radius: 6px;
   padding: 8px;
 }
 
+.waveform-play-button {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2a2a;
+  border: 2px solid #4a9eff;
+  border-radius: 50%;
+  color: #4a9eff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.waveform-play-button:hover {
+  background: #4a9eff;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.waveform-play-button:active {
+  transform: scale(0.95);
+}
+
+.waveform-play-button:focus {
+  outline: 2px solid #4a9eff;
+  outline-offset: 2px;
+}
+
 .waveform-canvas {
   display: block;
+  flex: 1;
   width: 100%;
   height: auto;
   max-width: 100%;

@@ -526,7 +526,12 @@ export function ExportModal({
                 </span>
               </div>
             ) : waveformData ? (
-              <WaveformDisplay waveformData={waveformData} width={600} height={80} />
+              <WaveformDisplay
+                waveformData={waveformData}
+                wavBuffer={generatedWAV || undefined}
+                width={600}
+                height={80}
+              />
             ) : null}
 
             {/* Cancel button while exporting, Save button when complete */}

@@ -1,14 +1,18 @@
 /**
  * WaveformDisplay Component
  * Renders audio waveform visualization using Canvas
+ * Click to play/pause audio with looping
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './WaveformDisplay.css';
 
 export interface WaveformDisplayProps {
   /** Waveform data (0-1 normalized amplitude values) */
   waveformData: number[];
+
+  /** WAV file ArrayBuffer for playback */
+  wavBuffer?: ArrayBuffer;
 
   /** Canvas width in pixels (default: 600) */
   width?: number;
@@ -19,11 +23,40 @@ export interface WaveformDisplayProps {
 
 export function WaveformDisplay({
   waveformData,
+  wavBuffer,
   width = 600,
   height = 100,
 }: WaveformDisplayProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
+  // Setup audio element when wavBuffer is provided
+  useEffect(() => {
+    if (!wavBuffer) return;
+
+    // Create audio element
+    const audio = new Audio();
+    audio.loop = true; // Enable looping
+
+    // Create blob URL from WAV buffer
+    const blob = new Blob([wavBuffer], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    audio.src = url;
+
+    audioRef.current = audio;
+
+    // Cleanup
+    return () => {
+      audio.pause();
+      audio.src = '';
+      URL.revokeObjectURL(url);
+      audioRef.current = null;
+      setIsPlaying(false);
+    };
+  }, [wavBuffer]);
+
+  // Draw waveform
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || waveformData.length === 0) return;
@@ -70,8 +103,48 @@ export function WaveformDisplay({
     ctx.stroke();
   }, [waveformData, width, height]);
 
+  /**
+   * Handle click to play/pause audio
+   */
+  const handleClick = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      audio.play().catch((err) => {
+        console.error('[WaveformDisplay] Failed to play audio:', err);
+      });
+      setIsPlaying(true);
+    }
+  };
+
   return (
     <div className="waveform-display">
+      {/* Play/Pause Button */}
+      {wavBuffer && (
+        <button
+          className="waveform-play-button"
+          onClick={handleClick}
+          title={isPlaying ? 'Pause' : 'Play'}
+          type="button"
+        >
+          {isPlaying ? (
+            // Pause icon
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect x="6" y="5" width="4" height="14" fill="currentColor" />
+              <rect x="14" y="5" width="4" height="14" fill="currentColor" />
+            </svg>
+          ) : (
+            // Play icon
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M8 5v14l11-7z" fill="currentColor" />
+            </svg>
+          )}
+        </button>
+      )}
       <canvas ref={canvasRef} className="waveform-canvas" />
     </div>
   );
