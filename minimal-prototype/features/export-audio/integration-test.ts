@@ -258,8 +258,97 @@ async function loadOPL3Library(): Promise<void> {
   }
 }
 
+// Export RPG Adventure pattern
+async function exportRPGAdventure() {
+  const result = document.getElementById('rpg-result')!;
+  result.innerHTML = 'Exporting RPG Adventure pattern...\n\n';
+  result.className = 'result';
+
+  try {
+    // Step 1: Load pattern from YAML
+    result.innerHTML += 'Step 1: Loading rpg-adventure.yaml...\n';
+    const { loadPattern } = await import('../../src/utils/patternLoader');
+    const pattern = await loadPattern('rpg-adventure');
+
+    result.innerHTML += '✓ Pattern loaded\n';
+    result.innerHTML += `  - Name: ${pattern.name}\n`;
+    result.innerHTML += `  - Description: ${pattern.description}\n`;
+    result.innerHTML += `  - Rows: ${pattern.rows}\n`;
+    result.innerHTML += `  - Tracks: ${pattern.tracks}\n`;
+    result.innerHTML += `  - BPM: ${pattern.bpm}\n`;
+    result.innerHTML += `  - Instruments: ${pattern.instruments.join(', ')}\n\n`;
+
+    // Step 2: Calculate expected duration
+    const bpm = pattern.bpm || 120;
+    const rowsPerBeat = 4;
+    const secondsPerRow = 60 / (bpm * rowsPerBeat);
+    const durationSeconds = pattern.rows * secondsPerRow;
+    result.innerHTML += `Expected duration: ${durationSeconds.toFixed(2)}s (${Math.floor(durationSeconds / 60)}:${(durationSeconds % 60).toFixed(0).padStart(2, '0')})\n\n`;
+
+    // Step 3: Render to WAV
+    result.innerHTML += 'Step 2: Rendering to WAV (auto-loading GENMIDI patches)...\n';
+    const { OfflineAudioRenderer } = await import('../../src/export/OfflineAudioRenderer');
+
+    let lastProgress = 0;
+    const startTime = Date.now();
+
+    const wavBuffer = await OfflineAudioRenderer.renderToWAV(
+      pattern,
+      null,  // Auto-load GENMIDI patches
+      (progress) => {
+        const percent = Math.round(progress * 100);
+        if (percent > lastProgress && percent % 10 === 0) {
+          const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+          result.innerHTML += `  Progress: ${percent}% (${elapsed}s elapsed)\n`;
+          lastProgress = percent;
+        }
+      }
+    );
+
+    const renderTime = ((Date.now() - startTime) / 1000).toFixed(2);
+    result.innerHTML += `\n✓ WAV generated: ${(wavBuffer.byteLength / 1024 / 1024).toFixed(2)} MB\n`;
+    result.innerHTML += `  Render time: ${renderTime}s\n\n`;
+
+    // Step 4: Download WAV file
+    result.innerHTML += 'Step 3: Downloading WAV file...\n';
+    const blob = new Blob([wavBuffer], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rpg-adventure.wav';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    result.innerHTML += '✓ WAV file downloaded: rpg-adventure.wav\n\n';
+
+    result.innerHTML += '✅ RPG ADVENTURE EXPORT SUCCESSFUL\n\n';
+    result.innerHTML += 'Verification steps:\n';
+    result.innerHTML += '1. Open rpg-adventure.wav in your media player\n';
+    result.innerHTML += '2. Verify it plays without errors\n';
+    result.innerHTML += `3. Check duration is approximately ${Math.floor(durationSeconds / 60)}:${(durationSeconds % 60).toFixed(0).padStart(2, '0')}\n`;
+    result.innerHTML += '4. Listen for 8 tracks of layered melody and harmony\n';
+    result.innerHTML += '5. Verify dual-voice richness (should sound fuller than single-voice)\n';
+    result.innerHTML += '6. Compare with real-time playback in main tracker';
+    result.className = 'result success';
+  } catch (error) {
+    result.innerHTML += `\n❌ RPG ADVENTURE EXPORT FAILED\n\n`;
+    result.innerHTML += `Error: ${error}\n\n`;
+    result.innerHTML += 'Possible causes:\n';
+    result.innerHTML += '- Pattern file not found or invalid\n';
+    result.innerHTML += '- GENMIDI patches failed to load\n';
+    result.innerHTML += '- OPL3 library initialization error\n';
+    result.innerHTML += '- Insufficient memory for large pattern\n\n';
+    result.innerHTML += 'Check console for detailed error information.';
+    result.className = 'result error';
+    console.error('RPG Adventure export error:', error);
+  }
+}
+
 // Make functions available globally for onclick handlers
 (window as any).testPhase1 = testPhase1;
 (window as any).testPhase2 = testPhase2;
 (window as any).testPhase3 = testPhase3;
 (window as any).runFullTest = runFullTest;
+(window as any).exportRPGAdventure = exportRPGAdventure;
