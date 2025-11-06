@@ -397,6 +397,151 @@ The same musical phrase clearly speeds up across the 3 sections, proving:
 
 ---
 
+## Prototype 5: Full Song Export
+
+### Goal
+Export complete RPG Adventure pattern (64 rows × 8 tracks) using GENMIDI instrument patches.
+
+### What Worked
+
+✅ **GENMIDI Patch Loading**
+
+Successfully loaded patches 0-3 from GENMIDI.json:
+- Patch 0: Acoustic Grand Piano
+- Patch 1: Bright Acoustic Piano
+- Patch 2: Electric Grand Piano
+- Patch 3: Honky-tonk Piano
+
+```typescript
+async function loadGENMIDIPatches(): Promise<OPLPatch[]> {
+  const response = await fetch('/instruments/GENMIDI.json');
+  const genmidi = await response.json();
+
+  // Convert GENMIDI format to OPLPatch format
+  for (let i = 0; i < 4; i++) {
+    const inst = genmidi.instruments[i];
+    const modulator: OPLOperator = {
+      attackRate: inst.voice1.mod.attack,
+      decayRate: inst.voice1.mod.decay,
+      // ... all operator parameters
+    };
+    // Same for carrier
+  }
+}
+```
+
+✅ **8-Track Polyphonic Rendering**
+
+Extended from 4 tracks to 8 with proper channel allocation:
+```typescript
+const CHANNEL_OFFSETS = [
+  { modulator: 0x00, carrier: 0x03, channel: 0 },  // Track 0
+  { modulator: 0x01, carrier: 0x04, channel: 1 },  // Track 1
+  { modulator: 0x02, carrier: 0x05, channel: 2 },  // Track 2
+  { modulator: 0x08, carrier: 0x0B, channel: 3 },  // Track 3
+  { modulator: 0x09, carrier: 0x0C, channel: 4 },  // Track 4
+  { modulator: 0x0A, carrier: 0x0D, channel: 5 },  // Track 5
+  { modulator: 0x10, carrier: 0x13, channel: 6 },  // Track 6
+  { modulator: 0x11, carrier: 0x14, channel: 7 },  // Track 7
+];
+```
+
+✅ **64-Row Pattern Processing**
+
+Hardcoded RPG Adventure pattern data validates real-world complexity:
+- 64 rows (4 bars)
+- 8 simultaneous tracks
+- Note sustain working correctly across all tracks
+- Clean polyphonic mixing
+
+✅ **Instrument Assignment from YAML**
+
+Used instrument mapping from pattern file:
+```typescript
+const INSTRUMENTS = [0, 1, 2, 3, 0, 1, 2, 3];
+// Tracks 0,4: Piano | Tracks 1,5: Bright Piano
+// Tracks 2,6: Electric Piano | Tracks 3,7: Honky-tonk
+```
+
+### Known Limitation: Dual-Voice Not Supported
+
+**Issue:** GENMIDI patches can use 2 OPL channels per note ("dual-voice mode") for richer sound.
+
+**Analysis:**
+```javascript
+// Heuristic from genmidiParser.ts
+function isDualVoiceWorthwhile(inst) {
+  if (inst.voice1.feedback !== inst.voice2.feedback) return true;
+  if (inst.voice1.additive !== inst.voice2.additive) return true;
+
+  const modDiff = operatorDistance(inst.voice1.mod, inst.voice2.mod);
+  const carDiff = operatorDistance(inst.voice1.car, inst.voice2.car);
+
+  return (modDiff + carDiff) > 10; // Threshold
+}
+```
+
+**Results for patches 0-3:**
+```
+Patch 0 (Acoustic Grand Piano): Dual-voice = false ✓
+Patch 1 (Bright Acoustic Piano): Dual-voice = true  ✗
+Patch 2 (Electric Grand Piano):  Dual-voice = true  ✗
+Patch 3 (Honky-tonk Piano):      Dual-voice = false ✓
+```
+
+**Impact:**
+- Tracks 1, 2, 5, 6 sound thinner than in tracker
+- Only voice1 is rendered (voice2 ignored)
+- Still musical and recognizable, just less rich
+
+**Why Not Implemented:**
+- Requires dynamic channel allocation (like SimpleSynth's ChannelManager)
+- Each dual-voice note needs 2 OPL channels allocated
+- Adds complexity: channel stealing, voice pairing, simultaneous triggering
+- Prototype validates core concepts; dual-voice is integration work
+
+**For Integration:**
+The tracker's SimpleSynth already has dual-voice support:
+```typescript
+// From SimpleSynth.noteOn() lines 391-436
+if (isDualVoice) {
+  const channels = this.channelManager.allocateDualChannels(noteId);
+  this.programVoice(ch1, patch.voice1!, patch);
+  this.programVoice(ch2, patch.voice2!, patch);
+  // Trigger both channels...
+}
+```
+
+This logic can be adapted for offline rendering.
+
+### Key Insights
+
+1. **GENMIDI is the real instrument source**
+   - The tracker uses GENMIDI.json (128 patches from DOOM/Heretic)
+   - defaultPatches.ts is just a fallback
+   - Must load actual GENMIDI data for matching sound
+
+2. **Single-voice is acceptable for prototyping**
+   - Validates 90% of the export pipeline
+   - Proves pattern rendering, timing, sustain all work
+   - Dual-voice is "nice to have", not critical for proof-of-concept
+
+3. **Instrument conversion must match genmidiParser.ts**
+   - Same operator field mapping
+   - Same bit-packing in writeOperatorRegisters()
+   - Same feedback/connection logic
+
+4. **Static channel allocation works for prototypes**
+   - Track N → Channel N mapping is simple
+   - No channel stealing needed for 8 tracks (18 channels available)
+   - Dynamic allocation only needed for dual-voice
+
+### Files Created
+- `prototype-5-full-song.html`
+- `prototype-5-full-song.ts`
+
+---
+
 ## Cross-Cutting Lessons
 
 ### 1. OPL3 Register Programming

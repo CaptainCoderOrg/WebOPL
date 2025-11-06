@@ -14,7 +14,7 @@
 
 ## Current Status
 
-**Phase:** Prototyping COMPLETE! (4 of 4 ✅)
+**Phase:** Prototyping COMPLETE! (5 of 5 ✅)
 
 **Completed:**
 - ✅ Requirements analysis
@@ -26,10 +26,16 @@
 - ✅ Prototype 2: Instrument switching (works!)
 - ✅ Prototype 3: Polyphonic + sustain (CRITICAL TEST PASSED!)
 - ✅ Prototype 4: Tempo changes (works!)
+- ✅ Prototype 5: Full song with GENMIDI patches (works with known limitation!)
 - ✅ Lessons learned documented
 
+**Known Limitation:**
+- Prototype 5 uses single-voice mode only
+- GENMIDI patches 1 & 2 (Bright Acoustic Piano, Electric Grand Piano) sound thinner than tracker
+- Dual-voice support requires channel allocation and is planned for integration phase
+
 **Next Steps:**
-1. Integration into main tracker app
+1. Integration into main tracker app (with dual-voice support)
 2. User testing with real patterns
 
 ---
