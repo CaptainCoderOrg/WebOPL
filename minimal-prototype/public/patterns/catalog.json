@@ -30,6 +30,12 @@
     "file": "space-battle.yaml"
   },
   {
+    "id": "tropical-sunset",
+    "name": "Tropical Sunset",
+    "description": "Laid-back tropical beach music with marimbas and island percussion",
+    "file": "tropical-sunset.yaml"
+  },
+  {
     "id": "orchestral-fanfare",
     "name": "Orchestral Fanfare",
     "description": "Triumphant orchestral fanfare with full brass and string sections",
