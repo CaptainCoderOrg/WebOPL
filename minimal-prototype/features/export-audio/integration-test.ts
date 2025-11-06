@@ -165,42 +165,38 @@ async function runFullTest() {
   result.className = 'result';
 
   try {
-    // Load test pattern (simple 4-row, 2-track test)
+    // Load test pattern (simple 4-row, 2-track test) in PatternFile format
     result.innerHTML += 'Step 1: Loading test pattern...\n';
     const testPattern = {
       name: 'Integration Test Pattern',
-      tracks: ['Track 0', 'Track 1'],
-      instruments: [0, 1],
-      rows: [
-        ['C-4', null],
-        [null, 'E-4'],
-        ['---', null],
-        [null, '---']
-      ],
-      rowsPerBeat: 4
+      description: 'Simple test with C-4 and E-4 notes',
+      author: 'Test Suite',
+      rows: 4,
+      tracks: 2,
+      bpm: 120,
+      instruments: [0, 1],  // GENMIDI patch indices
+      pattern: [
+        ['C-4', '---'],
+        ['---', 'E-4'],
+        ['OFF', '---'],
+        ['---', 'OFF']
+      ]
     };
-
-    // Note: These are placeholder patches. The actual GENMIDI patches will be loaded by OfflineAudioRenderer
-    const testPatches = [
-      { id: 0, name: 'Test Patch 0' },
-      { id: 1, name: 'Test Patch 1' }
-    ] as any;
 
     result.innerHTML += '✓ Test pattern loaded\n';
     result.innerHTML += `  - Pattern: ${testPattern.name}\n`;
-    result.innerHTML += `  - Rows: ${testPattern.rows.length}\n`;
-    result.innerHTML += `  - Tracks: ${testPattern.tracks.length}\n`;
-    result.innerHTML += `  - BPM: 120\n\n`;
+    result.innerHTML += `  - Rows: ${testPattern.rows}\n`;
+    result.innerHTML += `  - Tracks: ${testPattern.tracks}\n`;
+    result.innerHTML += `  - BPM: ${testPattern.bpm}\n\n`;
 
     // Render to WAV
-    result.innerHTML += 'Step 2: Rendering to WAV...\n';
+    result.innerHTML += 'Step 2: Rendering to WAV (will auto-load GENMIDI patches)...\n';
     const { OfflineAudioRenderer } = await import('../../src/export/OfflineAudioRenderer');
 
     let lastProgress = 0;
     const wavBuffer = await OfflineAudioRenderer.renderToWAV(
-      testPattern as any,
-      testPatches,
-      120,
+      testPattern,
+      null,  // Auto-load GENMIDI patches
       (progress) => {
         const percent = Math.round(progress * 100);
         if (percent > lastProgress) {
