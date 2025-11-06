@@ -304,11 +304,15 @@ export function ExportModal({
    * Flipped: -16 dB = 0% (left), 0 dB = 100% (right)
    */
   const dbToSlider = (db: number): number => {
-    if (db <= -3) {
+    // Handle exact boundary values to ensure perfect alignment with markers
+    if (db === -3) return 25;
+    if (db === -1) return 75;
+
+    if (db < -3) {
       // -16 to -3 dB → 0-25% slider
       const normalized = (db - (-16)) / 13; // 0-1 within -16 to -3 range
       return normalized * 25;
-    } else if (db <= -1) {
+    } else if (db < -1) {
       // -3 to -1 dB → 25-75% slider
       const normalized = (db - (-3)) / 2; // 0-1 within -3 to -1 range
       return 25 + normalized * 50;
@@ -326,6 +330,31 @@ export function ExportModal({
     const sliderValue = parseFloat(e.target.value);
     const db = sliderToDb(sliderValue);
     setNormalizeDb(db);
+  };
+
+  /**
+   * Handle keyboard arrow keys for fine adjustment
+   * Always adjusts by exactly 0.1 dB
+   */
+  const handleNormalizeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+
+      const dbStep = 0.1; // Always adjust by 0.1 dB
+      let newDb;
+
+      if (e.key === 'ArrowLeft') {
+        // Decrease dB (move left, quieter)
+        newDb = Math.max(-16, normalizeDb - dbStep);
+      } else {
+        // Increase dB (move right, louder)
+        newDb = Math.min(0, normalizeDb + dbStep);
+      }
+
+      // Round to nearest 0.1 to avoid floating point errors
+      newDb = Math.round(newDb * 10) / 10;
+      setNormalizeDb(newDb);
+    }
   };
 
   /**
@@ -650,108 +679,133 @@ export function ExportModal({
 
           {/* Normalize Option */}
           <div className="export-option">
-            <label className="export-checkbox-label">
-              <input
-                type="checkbox"
-                checked={normalizeEnabled}
-                onChange={(e) => setNormalizeEnabled(e.target.checked)}
-                className="export-checkbox"
-              />
-              <span className="export-checkbox-text">Normalize</span>
-            </label>
-
-            {normalizeEnabled && (
-              <div className="export-option-controls">
-                <label className="export-option-label">
-                  Target dB: <strong>{normalizeDb.toFixed(1)} dB</strong>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                <label className="export-checkbox-label" style={{ flexShrink: 0 }}>
+                  <input
+                    type="checkbox"
+                    checked={normalizeEnabled}
+                    onChange={(e) => setNormalizeEnabled(e.target.checked)}
+                    className="export-checkbox"
+                  />
+                  <span className="export-checkbox-text">Normalize</span>
                 </label>
 
-                {/* Slider with non-linear mapping */}
-                <div className="export-slider-container">
-                  {/* Visual marker labels at -3dB (25%) and -1dB (75%) */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '0',
-                      left: '25%',
-                      transform: 'translateX(-50%)',
-                      fontSize: '11px',
-                      color: '#4a9eff',
-                      fontWeight: 600,
-                      pointerEvents: 'none',
-                    }}
-                  >
-                    -3 dB
-                  </div>
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '0',
-                      left: '75%',
-                      transform: 'translateX(-50%)',
-                      fontSize: '11px',
-                      color: '#4a9eff',
-                      fontWeight: 600,
-                      pointerEvents: 'none',
-                    }}
-                  >
-                    -1 dB
-                  </div>
+                {normalizeEnabled && (
+                  <div style={{ flex: 1 }}>
+                    {/* Slider with non-linear mapping */}
+                    <div className="export-slider-container">
+                      {/* Visual marker labels at -3dB (25%) and -1dB (75%) */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '-24px',
+                          left: '25%',
+                          transform: 'translateX(-50%)',
+                          fontSize: '11px',
+                          color: '#4a9eff',
+                          fontWeight: 600,
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        -3 dB
+                      </div>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '-24px',
+                          left: '75%',
+                          transform: 'translateX(-50%)',
+                          fontSize: '11px',
+                          color: '#4a9eff',
+                          fontWeight: 600,
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        -1 dB
+                      </div>
 
-                  {/* Visual marker lines at -3dB (25%) and -1dB (75%) */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '24px',
-                      left: '25%',
-                      width: '2px',
-                      height: '10px',
-                      background: '#4a9eff',
-                      pointerEvents: 'none',
-                    }}
-                    title="-3 dB"
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '24px',
-                      left: '75%',
-                      width: '2px',
-                      height: '10px',
-                      background: '#4a9eff',
-                      pointerEvents: 'none',
-                    }}
-                    title="-1 dB"
-                  />
+                      {/* Visual marker lines at -3dB (25%) and -1dB (75%) */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '0',
+                          left: '25%',
+                          width: '2px',
+                          height: '10px',
+                          background: '#4a9eff',
+                          pointerEvents: 'none',
+                        }}
+                        title="-3 dB"
+                      />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '0',
+                          left: '75%',
+                          width: '2px',
+                          height: '10px',
+                          background: '#4a9eff',
+                          pointerEvents: 'none',
+                        }}
+                        title="-1 dB"
+                      />
 
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="0.1"
-                    value={dbToSlider(normalizeDb)}
-                    onChange={handleNormalizeSliderChange}
-                    className="export-slider"
-                  />
-                  <div className="export-slider-labels">
-                    <span>-16 dB</span>
-                    <span>0 dB</span>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        value={dbToSlider(normalizeDb)}
+                        onChange={handleNormalizeSliderChange}
+                        onKeyDown={handleNormalizeKeyDown}
+                        className="export-slider"
+                        disabled={!normalizeEnabled}
+                      />
+
+                      {/* Current value label positioned at slider thumb */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '22px',
+                          left: `${dbToSlider(normalizeDb)}%`,
+                          transform: 'translateX(-50%)',
+                          fontSize: '13px',
+                          color: '#e0e0e0',
+                          fontWeight: 600,
+                          pointerEvents: 'none',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {normalizeDb.toFixed(1)} dB
+                      </div>
+
+                      <div className="export-slider-labels">
+                        <span>-16 dB</span>
+                        <span>0 dB</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                {/* Warning when outside typical range */}
-                {(normalizeDb < -3 || normalizeDb > -1) && (
-                  <p className="export-option-hint" style={{ color: '#ffaa44', fontWeight: 500 }}>
-                    ⚠️ Typical normalization is between -1 dB and -3 dB
-                  </p>
                 )}
-
-                <p className="export-option-hint">
-                  Sets the peak level of the audio. -1 dB to -3 dB is the typical range for
-                  preventing clipping while maintaining loudness.
-                </p>
               </div>
-            )}
+
+              {/* Warning and helper text - spans full width */}
+              {normalizeEnabled && (
+                <>
+                  {/* Warning when outside typical range */}
+                  {(normalizeDb < -3 || normalizeDb > -1) && (
+                    <p className="export-option-hint" style={{ color: '#ffaa44', fontWeight: 500, margin: 0 }}>
+                      ⚠️ Typical normalization is between -1 dB and -3 dB
+                    </p>
+                  )}
+
+                  <p className="export-option-hint" style={{ margin: 0 }}>
+                    Sets the peak level of the audio. -1 dB to -3 dB is the typical range for
+                    preventing clipping while maintaining loudness.
+                  </p>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
