@@ -178,9 +178,9 @@ export function WaveformDisplay({
   }, [waveformData, width, height, wavBuffer, playbackPosition]);
 
   /**
-   * Handle click to play/pause audio
+   * Handle play/pause button click
    */
-  const handleClick = () => {
+  const handlePlayPauseClick = () => {
     const audioContext = audioContextRef.current;
     const audioBuffer = audioBufferRef.current;
 
@@ -194,7 +194,7 @@ export function WaveformDisplay({
         sourceNodeRef.current = null;
       }
 
-      // Calculate where we paused
+      // Calculate where we paused (same formula as position tracking)
       const elapsed = audioContext.currentTime - startTimeRef.current + pauseTimeRef.current;
       pauseTimeRef.current = elapsed % audioBuffer.duration;
 
@@ -209,11 +209,57 @@ export function WaveformDisplay({
       // Start from pause position (or 0 if first play)
       source.start(0, pauseTimeRef.current);
 
-      // Record start time
-      startTimeRef.current = audioContext.currentTime - pauseTimeRef.current;
+      // Record start time - use same approach as seeking
+      startTimeRef.current = audioContext.currentTime;
 
       sourceNodeRef.current = source;
       setIsPlaying(true);
+    }
+  };
+
+  /**
+   * Handle waveform canvas click to seek
+   */
+  const handleWaveformClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    const audioContext = audioContextRef.current;
+    const audioBuffer = audioBufferRef.current;
+
+    if (!canvas || !audioContext || !audioBuffer) return;
+
+    // Get click position relative to canvas rendered size
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const clickPosition = x / rect.width; // 0-1 normalized (use rendered width, not canvas.width)
+
+    // Clamp to 0-1 range
+    const clampedPosition = Math.max(0, Math.min(1, clickPosition));
+
+    // Calculate new time position
+    const newTime = clampedPosition * audioBuffer.duration;
+
+    // If playing, restart from new position
+    if (isPlaying && sourceNodeRef.current) {
+      sourceNodeRef.current.stop();
+      sourceNodeRef.current.disconnect();
+      sourceNodeRef.current = null;
+
+      // Create new source at the clicked position
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.loop = true;
+      source.connect(audioContext.destination);
+      source.start(0, newTime);
+
+      // Update timing - startTimeRef should be when we started, adjusted for the offset
+      startTimeRef.current = audioContext.currentTime;
+      pauseTimeRef.current = newTime;
+
+      sourceNodeRef.current = source;
+    } else {
+      // If paused, just update the pause position
+      pauseTimeRef.current = newTime;
+      setPlaybackPosition(clampedPosition);
     }
   };
 
@@ -223,7 +269,7 @@ export function WaveformDisplay({
       {wavBuffer && (
         <button
           className="waveform-play-button"
-          onClick={handleClick}
+          onClick={handlePlayPauseClick}
           title={isPlaying ? 'Pause' : 'Play'}
           type="button"
         >
@@ -242,7 +288,12 @@ export function WaveformDisplay({
         </button>
       )}
       <div className="waveform-display">
-        <canvas ref={canvasRef} className="waveform-canvas" />
+        <canvas
+          ref={canvasRef}
+          className="waveform-canvas"
+          onClick={handleWaveformClick}
+          style={{ cursor: wavBuffer ? 'pointer' : 'default' }}
+        />
       </div>
     </>
   );
