@@ -7,13 +7,14 @@
 ## Quick Links
 
 - **[OVERVIEW.md](OVERVIEW.md)** - Comprehensive plan and requirements
-- **[prototypes/](prototypes/)** - Incremental prototypes (to be created)
+- **[prototypes/](prototypes/)** - Incremental prototypes
+- **[LESSONS_LEARNED.md](LESSONS_LEARNED.md)** - Key insights and solutions from all prototypes
 
 ---
 
 ## Current Status
 
-**Phase:** Prototyping (3 of 4 complete)
+**Phase:** Prototyping COMPLETE! (4 of 4 ✅)
 
 **Completed:**
 - ✅ Requirements analysis
@@ -24,13 +25,12 @@
 - ✅ Frequency calculation fixed
 - ✅ Prototype 2: Instrument switching (works!)
 - ✅ Prototype 3: Polyphonic + sustain (CRITICAL TEST PASSED!)
-
-**In Progress:**
-- 🔄 Prototype 4: Tempo changes (final prototype - ready to test!)
+- ✅ Prototype 4: Tempo changes (works!)
+- ✅ Lessons learned documented
 
 **Next Steps:**
-1. Test Prototype 4 (tempo changes)
-2. Integration into main tracker app
+1. Integration into main tracker app
+2. User testing with real patterns
 
 ---
 
@@ -52,9 +52,9 @@
 **Status:** Complete! (CRITICAL TEST PASSED!)
 **Files:** `prototypes/prototype-3-*`
 
-### Prototype 4: Tempo Changes 🔄
+### Prototype 4: Tempo Changes ✅
 **Goal:** Same pattern at different BPMs
-**Status:** Ready to test!
+**Status:** Complete!
 **Files:** `prototypes/prototype-4-*`
 
 ---
@@ -68,19 +68,39 @@
 
 ---
 
-## Key Learnings (To be updated)
+## Key Learnings
 
-### What Works
+**📖 See [LESSONS_LEARNED.md](LESSONS_LEARNED.md) for comprehensive documentation!**
 
-- TBD after prototypes
+### Critical Discoveries
 
-### What Doesn't Work
+✅ **Frequency Calculation Bug (Fixed)**
+- Block calculation was wrong, causing F-num overflow
+- Fix: `block = Math.floor(midiNote / 12) - 1`
+- See: [BUGFIX_FREQUENCY.md](prototypes/BUGFIX_FREQUENCY.md)
 
-- TBD after prototypes
+✅ **Note Sustain Mechanism (Critical!)**
+- `null` in pattern = Do NOTHING (let note continue)
+- This is what the real-time player does
+- Previous attempts failed by retriggering on `---`
 
-### Gotchas
+✅ **Envelope Retriggering Solution**
+- Must key-off before key-on to retrigger attack
+- Sequence: `writeReg(0xB0, 0x00)` → `writeReg(0xB0, keyOnByte)`
+- Piano chord now "strikes" properly on each beat
 
-- TBD after prototypes
+✅ **One Sample at a Time Pattern**
+```typescript
+for (let i = 0; i < totalSamples; i++) {
+  chip.read(buffer);  // ONE sample per call
+  leftChannel[i] = buffer[0];
+  rightChannel[i] = buffer[1];
+}
+```
+
+### Integration-Ready
+
+All 4 prototypes passed successfully. The approach is validated and ready for integration into the main tracker application.
 
 ---
 
