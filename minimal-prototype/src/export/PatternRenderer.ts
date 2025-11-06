@@ -56,6 +56,9 @@ export class PatternRenderer {
         if (!cell) continue; // Empty cell
 
         if (cell === '---') {
+          // Sustain/continue - do nothing, let note keep playing
+          continue;
+        } else if (cell === 'OFF') {
           // Note off
           const activeMidiNote = activeNotes.get(trackIndex);
           if (activeMidiNote !== undefined) {
