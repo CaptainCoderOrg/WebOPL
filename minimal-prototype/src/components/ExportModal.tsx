@@ -6,7 +6,7 @@
  * 2. Seamless Loop Export - Context-aware rendering for perfect loops
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { OPLPatch } from '../types/OPLPatch';
 import {
   calculateDuration,
@@ -21,6 +21,7 @@ import {
   downloadWAV,
 } from '../export/exportPattern';
 import { generateWaveformFromWAV } from '../utils/waveformGenerator';
+import { normalizeAudio } from '../utils/audioProcessing';
 import { WaveformDisplay } from './WaveformDisplay';
 import './ExportModal.css';
 
@@ -81,7 +82,12 @@ export function ExportModal({
   const [error, setError] = useState<string | null>(null);
   const [abortController, setAbortController] = useState<AbortController | null>(null);
   const [generatedWAV, setGeneratedWAV] = useState<ArrayBuffer | null>(null);
+  const [originalWAV, setOriginalWAV] = useState<ArrayBuffer | null>(null);
   const [waveformData, setWaveformData] = useState<number[] | null>(null);
+
+  // Post-processing state
+  const [normalizeEnabled, setNormalizeEnabled] = useState(false);
+  const [normalizeDb, setNormalizeDb] = useState<number | ''>(-0.1); // Target dB (slightly below 0 to prevent clipping)
 
   // Calculate pattern info
   const rows = pattern.length;
@@ -151,7 +157,10 @@ export function ExportModal({
         });
       }
 
-      // Store the generated WAV
+      // Store the original WAV (before any post-processing)
+      setOriginalWAV(wavBuffer);
+
+      // Store the generated WAV (will be updated by post-processing)
       setGeneratedWAV(wavBuffer);
 
       // Generate waveform data for visualization
@@ -259,6 +268,25 @@ export function ExportModal({
       setEditingCustomLoop(false);
     }
   };
+
+  /**
+   * Apply post-processing (normalization) when settings change
+   */
+  useEffect(() => {
+    if (!originalWAV) return;
+
+    let processedWAV = originalWAV;
+
+    // Apply normalization if enabled
+    if (normalizeEnabled && typeof normalizeDb === 'number') {
+      processedWAV = normalizeAudio(originalWAV, normalizeDb);
+    }
+
+    // Update the generated WAV and waveform
+    setGeneratedWAV(processedWAV);
+    const waveform = generateWaveformFromWAV(processedWAV, 1000);
+    setWaveformData(waveform);
+  }, [normalizeEnabled, normalizeDb, originalWAV]);
 
   return (
     <div className="export-modal">
@@ -552,6 +580,55 @@ export function ExportModal({
                 Save
               </button>
             ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* Post-Processing Section */}
+      {generatedWAV && !isExporting && (
+        <div className="export-options-section">
+          <h3 className="export-section-title">Post-Processing</h3>
+
+          {/* Normalize Option */}
+          <div className="export-option">
+            <label className="export-checkbox-label">
+              <input
+                type="checkbox"
+                checked={normalizeEnabled}
+                onChange={(e) => setNormalizeEnabled(e.target.checked)}
+                className="export-checkbox"
+              />
+              <span className="export-checkbox-text">Normalize</span>
+            </label>
+
+            {normalizeEnabled && (
+              <div className="export-option-controls">
+                <label className="export-number-label">
+                  Target dB:
+                  <input
+                    type="number"
+                    min="-12"
+                    max="0"
+                    step="0.1"
+                    value={normalizeDb}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setNormalizeDb(val === '' ? '' : parseFloat(val));
+                    }}
+                    onBlur={() => {
+                      if (normalizeDb === '' || isNaN(normalizeDb)) {
+                        setNormalizeDb(-0.1);
+                      }
+                    }}
+                    className="export-number-input"
+                  />
+                </label>
+                <p className="export-option-hint">
+                  Sets the peak level of the audio. 0 dB is maximum volume, -0.1 dB prevents clipping.
+                  Lower values (e.g., -3 dB) provide more headroom.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}
