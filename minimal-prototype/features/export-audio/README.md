@@ -30,10 +30,11 @@
 
 ## Prototype Sequence
 
-### Prototype 1: Single Tone WAV ⬜
+### Prototype 1: Single Tone WAV 🔄
 **Goal:** 1-second C-4 note exported as WAV
-**Status:** Not started
+**Status:** Ready to test!
 **Files:** `prototypes/prototype-1-*`
+**Guide:** [PROTOTYPE_1_GUIDE.md](prototypes/PROTOTYPE_1_GUIDE.md)
 
 ### Prototype 2: Instrument Switch ⬜
 **Goal:** Two notes with different instruments

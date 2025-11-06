@@ -267,22 +267,21 @@ async function testTriggerNote(): Promise<TestResult> {
     }
 
     // Calculate frequency for middle C (261.63 Hz)
-    // Using formula from SimpleSynth
+    // Using correct OPL3 algorithm
     const midiNote = 60; // Middle C
     const frequency = 440.0 * Math.pow(2, (midiNote - 69) / 12.0);
 
     log(`  MIDI note: ${midiNote}`);
     log(`  Frequency: ${frequency.toFixed(2)} Hz`);
 
-    // Calculate F-num and block
-    let block = 0;
-    let testFreq = frequency;
-    while (testFreq >= 1024 && block < 7) {
-      testFreq /= 2;
-      block++;
-    }
+    // Calculate block (octave selector)
+    // For MIDI 60 (C-4): block = floor(60/12) - 1 = 4
+    const block = Math.max(0, Math.min(7, Math.floor(midiNote / 12) - 1));
 
-    const fnum = Math.round((frequency * Math.pow(2, 20 - block)) / 49716);
+    // Calculate F-num for this block (must be 0-1023)
+    const fnum = Math.max(0, Math.min(1023,
+      Math.round((frequency * Math.pow(2, 20 - block)) / 49716)
+    ));
 
     log(`  Block: ${block}`);
     log(`  F-num: ${fnum}`);
