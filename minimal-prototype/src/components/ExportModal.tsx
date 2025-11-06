@@ -87,7 +87,7 @@ export function ExportModal({
 
   // Post-processing state
   const [normalizeEnabled, setNormalizeEnabled] = useState(false);
-  const [normalizeDb, setNormalizeDb] = useState<number | ''>(-0.1); // Target dB (slightly below 0 to prevent clipping)
+  const [normalizeDb, setNormalizeDb] = useState<number>(-1); // Target dB (default to -1 dB)
 
   // Calculate pattern info
   const rows = pattern.length;
@@ -267,6 +267,65 @@ export function ExportModal({
     } else if (e.key === 'Escape') {
       setEditingCustomLoop(false);
     }
+  };
+
+  /**
+   * Convert slider position (0-100) to dB value (-16 to 0)
+   * Non-linear mapping with 50% of slider dedicated to -1dB to -3dB
+   * Flipped: 0% = -16 dB (left), 100% = 0 dB (right)
+   */
+  const sliderToDb = (sliderValue: number): number => {
+    // Piecewise linear mapping (inverted):
+    // 0-25% slider → -16 to -3 dB
+    // 25-75% slider → -3 to -1 dB (50% of slider for 2 dB range)
+    // 75-100% slider → -1 to 0 dB
+
+    if (sliderValue <= 25) {
+      // 0-25% → -16 to -3 dB
+      const normalized = sliderValue / 25; // 0-1 within this range
+      const db = -16 + (normalized * 13); // -16 to -3
+      return Math.round(db * 10) / 10; // Round to 0.1
+    } else if (sliderValue <= 75) {
+      // 25-75% → -3 to -1 dB
+      const normalized = (sliderValue - 25) / 50; // 0-1 within this range
+      const db = -3 + (normalized * 2); // -3 to -1
+      return Math.round(db * 10) / 10; // Round to 0.1
+    } else {
+      // 75-100% → -1 to 0 dB
+      const normalized = (sliderValue - 75) / 25; // 0-1 within this range
+      const db = -1 + (normalized * 1); // -1 to 0
+      return Math.round(db * 10) / 10; // Round to 0.1
+    }
+  };
+
+  /**
+   * Convert dB value (-16 to 0) to slider position (0-100)
+   * Inverse of sliderToDb
+   * Flipped: -16 dB = 0% (left), 0 dB = 100% (right)
+   */
+  const dbToSlider = (db: number): number => {
+    if (db <= -3) {
+      // -16 to -3 dB → 0-25% slider
+      const normalized = (db - (-16)) / 13; // 0-1 within -16 to -3 range
+      return normalized * 25;
+    } else if (db <= -1) {
+      // -3 to -1 dB → 25-75% slider
+      const normalized = (db - (-3)) / 2; // 0-1 within -3 to -1 range
+      return 25 + normalized * 50;
+    } else {
+      // -1 to 0 dB → 75-100% slider
+      const normalized = (db - (-1)) / 1; // 0-1 within -1 to 0 range
+      return 75 + normalized * 25;
+    }
+  };
+
+  /**
+   * Handle slider change - convert to dB with snapping
+   */
+  const handleNormalizeSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sliderValue = parseFloat(e.target.value);
+    const db = sliderToDb(sliderValue);
+    setNormalizeDb(db);
   };
 
   /**
@@ -603,29 +662,93 @@ export function ExportModal({
 
             {normalizeEnabled && (
               <div className="export-option-controls">
-                <label className="export-number-label">
-                  Target dB:
-                  <input
-                    type="number"
-                    min="-12"
-                    max="0"
-                    step="0.1"
-                    value={normalizeDb}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setNormalizeDb(val === '' ? '' : parseFloat(val));
-                    }}
-                    onBlur={() => {
-                      if (normalizeDb === '' || isNaN(normalizeDb)) {
-                        setNormalizeDb(-0.1);
-                      }
-                    }}
-                    className="export-number-input"
-                  />
+                <label className="export-option-label">
+                  Target dB: <strong>{normalizeDb.toFixed(1)} dB</strong>
                 </label>
+
+                {/* Slider with non-linear mapping */}
+                <div className="export-slider-container">
+                  {/* Visual marker labels at -3dB (25%) and -1dB (75%) */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '0',
+                      left: '25%',
+                      transform: 'translateX(-50%)',
+                      fontSize: '11px',
+                      color: '#4a9eff',
+                      fontWeight: 600,
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    -3 dB
+                  </div>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '0',
+                      left: '75%',
+                      transform: 'translateX(-50%)',
+                      fontSize: '11px',
+                      color: '#4a9eff',
+                      fontWeight: 600,
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    -1 dB
+                  </div>
+
+                  {/* Visual marker lines at -3dB (25%) and -1dB (75%) */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '24px',
+                      left: '25%',
+                      width: '2px',
+                      height: '10px',
+                      background: '#4a9eff',
+                      pointerEvents: 'none',
+                    }}
+                    title="-3 dB"
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '24px',
+                      left: '75%',
+                      width: '2px',
+                      height: '10px',
+                      background: '#4a9eff',
+                      pointerEvents: 'none',
+                    }}
+                    title="-1 dB"
+                  />
+
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    value={dbToSlider(normalizeDb)}
+                    onChange={handleNormalizeSliderChange}
+                    className="export-slider"
+                  />
+                  <div className="export-slider-labels">
+                    <span>-16 dB</span>
+                    <span>0 dB</span>
+                  </div>
+                </div>
+
+                {/* Warning when outside typical range */}
+                {(normalizeDb < -3 || normalizeDb > -1) && (
+                  <p className="export-option-hint" style={{ color: '#ffaa44', fontWeight: 500 }}>
+                    ⚠️ Typical normalization is between -1 dB and -3 dB
+                  </p>
+                )}
+
                 <p className="export-option-hint">
-                  Sets the peak level of the audio. 0 dB is maximum volume, -0.1 dB prevents clipping.
-                  Lower values (e.g., -3 dB) provide more headroom.
+                  Sets the peak level of the audio. -1 dB to -3 dB is the typical range for
+                  preventing clipping while maintaining loudness.
                 </p>
               </div>
             )}

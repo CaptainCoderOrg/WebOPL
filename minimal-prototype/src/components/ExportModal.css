@@ -248,6 +248,12 @@
 }
 
 /* Slider Styles */
+.export-slider-container {
+  position: relative;
+  padding-top: 24px;
+  margin-bottom: 8px;
+}
+
 .export-slider {
   width: 100%;
   margin: 8px 0;
