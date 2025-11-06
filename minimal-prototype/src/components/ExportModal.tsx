@@ -89,7 +89,7 @@ export function ExportModal({
   const [waveformData, setWaveformData] = useState<number[] | null>(null);
 
   // Post-processing state
-  const [normalizeEnabled, setNormalizeEnabled] = useState(false);
+  const [normalizeEnabled, setNormalizeEnabled] = useState(true); // Enabled by default
   const [normalizeDb, setNormalizeDb] = useState<number>(-1); // Target dB (default to -1 dB)
 
   // Calculate pattern info
@@ -234,26 +234,28 @@ export function ExportModal({
    */
   const handleCustomLoopClick = () => {
     setEditingCustomLoop(true);
-    setCustomLoopInput(loopCount > 4 ? String(loopCount) : '5');
+    // Display the loop count minus 1 (e.g., if loopCount is 6, show "5")
+    setCustomLoopInput(loopCount > 4 ? String(loopCount - 1) : '5');
   };
 
   /**
    * Validate and apply custom loop count
+   * User enters display value (e.g., "5x"), we store as loop count (e.g., 6)
    */
   const applyCustomLoopCount = () => {
     const parsed = parseInt(customLoopInput, 10);
 
-    if (isNaN(parsed) || parsed < 1) {
-      // Invalid or < 1: set to 1 and select button 1
+    if (isNaN(parsed) || parsed < 0) {
+      // Invalid or < 0: set to 1 (0x) and select button 1
       setLoopCount(1);
       setEditingCustomLoop(false);
-    } else if (parsed >= 1 && parsed <= 4) {
-      // 1-4: select the appropriate button
-      setLoopCount(parsed);
+    } else if (parsed >= 0 && parsed <= 3) {
+      // 0-3: select the appropriate button (parsed + 1 = actual loop count)
+      setLoopCount(parsed + 1);
       setEditingCustomLoop(false);
     } else {
-      // > 4: keep custom
-      setLoopCount(parsed);
+      // >= 4: keep custom (parsed + 1 = actual loop count)
+      setLoopCount(parsed + 1);
       setEditingCustomLoop(false);
     }
   };
@@ -466,13 +468,13 @@ export function ExportModal({
         <p className="export-mode-description">
           {seamlessLoop
             ? 'Uses context-aware rendering to create a perfect loop with no audible clicks at the loop boundary.'
-            : 'Standard export with optional fade in/out to prevent clicks at start/end.'}
+            : 'Normal render that starts on the first beat and "rings" on the last notes.'}
         </p>
 
         {/* Loop Count */}
         <div className="export-option" style={{ marginTop: '20px' }}>
           <div className="export-loop-count-row">
-            <label className="export-option-label">Loop Count</label>
+            <label className="export-option-label">Loop</label>
             <div className="export-loop-count-buttons">
               {[1, 2, 3, 4].map((count) => (
                 <button
@@ -483,10 +485,10 @@ export function ExportModal({
                   }`}
                   onClick={() => handleLoopCountClick(count)}
                 >
-                  {count}
+                  {count - 1}x
                 </button>
               ))}
-              {/* Custom Loop Count (5+) */}
+              {/* Custom Loop Count (4+) */}
               {editingCustomLoop ? (
                 <input
                   type="text"
@@ -495,7 +497,7 @@ export function ExportModal({
                   onMouseLeave={handleCustomLoopMouseLeave}
                   onKeyDown={handleCustomLoopKeyDown}
                   className="export-loop-count-input"
-                  placeholder="5+"
+                  placeholder="4+"
                   autoFocus
                 />
               ) : (
@@ -506,7 +508,7 @@ export function ExportModal({
                   }`}
                   onClick={handleCustomLoopClick}
                 >
-                  {loopCount > 4 ? loopCount : '5+'}
+                  {loopCount > 4 ? `${loopCount - 1}x` : '4x+'}
                 </button>
               )}
             </div>
