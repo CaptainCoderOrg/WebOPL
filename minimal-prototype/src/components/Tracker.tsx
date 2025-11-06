@@ -12,7 +12,10 @@ import type { PatternCatalogEntry } from '../types/PatternFile';
 import { noteNameToMIDI } from '../utils/noteConversion';
 import { validatePattern, formatValidationErrors } from '../utils/patternValidation';
 import { loadPatternCatalog, loadPattern } from '../utils/patternLoader';
+import { hasNotes } from '../utils/exportHelpers';
 import { TrackerGrid } from './TrackerGrid';
+import { Modal } from './Modal';
+import { ExportModal } from './ExportModal';
 import './Tracker.css';
 
 export interface TrackerProps {
@@ -78,6 +81,9 @@ export function Tracker({
 
   // Selected example pattern
   const [selectedExample, setSelectedExample] = useState<string>('major-scale');
+
+  // Export modal state
+  const [showExportModal, setShowExportModal] = useState(false);
 
   /**
    * Load pattern catalog on mount
@@ -516,6 +522,17 @@ export function Tracker({
           >
             + Track
           </button>
+          <button
+            onClick={() => setShowExportModal(true)}
+            disabled={isPlaying || !hasNotes(pattern)}
+            title={
+              !hasNotes(pattern)
+                ? 'Pattern is empty - add some notes first'
+                : 'Export pattern to WAV file'
+            }
+          >
+            💾 Export
+          </button>
         </div>
       </div>
 
@@ -649,6 +666,29 @@ export function Tracker({
           </div>
         )}
       </div>
+
+      {/* Export Modal */}
+      {showExportModal && (
+        <Modal
+          isOpen={showExportModal}
+          onClose={() => setShowExportModal(false)}
+          title="Export to WAV"
+          width="medium"
+        >
+          <ExportModal
+            patternName={selectedExample || 'Untitled Pattern'}
+            pattern={pattern}
+            trackInstruments={trackInstruments}
+            instrumentBank={instrumentBank}
+            bpm={bpm}
+            onClose={() => setShowExportModal(false)}
+            onExportComplete={(filename) => {
+              console.log(`[Tracker] Export complete: ${filename}`);
+              setShowExportModal(false);
+            }}
+          />
+        </Modal>
+      )}
     </div>
   );
 }
