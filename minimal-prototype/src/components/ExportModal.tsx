@@ -20,6 +20,8 @@ import {
   exportSeamlessLoop,
   downloadWAV,
 } from '../export/exportPattern';
+import { generateWaveformFromWAV } from '../utils/waveformGenerator';
+import { WaveformDisplay } from './WaveformDisplay';
 import './ExportModal.css';
 
 export interface ExportModalProps {
@@ -79,6 +81,7 @@ export function ExportModal({
   const [error, setError] = useState<string | null>(null);
   const [abortController, setAbortController] = useState<AbortController | null>(null);
   const [generatedWAV, setGeneratedWAV] = useState<ArrayBuffer | null>(null);
+  const [waveformData, setWaveformData] = useState<number[] | null>(null);
 
   // Calculate pattern info
   const rows = pattern.length;
@@ -108,6 +111,7 @@ export function ExportModal({
       setProgressMessage('Starting export...');
       setError(null);
       setGeneratedWAV(null);
+      setWaveformData(null);
 
       const onProgress = (progress: number, message: string) => {
         setProgress(progress);
@@ -149,6 +153,11 @@ export function ExportModal({
 
       // Store the generated WAV
       setGeneratedWAV(wavBuffer);
+
+      // Generate waveform data for visualization
+      const waveform = generateWaveformFromWAV(wavBuffer, 1000);
+      setWaveformData(waveform);
+
       setIsExporting(false);
       setAbortController(null);
 
@@ -501,19 +510,26 @@ export function ExportModal({
         </div>
       </div>
 
-      {/* Progress Section */}
+      {/* Progress / Waveform Section */}
       {(isExporting || generatedWAV) && (
         <div className="export-progress-section">
           <div className="export-progress-row">
-            <div className="export-progress-bar">
-              <div
-                className="export-progress-fill"
-                style={{ width: `${progress}%` }}
-              />
-              <span className="export-progress-text">
-                {progress}% - {progressMessage || 'Processing...'}
-              </span>
-            </div>
+            {/* Show progress bar while exporting, waveform when complete */}
+            {isExporting ? (
+              <div className="export-progress-bar">
+                <div
+                  className="export-progress-fill"
+                  style={{ width: `${progress}%` }}
+                />
+                <span className="export-progress-text">
+                  {progress}% - {progressMessage || 'Processing...'}
+                </span>
+              </div>
+            ) : waveformData ? (
+              <WaveformDisplay waveformData={waveformData} width={600} height={80} />
+            ) : null}
+
+            {/* Cancel button while exporting, Save button when complete */}
             {isExporting ? (
               <button
                 type="button"
