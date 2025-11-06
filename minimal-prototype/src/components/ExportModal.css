@@ -462,6 +462,10 @@
   gap: 12px;
 }
 
+.export-progress-row > .waveform-play-button {
+  flex-shrink: 0;
+}
+
 .export-progress-row > .waveform-display {
   flex: 1;
 }

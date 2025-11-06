@@ -3,10 +3,10 @@
  */
 
 .waveform-display {
-  width: 100%;
+  flex: 1;
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 12px;
   background: #1a1a1a;
   border-radius: 6px;
   padding: 8px;
@@ -45,7 +45,6 @@
 
 .waveform-canvas {
   display: block;
-  flex: 1;
   width: 100%;
   height: auto;
   max-width: 100%;

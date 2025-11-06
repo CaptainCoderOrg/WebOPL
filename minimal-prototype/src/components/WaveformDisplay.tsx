@@ -122,7 +122,7 @@ export function WaveformDisplay({
   };
 
   return (
-    <div className="waveform-display">
+    <>
       {/* Play/Pause Button */}
       {wavBuffer && (
         <button
@@ -145,7 +145,9 @@ export function WaveformDisplay({
           )}
         </button>
       )}
-      <canvas ref={canvasRef} className="waveform-canvas" />
-    </div>
+      <div className="waveform-display">
+        <canvas ref={canvasRef} className="waveform-canvas" />
+      </div>
+    </>
   );
 }
