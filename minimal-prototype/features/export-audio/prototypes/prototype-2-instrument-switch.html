@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prototype 2: Instrument Switch</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-top: 0;
+      color: #333;
+    }
+    .section {
+      margin: 2rem 0;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-left: 4px solid #0066cc;
+      border-radius: 4px;
+    }
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #0066cc;
+    }
+    .status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .status.ready {
+      background: #ffeaa7;
+      color: #856404;
+    }
+    .status.generating {
+      background: #74b9ff;
+      color: #004085;
+    }
+    .status.complete {
+      background: #55efc4;
+      color: #155724;
+    }
+    .status.error {
+      background: #ff7675;
+      color: #721c24;
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-right: 1rem;
+    }
+    button:hover:not(:disabled) {
+      background: #0052a3;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    button.download {
+      background: #00b894;
+    }
+    button.download:hover:not(:disabled) {
+      background: #00947a;
+    }
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .info-grid dt {
+      font-weight: bold;
+      color: #555;
+    }
+    .info-grid dd {
+      margin: 0;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+      display: none;
+    }
+    .progress-bar.active {
+      display: block;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0066cc, #00b894);
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    .success-box {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      padding: 1rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+      display: none;
+    }
+    .success-box.active {
+      display: block;
+    }
+    .timeline {
+      background: white;
+      padding: 1rem;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    .timeline-time {
+      font-weight: bold;
+      color: #0066cc;
+      min-width: 80px;
+    }
+    .timeline-event {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎵 Prototype 2: Instrument Switch</h1>
+
+    <div class="section">
+      <h2>Goal</h2>
+      <p>Generate a <strong>2-second audio file</strong> with two different instruments playing different notes:</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">0.0 - 1.0s</div>
+          <div class="timeline-event"><strong>Piano</strong> playing <strong>C-4</strong> (MIDI 60)</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">1.0 - 2.0s</div>
+          <div class="timeline-event"><strong>Celeste</strong> playing <strong>D-4</strong> (MIDI 62)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Status</h2>
+      <div>
+        <span id="status" class="status ready">Ready to Generate</span>
+      </div>
+
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+      </div>
+
+      <div style="margin-top: 1rem;">
+        <button id="generateBtn" onclick="generateWAV()">🎹 Generate WAV</button>
+        <button id="downloadBtn" class="download" style="display: none;" onclick="downloadWAV()">⬇️ Download WAV</button>
+      </div>
+
+      <div class="success-box" id="successBox">
+        <strong>✅ Success!</strong> WAV file generated successfully. Click the download button above.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Expected Output</h2>
+      <dl class="info-grid">
+        <dt>Instrument 1:</dt>
+        <dd>Piano (0.0 - 1.0s)</dd>
+
+        <dt>Note 1:</dt>
+        <dd>C-4 (MIDI 60, 261.63 Hz)</dd>
+
+        <dt>Instrument 2:</dt>
+        <dd>Celeste (1.0 - 2.0s)</dd>
+
+        <dt>Note 2:</dt>
+        <dd>D-4 (MIDI 62, 293.66 Hz)</dd>
+
+        <dt>Duration:</dt>
+        <dd>2 seconds</dd>
+
+        <dt>Sample Rate:</dt>
+        <dd>49,716 Hz</dd>
+
+        <dt>Expected Size:</dt>
+        <dd>~388 KB (397,816 bytes)</dd>
+
+        <dt>Filename:</dt>
+        <dd><code>prototype-2-instrument-switch.wav</code></dd>
+      </dl>
+    </div>
+
+    <div class="section">
+      <h2>Console Output</h2>
+      <pre id="consoleOutput">Waiting to generate...</pre>
+    </div>
+
+    <div class="section">
+      <h2>Success Criteria</h2>
+      <ul>
+        <li>✅ WAV file generates without errors</li>
+        <li>✅ File size is ~388 KB</li>
+        <li>✅ Duration is exactly 2 seconds</li>
+        <li>✅ <strong>First second sounds like piano (percussive)</strong></li>
+        <li>✅ <strong>Second second sounds like celeste (bell-like, shimmering)</strong></li>
+        <li>✅ Clear pitch difference (C to D)</li>
+        <li>✅ Clean transition between instruments</li>
+        <li>✅ No clicks/pops at transitions</li>
+      </ul>
+    </div>
+  </div>
+
+  <script type="module" src="/features/export-audio/prototypes/prototype-2-instrument-switch.ts"></script>
+</body>
+</html>

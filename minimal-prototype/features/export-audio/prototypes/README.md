@@ -62,8 +62,8 @@ Each prototype consists of:
 
 | # | Name | Status | Description |
 |---|------|--------|-------------|
-| 1 | Single Tone | 🔄 | 1-second C-4 note (Ready to test!) |
-| 2 | Instrument Switch | ⬜ | Two notes, different instruments |
+| 1 | Single Tone | ✅ | 1-second C-4 note (Complete!) |
+| 2 | Instrument Switch | 🔄 | Two notes, different instruments (Ready to test!) |
 | 3 | Polyphonic + Sustain | ⬜ | Multi-track with sustained bass |
 | 4 | Tempo Changes | ⬜ | Same pattern at different BPMs |
 

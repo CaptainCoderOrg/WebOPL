@@ -13,32 +13,37 @@
 
 ## Current Status
 
-**Phase:** Planning & Setup
+**Phase:** Prototyping (2 of 4 complete)
 
 **Completed:**
 - ✅ Requirements analysis
 - ✅ Architecture planning
 - ✅ Prototype roadmap defined
+- ✅ OPL3 direct access validated
+- ✅ Prototype 1: Single tone (works!)
+- ✅ Frequency calculation fixed
+
+**In Progress:**
+- 🔄 Prototype 2: Instrument switching
 
 **Next Steps:**
-1. Create prototype 1 (single tone)
-2. Validate OPL3 direct usage
-3. Test WAV encoding
-4. Iterate on remaining prototypes
+1. Test Prototype 2
+2. Build Prototype 3 (polyphonic + sustain - critical!)
+3. Build Prototype 4 (tempo changes)
 
 ---
 
 ## Prototype Sequence
 
-### Prototype 1: Single Tone WAV 🔄
+### Prototype 1: Single Tone WAV ✅
 **Goal:** 1-second C-4 note exported as WAV
-**Status:** Ready to test!
+**Status:** Complete!
 **Files:** `prototypes/prototype-1-*`
 **Guide:** [PROTOTYPE_1_GUIDE.md](prototypes/PROTOTYPE_1_GUIDE.md)
 
-### Prototype 2: Instrument Switch ⬜
+### Prototype 2: Instrument Switch 🔄
 **Goal:** Two notes with different instruments
-**Status:** Not started
+**Status:** Ready to test!
 **Files:** `prototypes/prototype-2-*`
 
 ### Prototype 3: Polyphonic + Sustain ⬜
