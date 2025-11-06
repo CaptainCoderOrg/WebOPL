@@ -346,9 +346,387 @@ async function exportRPGAdventure() {
   }
 }
 
+// Helper: Render pattern to audio buffers
+async function renderPatternToBuffers(pattern: any, trimSilence: boolean = false): Promise<{ left: Int16Array; right: Int16Array }> {
+  const SAMPLE_RATE = 49716;
+
+  // Load GENMIDI patches
+  const { loadGENMIDI } = await import('../../src/utils/genmidiParser');
+  const bank = await loadGENMIDI();
+  const patches = bank.patches;
+
+  // Load OPL3 library and create chip
+  await loadOPL3Library();
+  const chip = new (globalThis as any).OPL3.OPL3();
+
+  // Initialize OPL3 chip
+  chip.write(0, 0x04, 0x60);
+  chip.write(0, 0x04, 0x80);
+  chip.write(0, 0x01, 0x20);
+  chip.write(0, 0xBD, 0x00);
+  chip.write(1, 0x05, 0x01);
+  chip.write(1, 0x04, 0x00);
+  for (let ch = 0; ch < 9; ch++) {
+    chip.write(0, 0xC0 + ch, 0x00);
+    chip.write(1, 0xC0 + ch, 0x00);
+  }
+
+  // Create adapter and synth
+  const { DirectOPLChip } = await import('../../src/adapters/DirectOPLChip');
+  const directChip = new DirectOPLChip(chip);
+  const { SimpleSynth } = await import('../../src/SimpleSynth');
+  const synth = new SimpleSynth();
+  await synth.init(directChip);
+
+  // Load patches for each track
+  for (let trackIndex = 0; trackIndex < pattern.tracks; trackIndex++) {
+    const patchIndex = pattern.instruments[trackIndex];
+    const patch = patches[patchIndex];
+    if (patch) {
+      synth.setTrackPatch(trackIndex, patch);
+    }
+  }
+
+  // Convert to renderable pattern
+  const { PatternRenderer } = await import('../../src/export/PatternRenderer');
+  const renderablePattern = {
+    name: pattern.name,
+    pattern: pattern.pattern,
+    instruments: pattern.instruments,
+    bpm: pattern.bpm,
+    rowsPerBeat: 4,
+  };
+
+  // Render to timeline
+  const timeline = PatternRenderer.render(renderablePattern);
+  const totalSamples = Math.ceil(timeline.duration * SAMPLE_RATE);
+
+  // Allocate buffers
+  const leftChannel = new Int16Array(totalSamples);
+  const rightChannel = new Int16Array(totalSamples);
+
+  // Render samples
+  let eventIndex = 0;
+  const sampleBuffer = new Int16Array(2);
+
+  for (let sampleIndex = 0; sampleIndex < totalSamples; sampleIndex++) {
+    // Process events at this sample time
+    while (eventIndex < timeline.events.length) {
+      const event = timeline.events[eventIndex];
+      const eventSampleIndex = Math.floor(event.time * SAMPLE_RATE);
+      if (eventSampleIndex > sampleIndex) break;
+
+      if (event.type === 'note-on') {
+        synth.noteOn(event.track, event.midiNote, 100);
+      } else {
+        synth.noteOff(event.track, event.midiNote);
+      }
+      eventIndex++;
+    }
+
+    // Generate sample
+    directChip.read(sampleBuffer);
+    leftChannel[sampleIndex] = sampleBuffer[0];
+    rightChannel[sampleIndex] = sampleBuffer[1];
+  }
+
+  // Trim trailing silence if requested (for loop exports)
+  if (trimSilence) {
+    const trimPoint = findAudioEndPoint(leftChannel, rightChannel);
+    console.log(`[renderPatternToBuffers] Trimming silence: ${totalSamples} -> ${trimPoint} samples`);
+    return {
+      left: leftChannel.slice(0, trimPoint),
+      right: rightChannel.slice(0, trimPoint)
+    };
+  }
+
+  return { left: leftChannel, right: rightChannel };
+}
+
+// Helper: Find where actual audio ends (before trailing silence)
+function findAudioEndPoint(leftChannel: Int16Array, rightChannel: Int16Array): number {
+  const SILENCE_THRESHOLD = 50; // Amplitude threshold for silence
+  const SILENCE_DURATION_MS = 200; // Look for 200ms of continuous silence
+  const SAMPLE_RATE = 49716;
+  const silenceDurationSamples = Math.floor((SILENCE_DURATION_MS / 1000) * SAMPLE_RATE);
+
+  // Search backwards from the end
+  let silenceCount = 0;
+  for (let i = leftChannel.length - 1; i >= 0; i--) {
+    const leftAmp = Math.abs(leftChannel[i]);
+    const rightAmp = Math.abs(rightChannel[i]);
+
+    if (leftAmp < SILENCE_THRESHOLD && rightAmp < SILENCE_THRESHOLD) {
+      silenceCount++;
+      if (silenceCount >= silenceDurationSamples) {
+        // Found sustained silence region
+        // i is the start of the silence region (going forward)
+        // Return i as the trim point
+        return i;
+      }
+    } else {
+      // Reset silence counter when we find audio
+      silenceCount = 0;
+    }
+  }
+
+  // No significant silence found, return full length
+  return leftChannel.length;
+}
+
+// Export RPG Adventure with crossfade loop
+async function exportCrossfadeLoop() {
+  const result = document.getElementById('crossfade-result')!;
+  result.innerHTML = 'Exporting with crossfade loop...\\n\\n';
+  result.className = 'result';
+
+  try {
+    // Step 1: Load pattern
+    result.innerHTML += 'Step 1: Loading rpg-adventure.yaml...\\n';
+    const { loadPattern } = await import('../../src/utils/patternLoader');
+    const pattern = await loadPattern('rpg-adventure');
+
+    result.innerHTML += '✓ Pattern loaded\\n';
+    result.innerHTML += `  - Name: ${pattern.name}\\n`;
+    result.innerHTML += `  - Rows: ${pattern.rows}, Tracks: ${pattern.tracks}, BPM: ${pattern.bpm}\\n\\n`;
+
+    // Step 2: Create context-aware pattern (last 8 + all + first 8)
+    result.innerHTML += 'Step 2: Creating context-aware pattern...\\n';
+    const originalRows = pattern.rows;
+    const contextRows = 8; // Lead-in and lead-out context
+    const totalRows = contextRows + originalRows + contextRows;
+
+    const contextPattern = {
+      ...pattern,
+      rows: totalRows,
+      pattern: [] as string[][]
+    };
+
+    // Build pattern: [last 8 rows | all rows | first 8 rows]
+    // Last 8 rows (lead-in context)
+    for (let i = 0; i < contextRows; i++) {
+      const rowIdx = (originalRows - contextRows + i) % originalRows;
+      contextPattern.pattern.push(pattern.pattern[rowIdx]);
+    }
+    // All rows (core pattern)
+    for (let i = 0; i < originalRows; i++) {
+      contextPattern.pattern.push(pattern.pattern[i]);
+    }
+    // First 8 rows (lead-out context)
+    for (let i = 0; i < contextRows; i++) {
+      contextPattern.pattern.push(pattern.pattern[i]);
+    }
+
+    result.innerHTML += `  - Original: ${originalRows} rows\\n`;
+    result.innerHTML += `  - Lead-in context: ${contextRows} rows (rows ${originalRows - contextRows}-${originalRows - 1})\\n`;
+    result.innerHTML += `  - Lead-out context: ${contextRows} rows (rows 0-${contextRows - 1})\\n`;
+    result.innerHTML += `  - Total render: ${totalRows} rows\\n\\n`;
+
+    // Step 3: Render context-aware pattern
+    result.innerHTML += 'Step 3: Rendering context-aware pattern...\\n';
+    const audioBuffers = await renderPatternToBuffers(contextPattern, false);
+
+    result.innerHTML += `✓ Rendered ${audioBuffers.left.length} samples (${(audioBuffers.left.length / 49716).toFixed(2)}s)\\n\\n`;
+
+    // Step 4: Calculate sample positions
+    result.innerHTML += 'Step 4: Calculating core extraction...\\n';
+    const bpm = pattern.bpm || 120;
+    const rowsPerBeat = 4;
+    const secondsPerRow = 60 / (bpm * rowsPerBeat);
+
+    const leadInDuration = contextRows * secondsPerRow;
+    const coreDuration = originalRows * secondsPerRow;
+    const totalDuration = totalRows * secondsPerRow;
+
+    const leadInSamples = Math.floor(leadInDuration * 49716);
+    const coreSamples = Math.floor(coreDuration * 49716);
+    const totalSamples = Math.floor(totalDuration * 49716);
+
+    result.innerHTML += `  - Lead-in: ${leadInDuration.toFixed(2)}s (${leadInSamples} samples)\\n`;
+    result.innerHTML += `  - Core: ${coreDuration.toFixed(2)}s (${coreSamples} samples)\\n`;
+    result.innerHTML += `  - Total: ${totalDuration.toFixed(2)}s (${totalSamples} samples)\\n`;
+    result.innerHTML += `  - Trimming from ${audioBuffers.left.length} to ${totalSamples} samples\\n\\n`;
+
+    // Trim to exact musical length
+    const trimmedLeft = audioBuffers.left.slice(0, totalSamples);
+    const trimmedRight = audioBuffers.right.slice(0, totalSamples);
+
+    // Step 5: Extract core loop (no crossfade needed - context makes it seamless)
+    result.innerHTML += 'Step 5: Extracting core loop...\\n';
+    const { CrossfadeLoopEncoder } = await import('../../src/utils/CrossfadeLoopEncoder');
+    const fadeDuration = 0; // No crossfade needed
+    result.innerHTML += `  - Extracting core (rows 0-${originalRows - 1}) from render\\n`;
+    result.innerHTML += `  - No crossfade needed - context ensures seamless loop\\n`;
+
+    const extracted = CrossfadeLoopEncoder.applyCrossfade(
+      trimmedLeft,
+      trimmedRight,
+      49716,
+      leadInSamples,
+      coreSamples,
+      fadeDuration
+    );
+
+    result.innerHTML += `✓ Extracted seamless loop: ${extracted.left.length} samples (${(extracted.left.length / 49716).toFixed(2)}s)\\n\\n`;
+
+    // Step 6: Encode to WAV (standard, no loop markers)
+    result.innerHTML += 'Step 6: Encoding to WAV...\\n';
+    const { WAVEncoder } = await import('../../src/utils/WAVEncoder');
+    const wavBuffer = WAVEncoder.encode(extracted.left, extracted.right, 49716);
+
+    result.innerHTML += `✓ WAV encoded: ${(wavBuffer.byteLength / 1024 / 1024).toFixed(2)} MB\\n\\n`;
+
+    // Step 7: Download
+    result.innerHTML += 'Step 7: Downloading...\\n';
+    const blob = new Blob([wavBuffer], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rpg-adventure-crossfade-loop.wav';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    result.innerHTML += '✓ Downloaded: rpg-adventure-crossfade-loop.wav\\n\\n';
+
+    result.innerHTML += '✅ CROSSFADE LOOP EXPORT SUCCESSFUL\\n\\n';
+    result.innerHTML += 'Verification:\\n';
+    result.innerHTML += '1. Open file and let it loop in your media player\\n';
+    result.innerHTML += '2. Listen carefully at loop boundary - should be completely seamless\\n';
+    result.innerHTML += `3. Method: Context-aware rendering (last 8 + all + first 8 rows)\\n`;
+    result.innerHTML += `4. Loop point: Row ${originalRows - 1} → Row 0 (natural musical boundary)\\n`;
+    result.innerHTML += `5. Crossfade: ${fadeDuration.toFixed(0)}ms equal-power fade at loop point\\n`;
+    result.innerHTML += '6. Musical structure preserved - loop starts at row 0';
+    result.className = 'result success';
+  } catch (error) {
+    result.innerHTML += `\\n❌ CROSSFADE LOOP EXPORT FAILED\\n\\n`;
+    result.innerHTML += `Error: ${error}\\n`;
+    result.className = 'result error';
+    console.error('Crossfade loop export error:', error);
+  }
+}
+
+// Export RPG Adventure with SMPL loop points
+async function exportSMPLLoop() {
+  const result = document.getElementById('smpl-result')!;
+  result.innerHTML = 'Exporting with SMPL loop points...\\n\\n';
+  result.className = 'result';
+
+  try {
+    // Step 1: Load pattern
+    result.innerHTML += 'Step 1: Loading rpg-adventure.yaml...\\n';
+    const { loadPattern } = await import('../../src/utils/patternLoader');
+    const pattern = await loadPattern('rpg-adventure');
+
+    result.innerHTML += '✓ Pattern loaded\\n';
+    result.innerHTML += `  - Name: ${pattern.name}\\n`;
+    result.innerHTML += `  - Rows: ${pattern.rows}, Tracks: ${pattern.tracks}, BPM: ${pattern.bpm}\\n\\n`;
+
+    // Step 2: Calculate extended render (1.5x)
+    result.innerHTML += 'Step 2: Calculating extended render (1.5x for overlap)...\\n';
+    const originalRows = pattern.rows;
+    const overlapRows = Math.floor(originalRows / 2); // 50% overlap
+    const extendedRows = originalRows + overlapRows;
+
+    result.innerHTML += `  - Original pattern: ${originalRows} rows\\n`;
+    result.innerHTML += `  - Overlap region: ${overlapRows} rows\\n`;
+    result.innerHTML += `  - Extended render: ${extendedRows} rows\\n\\n`;
+
+    // Create extended pattern
+    const extendedPattern = {
+      ...pattern,
+      rows: extendedRows,
+      pattern: [] as string[][]
+    };
+
+    // Repeat pattern data to create extended version
+    for (let i = 0; i < extendedRows; i++) {
+      extendedPattern.pattern.push(pattern.pattern[i % originalRows]);
+    }
+
+    result.innerHTML += '✓ Extended pattern created\\n\\n';
+
+    // Step 3: Render extended pattern (trim trailing silence)
+    result.innerHTML += 'Step 3: Rendering extended pattern...\\n';
+    const audioBuffers = await renderPatternToBuffers(extendedPattern, true);
+
+    const totalSamples = audioBuffers.left.length;
+    result.innerHTML += `✓ Rendered ${totalSamples} samples (silence trimmed)\\n\\n`;
+
+    // Step 4: Find optimal loop point
+    result.innerHTML += 'Step 4: Finding optimal loop point in overlap region...\\n';
+    const { LoopPointFinder } = await import('../../src/utils/LoopPointFinder');
+
+    // Calculate where the overlap region starts (in samples)
+    // Since we rendered 1.5x (96 rows total, 64 original + 32 overlap)
+    // The loop point should be around 64/96 of the total trimmed length
+    const originalLengthSamples = Math.floor(totalSamples * (originalRows / extendedRows));
+    const overlapStartSamples = originalLengthSamples;
+    const overlapEndSamples = totalSamples;
+
+    result.innerHTML += `  - Original length estimate: ${originalLengthSamples} samples (${(originalLengthSamples / 49716).toFixed(2)}s)\\n`;
+    result.innerHTML += `  - Overlap region: ${overlapStartSamples} to ${overlapEndSamples}\\n`;
+
+    const loopEnd = LoopPointFinder.findBestLoopPoint(
+      audioBuffers.left,
+      audioBuffers.right,
+      overlapStartSamples,
+      overlapEndSamples
+    );
+
+    const loopStart = 0; // Always start from beginning
+    result.innerHTML += `✓ Loop point found: ${loopStart} -> ${loopEnd}\\n\\n`;
+
+    // Step 5: Encode to WAV with SMPL chunk
+    result.innerHTML += 'Step 5: Encoding to WAV with SMPL chunk...\\n';
+    const { WAVEncoder } = await import('../../src/utils/WAVEncoder');
+    const wavBuffer = WAVEncoder.encodeWithLoop(
+      audioBuffers.left,
+      audioBuffers.right,
+      49716,
+      loopStart,
+      loopEnd
+    );
+
+    result.innerHTML += `✓ WAV with SMPL encoded: ${(wavBuffer.byteLength / 1024 / 1024).toFixed(2)} MB\\n`;
+    result.innerHTML += `  - Loop: ${loopStart} -> ${loopEnd} (${((loopEnd / 49716) * 1000).toFixed(0)}ms duration)\\n\\n`;
+
+    // Step 6: Download
+    result.innerHTML += 'Step 6: Downloading...\\n';
+    const blob = new Blob([wavBuffer], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rpg-adventure-smpl-loop.wav';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    result.innerHTML += '✓ Downloaded: rpg-adventure-smpl-loop.wav\\n\\n';
+
+    result.innerHTML += '✅ SMPL LOOP EXPORT SUCCESSFUL\\n\\n';
+    result.innerHTML += 'Verification:\\n';
+    result.innerHTML += '1. Verify SMPL chunk with hex editor (search for "smpl")\\n';
+    result.innerHTML += '2. Test in Unity/Unreal Engine (should respect loop markers)\\n';
+    result.innerHTML += '3. Open in DAW (Reaper, FL Studio) - should show loop region\\n';
+    result.innerHTML += '4. Compare pristine audio quality (no crossfade alteration)\\n';
+    result.innerHTML += '5. File is 50% larger due to overlap region';
+    result.className = 'result success';
+  } catch (error) {
+    result.innerHTML += `\\n❌ SMPL LOOP EXPORT FAILED\\n\\n`;
+    result.innerHTML += `Error: ${error}\\n`;
+    result.className = 'result error';
+    console.error('SMPL loop export error:', error);
+  }
+}
+
 // Make functions available globally for onclick handlers
 (window as any).testPhase1 = testPhase1;
 (window as any).testPhase2 = testPhase2;
 (window as any).testPhase3 = testPhase3;
 (window as any).runFullTest = runFullTest;
 (window as any).exportRPGAdventure = exportRPGAdventure;
+(window as any).exportCrossfadeLoop = exportCrossfadeLoop;
+(window as any).exportSMPLLoop = exportSMPLLoop;

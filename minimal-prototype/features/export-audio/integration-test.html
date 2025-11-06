@@ -135,6 +135,22 @@
     <div id="rpg-result" class="result"></div>
   </div>
 
+  <!-- Crossfade Loop Export Test -->
+  <div class="test-section">
+    <h2><span class="phase-badge">Loop Test 1</span>Crossfade Loop Export</h2>
+    <p>Export RPG Adventure using context-aware rendering: renders [last 8 rows + full pattern + first 8 rows], extracts the core pattern with proper context, applies crossfade at natural loop boundary (row 63 → row 0).</p>
+    <button onclick="exportCrossfadeLoop()">Export Crossfade Loop</button>
+    <div id="crossfade-result" class="result"></div>
+  </div>
+
+  <!-- SMPL Loop Export Test -->
+  <div class="test-section">
+    <h2><span class="phase-badge">Loop Test 2</span>SMPL Loop Points Export</h2>
+    <p>Export RPG Adventure with extended render (1.5x) and SMPL chunk loop markers. Pristine audio quality, game engine compatible.</p>
+    <button onclick="exportSMPLLoop()">Export SMPL Loop</button>
+    <div id="smpl-result" class="result"></div>
+  </div>
+
   <script type="module" src="./integration-test.ts"></script>
 </body>
 </html>
