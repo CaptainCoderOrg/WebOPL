@@ -13,7 +13,7 @@
 
 ## Current Status
 
-**Phase:** Prototyping (2 of 4 complete)
+**Phase:** Prototyping (3 of 4 in progress)
 
 **Completed:**
 - ✅ Requirements analysis
@@ -22,14 +22,14 @@
 - ✅ OPL3 direct access validated
 - ✅ Prototype 1: Single tone (works!)
 - ✅ Frequency calculation fixed
+- ✅ Prototype 2: Instrument switching (works!)
 
 **In Progress:**
-- 🔄 Prototype 2: Instrument switching
+- 🔄 Prototype 3: Polyphonic + sustain (CRITICAL TEST!)
 
 **Next Steps:**
-1. Test Prototype 2
-2. Build Prototype 3 (polyphonic + sustain - critical!)
-3. Build Prototype 4 (tempo changes)
+1. Test Prototype 3
+2. Build Prototype 4 (tempo changes)
 
 ---
 
@@ -41,14 +41,14 @@
 **Files:** `prototypes/prototype-1-*`
 **Guide:** [PROTOTYPE_1_GUIDE.md](prototypes/PROTOTYPE_1_GUIDE.md)
 
-### Prototype 2: Instrument Switch 🔄
+### Prototype 2: Instrument Switch ✅
 **Goal:** Two notes with different instruments
-**Status:** Ready to test!
+**Status:** Complete! (Piano → Celeste)
 **Files:** `prototypes/prototype-2-*`
 
-### Prototype 3: Polyphonic + Sustain ⬜
+### Prototype 3: Polyphonic + Sustain 🔄
 **Goal:** Multi-track with sustained bass
-**Status:** Not started
+**Status:** Ready to test! (CRITICAL!)
 **Files:** `prototypes/prototype-3-*`
 
 ### Prototype 4: Tempo Changes ⬜
