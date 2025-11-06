@@ -18,6 +18,7 @@ import {
 import {
   exportStandard,
   exportSeamlessLoop,
+  downloadWAV,
 } from '../export/exportPattern';
 import './ExportModal.css';
 
@@ -77,6 +78,7 @@ export function ExportModal({
   const [progressMessage, setProgressMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [abortController, setAbortController] = useState<AbortController | null>(null);
+  const [generatedWAV, setGeneratedWAV] = useState<ArrayBuffer | null>(null);
 
   // Calculate pattern info
   const rows = pattern.length;
@@ -105,15 +107,18 @@ export function ExportModal({
       setProgress(0);
       setProgressMessage('Starting export...');
       setError(null);
+      setGeneratedWAV(null);
 
       const onProgress = (progress: number, message: string) => {
         setProgress(progress);
         setProgressMessage(message);
       };
 
+      let wavBuffer: ArrayBuffer;
+
       if (seamlessLoop) {
         // Seamless loop export
-        await exportSeamlessLoop({
+        wavBuffer = await exportSeamlessLoop({
           patternName,
           pattern,
           trackInstruments,
@@ -126,7 +131,7 @@ export function ExportModal({
         });
       } else {
         // Standard export with optional fades
-        await exportStandard({
+        wavBuffer = await exportStandard({
           patternName,
           pattern,
           trackInstruments,
@@ -142,16 +147,13 @@ export function ExportModal({
         });
       }
 
+      // Store the generated WAV
+      setGeneratedWAV(wavBuffer);
+      setIsExporting(false);
+      setAbortController(null);
+
       // Call success callback
       onExportComplete?.(filename);
-
-      // Keep modal open for a moment to show success
-      setTimeout(() => {
-        setIsExporting(false);
-        setProgress(0);
-        setProgressMessage('');
-        setAbortController(null);
-      }, 1000);
 
     } catch (err) {
       console.error('[ExportModal] Export failed:', err);
@@ -159,6 +161,15 @@ export function ExportModal({
       setError(errorMessage);
       setIsExporting(false);
       setAbortController(null);
+    }
+  };
+
+  /**
+   * Handle download button click
+   */
+  const handleDownload = () => {
+    if (generatedWAV) {
+      downloadWAV(generatedWAV, filename);
     }
   };
 
@@ -490,6 +501,40 @@ export function ExportModal({
         </div>
       </div>
 
+      {/* Progress Section */}
+      {(isExporting || generatedWAV) && (
+        <div className="export-progress-section">
+          <div className="export-progress-row">
+            <div className="export-progress-bar">
+              <div
+                className="export-progress-fill"
+                style={{ width: `${progress}%` }}
+              />
+              <span className="export-progress-text">
+                {progress}% - {progressMessage || 'Processing...'}
+              </span>
+            </div>
+            {isExporting ? (
+              <button
+                type="button"
+                onClick={handleCancelExport}
+                className="export-button export-button-secondary"
+              >
+                Cancel
+              </button>
+            ) : generatedWAV ? (
+              <button
+                type="button"
+                onClick={handleDownload}
+                className="export-button export-button-primary"
+              >
+                Save
+              </button>
+            ) : null}
+          </div>
+        </div>
+      )}
+
       {/* Action Buttons */}
       <div className="export-actions">
         <button
@@ -498,7 +543,7 @@ export function ExportModal({
           className="export-button export-button-secondary"
           disabled={isExporting}
         >
-          Cancel
+          Close
         </button>
         <button
           type="button"
@@ -506,32 +551,9 @@ export function ExportModal({
           className="export-button export-button-primary"
           disabled={isExporting}
         >
-          {isExporting ? 'Exporting...' : 'Generate WAV'}
+          {isExporting ? 'Exporting...' : generatedWAV ? 'Regenerate' : 'Generate'}
         </button>
       </div>
-
-      {/* Progress Section */}
-      {isExporting && (
-        <div className="export-progress-section">
-          <div className="export-progress-bar">
-            <div
-              className="export-progress-fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="export-progress-text">
-            {progress}% - {progressMessage || 'Processing...'}
-          </p>
-          <button
-            type="button"
-            onClick={handleCancelExport}
-            className="export-button export-button-secondary"
-            style={{ marginTop: '12px' }}
-          >
-            Cancel Export
-          </button>
-        </div>
-      )}
 
       {/* Error Section */}
       {error && (

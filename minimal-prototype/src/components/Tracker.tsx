@@ -684,7 +684,6 @@ export function Tracker({
             onClose={() => setShowExportModal(false)}
             onExportComplete={(filename) => {
               console.log(`[Tracker] Export complete: ${filename}`);
-              setShowExportModal(false);
             }}
           />
         </Modal>

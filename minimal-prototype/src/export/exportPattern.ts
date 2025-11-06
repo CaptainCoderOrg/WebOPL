@@ -281,7 +281,7 @@ function applyFades(
 /**
  * Download WAV file
  */
-function downloadWAV(buffer: ArrayBuffer, filename: string): void {
+export function downloadWAV(buffer: ArrayBuffer, filename: string): void {
   const blob = new Blob([buffer], { type: 'audio/wav' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -296,9 +296,9 @@ function downloadWAV(buffer: ArrayBuffer, filename: string): void {
 /**
  * Export pattern as standard WAV with optional fades
  */
-export async function exportStandard(options: StandardExportOptions): Promise<void> {
+export async function exportStandard(options: StandardExportOptions): Promise<ArrayBuffer> {
   const {
-    patternName,
+    patternName: _patternName,
     pattern,
     trackInstruments,
     instrumentBank,
@@ -349,20 +349,17 @@ export async function exportStandard(options: StandardExportOptions): Promise<vo
   onProgress?.(97, 'Encoding WAV...');
   const wavBuffer = WAVEncoder.encode(trimmedLeft, trimmedRight, SAMPLE_RATE);
 
-  // Download
-  onProgress?.(99, 'Downloading...');
-  const filename = `${patternName}.wav`;
-  downloadWAV(wavBuffer, filename);
-
   onProgress?.(100, 'Complete!');
+
+  return wavBuffer;
 }
 
 /**
  * Export pattern as seamless loop
  */
-export async function exportSeamlessLoop(options: SeamlessLoopExportOptions): Promise<void> {
+export async function exportSeamlessLoop(options: SeamlessLoopExportOptions): Promise<ArrayBuffer> {
   const {
-    patternName,
+    patternName: _patternName,
     pattern,
     trackInstruments,
     instrumentBank,
@@ -427,10 +424,7 @@ export async function exportSeamlessLoop(options: SeamlessLoopExportOptions): Pr
   onProgress?.(95, 'Encoding WAV...');
   const wavBuffer = WAVEncoder.encode(finalLeft, finalRight, SAMPLE_RATE);
 
-  // Download
-  onProgress?.(99, 'Downloading...');
-  const filename = `${patternName}.wav`;
-  downloadWAV(wavBuffer, filename);
-
   onProgress?.(100, 'Complete!');
+
+  return wavBuffer;
 }
