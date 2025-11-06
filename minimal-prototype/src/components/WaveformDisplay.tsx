@@ -36,6 +36,7 @@ export function WaveformDisplay({
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackPosition, setPlaybackPosition] = useState(0); // 0-1 normalized position
   const animationFrameRef = useRef<number | null>(null);
+  const isDraggingRef = useRef<boolean>(false);
 
   // Setup Web Audio API when wavBuffer is provided
   useEffect(() => {
@@ -228,22 +229,16 @@ export function WaveformDisplay({
   };
 
   /**
-   * Handle waveform canvas click to seek
+   * Seek to a position (0-1 normalized)
    */
-  const handleWaveformClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
+  const seekToPosition = (normalizedPosition: number) => {
     const audioContext = audioContextRef.current;
     const audioBuffer = audioBufferRef.current;
 
-    if (!canvas || !audioContext || !audioBuffer) return;
-
-    // Get click position relative to canvas rendered size
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const clickPosition = x / rect.width; // 0-1 normalized (use rendered width, not canvas.width)
+    if (!audioContext || !audioBuffer) return;
 
     // Clamp to 0-1 range
-    const clampedPosition = Math.max(0, Math.min(1, clickPosition));
+    const clampedPosition = Math.max(0, Math.min(1, normalizedPosition));
 
     // Calculate new time position
     const newTime = clampedPosition * audioBuffer.duration;
@@ -254,14 +249,14 @@ export function WaveformDisplay({
       sourceNodeRef.current.disconnect();
       sourceNodeRef.current = null;
 
-      // Create new source at the clicked position
+      // Create new source at the new position
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
       source.loop = true;
       source.connect(audioContext.destination);
       source.start(0, newTime);
 
-      // Update timing - startTimeRef should be when we started, adjusted for the offset
+      // Update timing
       startTimeRef.current = audioContext.currentTime;
       pauseTimeRef.current = newTime;
 
@@ -272,6 +267,78 @@ export function WaveformDisplay({
       setPlaybackPosition(clampedPosition);
     }
   };
+
+  /**
+   * Handle waveform canvas click to seek
+   */
+  const handleWaveformClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) return;
+
+    // Get click position relative to canvas rendered size
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const clickPosition = x / rect.width; // 0-1 normalized
+
+    seekToPosition(clickPosition);
+  };
+
+  /**
+   * Handle mouse down to start dragging
+   */
+  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    isDraggingRef.current = true;
+    handleWaveformClick(event); // Also seek immediately on mouse down
+  };
+
+  /**
+   * Handle mouse move for dragging (canvas-local handler)
+   */
+  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDraggingRef.current) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Get position relative to canvas rendered size
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const position = x / rect.width; // 0-1 normalized
+
+    seekToPosition(position);
+  };
+
+  // Setup global mouse event listeners for dragging outside canvas
+  useEffect(() => {
+    const handleGlobalMouseMove = (event: MouseEvent) => {
+      if (!isDraggingRef.current) return;
+
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      // Get position relative to canvas rendered size
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const position = x / rect.width; // 0-1 normalized
+
+      seekToPosition(position);
+    };
+
+    const handleGlobalMouseUp = () => {
+      isDraggingRef.current = false;
+    };
+
+    // Add global listeners
+    window.addEventListener('mousemove', handleGlobalMouseMove);
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isPlaying]); // Re-create when isPlaying changes to capture current state
 
   // Calculate current time and total duration for display
   const audioBuffer = audioBufferRef.current;
@@ -307,7 +374,8 @@ export function WaveformDisplay({
           <canvas
             ref={canvasRef}
             className="waveform-canvas"
-            onClick={handleWaveformClick}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
             style={{ cursor: wavBuffer ? 'pointer' : 'default' }}
           />
         </div>
