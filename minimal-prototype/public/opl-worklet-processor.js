@@ -124,7 +124,24 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
         this.loadOPL3Code(payload.opl3Code);
         break;
 
+      case 'write-register':
+        // New IOPLChip format: { array, address, value }
+        if (this.isReady) {
+          const { array, address, value } = payload;
+          this.chip.write(array, address, value);
+
+          // Debug: log key-on register writes (0xB0-0xB8)
+          if (address >= 0xB0 && address <= 0xB8) {
+            const register = array === 1 ? 0x100 + address : address;
+            console.log(`[OPLWorkletProcessor] Key-on write: reg=0x${register.toString(16)}, val=0x${value.toString(16)}`);
+          }
+        } else {
+          console.warn('[OPLWorkletProcessor] Received write before ready');
+        }
+        break;
+
       case 'write':
+        // Legacy format: { register, value } (for backward compatibility)
         if (this.isReady) {
           const { register, value } = payload;
           this.chipWrite(register, value);

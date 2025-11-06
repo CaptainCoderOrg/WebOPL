@@ -8,6 +8,8 @@
 import type { OPLPatch, OPLOperator, OPLVoice } from './types/OPLPatch';
 import { getOPLParams } from './constants/midiToOPL';
 import { ChannelManager } from './utils/ChannelManager';
+import type { IOPLChip } from './interfaces/IOPLChip';
+import { WorkletOPLChip } from './adapters/WorkletOPLChip';
 
 export class SimpleSynth {
   private audioContext: AudioContext | null = null;
@@ -15,6 +17,7 @@ export class SimpleSynth {
   private masterGainNode: GainNode | null = null;
   private workletReady: boolean = false;
   private isInitialized: boolean = false;
+  private oplChip: IOPLChip | null = null;
   private trackPatches: Map<number, OPLPatch> = new Map(); // Track/MIDI channel (0-17) -> Patch (user selections)
   private channelPatches: Map<number, OPLPatch> = new Map(); // OPL hardware channel (0-17) -> Patch (runtime state)
   private channelManager: ChannelManager = new ChannelManager(); // Channel allocation for dual-voice
@@ -28,8 +31,9 @@ export class SimpleSynth {
   /**
    * Initialize OPL3 and Web Audio
    * Uses the exact pattern from opl3-chip-test.html
+   * @param oplChip - Optional IOPLChip implementation. If not provided, creates WorkletOPLChip for real-time playback.
    */
-  async init(): Promise<void> {
+  async init(oplChip?: IOPLChip): Promise<void> {
     if (this.isInitialized) {
       console.warn('[SimpleSynth] Already initialized');
       return;
@@ -38,6 +42,16 @@ export class SimpleSynth {
     console.log('[SimpleSynth] Initializing OPL3 (using opl3-chip-test.html pattern)...');
 
     try {
+      // If oplChip provided, use it directly (offline rendering mode)
+      if (oplChip) {
+        console.log('[SimpleSynth] Using provided IOPLChip (offline mode)');
+        this.oplChip = oplChip;
+        this.isInitialized = true;
+        console.log('[SimpleSynth] ✅ Initialization complete (offline mode)!');
+        return;
+      }
+
+      // Otherwise, initialize AudioWorklet for real-time playback
       // Create AudioContext with OPL3's native sample rate
       this.audioContext = new AudioContext({ sampleRate: 49716 });
       console.log('[SimpleSynth] ✅ AudioContext created (sample rate: 49716 Hz)');
@@ -78,6 +92,10 @@ export class SimpleSynth {
 
       // Wait for worklet to be ready
       await this.waitForWorkletReady();
+
+      // Create WorkletOPLChip wrapper
+      this.oplChip = new WorkletOPLChip(this.workletNode);
+      console.log('[SimpleSynth] ✅ WorkletOPLChip created');
 
       this.isInitialized = true;
       console.log('[SimpleSynth] ✅ Initialization complete!');
@@ -144,18 +162,19 @@ export class SimpleSynth {
 
   /**
    * Write to OPL3 register
-   * Converts our 0x000-0x1FF format to worklet commands
+   * Converts our 0x000-0x1FF format to IOPLChip.write() calls
    */
   private writeOPL(register: number, value: number): void {
-    if (!this.workletNode) {
-      console.warn('[SimpleSynth] Cannot write, worklet not initialized');
+    if (!this.oplChip) {
+      console.warn('[SimpleSynth] Cannot write, OPL chip not initialized');
       return;
     }
 
-    this.workletNode.port.postMessage({
-      type: 'write',
-      payload: { register, value }
-    });
+    // Convert 0x000-0x1FF register format to (array, address) format
+    const array = register >= 0x100 ? 1 : 0;
+    const address = register & 0xFF;
+
+    this.oplChip.write(array, address, value);
   }
 
   /**
