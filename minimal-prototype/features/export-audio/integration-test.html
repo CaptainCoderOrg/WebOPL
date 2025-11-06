@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Export Integration Tests</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #1a1a1a;
+      color: #e0e0e0;
+    }
+    h1 {
+      color: #4a9eff;
+      border-bottom: 2px solid #4a9eff;
+      padding-bottom: 10px;
+    }
+    .test-section {
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .test-section h2 {
+      margin-top: 0;
+      color: #4a9eff;
+      font-size: 1.2em;
+    }
+    button {
+      background: #4a9eff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #6ab0ff;
+    }
+    button:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+    .result {
+      margin-top: 10px;
+      padding: 10px;
+      background: #333;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .result.success {
+      border-left: 4px solid #4ade80;
+    }
+    .result.error {
+      border-left: 4px solid #f87171;
+    }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
+    .info {
+      background: #2a3a4a;
+      border-left: 4px solid #4a9eff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .phase-badge {
+      display: inline-block;
+      background: #4a9eff;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Export Integration Tests</h1>
+
+  <div class="info">
+    <strong>Test Harness for WAV Export Integration</strong><br>
+    This page validates each phase of the integration incrementally without touching the main tracker app.
+    Run tests in order: Phase 1 → Phase 2 → Phase 3 → Full Integration.
+  </div>
+
+  <!-- Phase 1 Tests -->
+  <div class="test-section">
+    <h2><span class="phase-badge">Phase 1</span>OPL3 Interface Abstraction</h2>
+    <p>Tests that IOPLChip interface and adapter classes compile and import correctly.</p>
+    <button onclick="testPhase1()">Run Phase 1 Tests</button>
+    <div id="phase1-result" class="result"></div>
+  </div>
+
+  <!-- Phase 2 Tests -->
+  <div class="test-section">
+    <h2><span class="phase-badge">Phase 2</span>SimpleSynth Refactor</h2>
+    <p>Tests that SimpleSynth works with DirectOPLChip for offline rendering.</p>
+    <button onclick="testPhase2()">Run Phase 2 Tests</button>
+    <div id="phase2-result" class="result"></div>
+  </div>
+
+  <!-- Phase 3 Tests -->
+  <div class="test-section">
+    <h2><span class="phase-badge">Phase 3</span>Offline Rendering Infrastructure</h2>
+    <p>Tests that PatternRenderer, WAVEncoder, and OfflineAudioRenderer classes import correctly.</p>
+    <button onclick="testPhase3()">Run Phase 3 Tests</button>
+    <div id="phase3-result" class="result"></div>
+  </div>
+
+  <!-- Full Integration Test -->
+  <div class="test-section">
+    <h2><span class="phase-badge">Full Test</span>Export Test Pattern to WAV</h2>
+    <p>End-to-end test: Renders a simple 4-row pattern and downloads as WAV file.</p>
+    <button onclick="runFullTest()">Export Test Pattern</button>
+    <div id="full-result" class="result"></div>
+  </div>
+
+  <script type="module" src="./integration-test.ts"></script>
+</body>
+</html>
