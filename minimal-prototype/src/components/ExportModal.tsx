@@ -57,6 +57,9 @@ export function ExportModal({
   onClose,
   onExportComplete,
 }: ExportModalProps) {
+  // Page state (1 = setup, 2 = post-processing)
+  const [currentPage, setCurrentPage] = useState<1 | 2>(1);
+
   // Export mode state
   const [seamlessLoop, setSeamlessLoop] = useState(false);
 
@@ -170,6 +173,9 @@ export function ExportModal({
       setIsExporting(false);
       setAbortController(null);
 
+      // Auto-navigate to page 2 after successful generation
+      setCurrentPage(2);
+
       // Call success callback
       onExportComplete?.(filename);
 
@@ -189,6 +195,17 @@ export function ExportModal({
     if (generatedWAV) {
       downloadWAV(generatedWAV, filename);
     }
+  };
+
+  /**
+   * Handle back button click - return to page 1 and clear generated state
+   */
+  const handleBackToSetup = () => {
+    setCurrentPage(1);
+    setGeneratedWAV(null);
+    setOriginalWAV(null);
+    setWaveformData(null);
+    setError(null);
   };
 
   /**
@@ -385,8 +402,11 @@ export function ExportModal({
 
   return (
     <div className="export-modal">
-      {/* Pattern Info Card */}
-      <div className="export-info-card">
+      {/* PAGE 1: Setup and Generation */}
+      {currentPage === 1 && (
+        <>
+          {/* Pattern Info Card */}
+          <div className="export-info-card">
         <h3 className="export-section-title">Pattern Information</h3>
         <div className="export-info-grid">
           <div className="export-info-item">
@@ -535,77 +555,101 @@ export function ExportModal({
         )}
       </div>
 
-      {/* Export Summary */}
-      <div className="export-summary-section">
-        <h3 className="export-section-title">Export Summary</h3>
-        <div className="export-summary-grid">
-          <div className="export-summary-item">
-            <span className="export-summary-label">Filename:</span>
-            <span className="export-summary-value">{filename}</span>
-          </div>
-          <div className="export-summary-item">
-            <span className="export-summary-label">Duration:</span>
-            <span className="export-summary-value">{formatDuration(finalDuration)}</span>
-          </div>
-          <div className="export-summary-item">
-            <span className="export-summary-label">File Size:</span>
-            <span className="export-summary-value">{formatFileSize(fileSize)}</span>
-          </div>
-          <div className="export-summary-item">
-            <span className="export-summary-label">Format:</span>
-            <span className="export-summary-value">WAV PCM 16-bit Stereo</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Progress / Waveform Section */}
-      {(isExporting || generatedWAV) && (
-        <div className="export-progress-section">
-          <div className="export-progress-row">
-            {/* Show progress bar while exporting, waveform when complete */}
-            {isExporting ? (
-              <div className="export-progress-bar">
-                <div
-                  className="export-progress-fill"
-                  style={{ width: `${progress}%` }}
-                />
-                <span className="export-progress-text">
-                  {progress}% - {progressMessage || 'Processing...'}
-                </span>
+          {/* Progress Section (only shown while exporting on Page 1) */}
+          {isExporting && (
+            <div className="export-progress-section">
+              <div className="export-progress-row">
+                <div className="export-progress-bar">
+                  <div
+                    className="export-progress-fill"
+                    style={{ width: `${progress}%` }}
+                  />
+                  <span className="export-progress-text">
+                    {progress}% - {progressMessage || 'Processing...'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleCancelExport}
+                  className="export-button export-button-secondary"
+                >
+                  Cancel
+                </button>
               </div>
-            ) : waveformData ? (
-              <WaveformDisplay
-                waveformData={waveformData}
-                wavBuffer={generatedWAV || undefined}
-                width={600}
-                height={80}
-              />
-            ) : null}
+            </div>
+          )}
 
-            {/* Cancel button while exporting, Save button when complete */}
-            {isExporting ? (
-              <button
-                type="button"
-                onClick={handleCancelExport}
-                className="export-button export-button-secondary"
-              >
-                Cancel
-              </button>
-            ) : generatedWAV ? (
-              <button
-                type="button"
-                onClick={handleDownload}
-                className="export-button export-button-primary"
-              >
-                Save
-              </button>
-            ) : null}
+          {/* Error Section */}
+          {error && (
+            <div className="export-error-section">
+              <p className="export-error-text">❌ {error}</p>
+            </div>
+          )}
+
+          {/* Action Buttons (Page 1) */}
+          <div className="export-actions">
+            <button
+              type="button"
+              onClick={onClose}
+              className="export-button export-button-secondary"
+              disabled={isExporting}
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              onClick={handleExport}
+              className="export-button export-button-primary"
+              disabled={isExporting}
+            >
+              {isExporting ? 'Generating...' : 'Generate'}
+            </button>
           </div>
-        </div>
+        </>
       )}
 
-      {/* Post-Processing Section */}
-      {generatedWAV && !isExporting && (
+      {/* PAGE 2: Post-Processing and Export */}
+      {currentPage === 2 && (
+        <>
+          {/* Export Summary */}
+          <div className="export-summary-section">
+            <h3 className="export-section-title">Export Summary</h3>
+            <div className="export-summary-grid">
+              <div className="export-summary-item">
+                <span className="export-summary-label">Filename:</span>
+                <span className="export-summary-value">{filename}</span>
+              </div>
+              <div className="export-summary-item">
+                <span className="export-summary-label">Duration:</span>
+                <span className="export-summary-value">{formatDuration(finalDuration)}</span>
+              </div>
+              <div className="export-summary-item">
+                <span className="export-summary-label">File Size:</span>
+                <span className="export-summary-value">{formatFileSize(fileSize)}</span>
+              </div>
+              <div className="export-summary-item">
+                <span className="export-summary-label">Format:</span>
+                <span className="export-summary-value">WAV PCM 16-bit Stereo</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Waveform Player Section */}
+          {waveformData && generatedWAV && (
+            <div className="export-progress-section">
+              <div className="export-progress-row">
+                <WaveformDisplay
+                  waveformData={waveformData}
+                  wavBuffer={generatedWAV}
+                  width={600}
+                  height={80}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Post-Processing Section */}
+          {generatedWAV && (
         <div className="export-options-section">
           <h3 className="export-section-title">Post-Processing</h3>
 
@@ -818,33 +862,26 @@ export function ExportModal({
             </p>
           </div>
         </div>
-      )}
+          )}
 
-      {/* Action Buttons */}
-      <div className="export-actions">
-        <button
-          type="button"
-          onClick={onClose}
-          className="export-button export-button-secondary"
-          disabled={isExporting}
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          onClick={handleExport}
-          className="export-button export-button-primary"
-          disabled={isExporting}
-        >
-          {isExporting ? 'Exporting...' : generatedWAV ? 'Regenerate' : 'Generate'}
-        </button>
-      </div>
-
-      {/* Error Section */}
-      {error && (
-        <div className="export-error-section">
-          <p className="export-error-text">❌ {error}</p>
-        </div>
+          {/* Action Buttons (Page 2) */}
+          <div className="export-actions">
+            <button
+              type="button"
+              onClick={handleBackToSetup}
+              className="export-button export-button-secondary"
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              onClick={handleDownload}
+              className="export-button export-button-primary"
+            >
+              Save
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
