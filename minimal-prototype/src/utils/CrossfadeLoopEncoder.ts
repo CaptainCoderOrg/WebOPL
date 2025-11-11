@@ -1,9 +1,18 @@
 /**
- * CrossfadeLoopEncoder - Create seamless loops using context-aware rendering
+ * CrossfadeLoopEncoder - DEPRECATED
  *
- * Uses context-aware rendering for musical patterns:
- * Renders [last N rows | full pattern | first N rows], extracts the middle section.
- * The context ensures natural loop boundaries without audible clicks or transitions.
+ * This approach was replaced with context-aware rendering in exportPattern.ts.
+ * The context-aware approach renders [last N rows | pattern | first N rows]
+ * and extracts the core pattern, which naturally handles the loop boundary
+ * without needing crossfade analysis.
+ *
+ * Kept for reference and potential future use.
+ *
+ * @deprecated Use context-aware rendering instead (exportSeamlessLoop)
+ * @see export/exportPattern.ts - exportSeamlessLoop function
+ * @see features/export-audio/SEAMLESS_LOOPS.md - Full documentation
+ *
+ * NOTE: This file is not currently used in the codebase.
  */
 
 export class CrossfadeLoopEncoder {

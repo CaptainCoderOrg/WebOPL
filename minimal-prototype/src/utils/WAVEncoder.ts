@@ -3,26 +3,62 @@
  * Generates standard WAV file with RIFF header
  * Supports SMPL chunk for loop point metadata
  */
+
+// WAV file format constants
+const MAX_WAV_FILE_SIZE = 4294967295; // 2^32 - 1 bytes (4GB limit)
+const WAV_HEADER_SIZE = 44;
+const WARNING_THRESHOLD = 500 * 1024 * 1024; // 500MB
+
 export class WAVEncoder {
   /**
    * Encode stereo PCM samples to WAV format
+   *
    * @param leftChannel - Left channel samples (Int16Array)
    * @param rightChannel - Right channel samples (Int16Array)
    * @param sampleRate - Sample rate in Hz (default: 49716)
    * @returns ArrayBuffer containing complete WAV file
+   * @throws Error if file would exceed 4GB WAV format limit or channels don't match
    */
   static encode(
     leftChannel: Int16Array,
     rightChannel: Int16Array,
     sampleRate: number = 49716
   ): ArrayBuffer {
+    // Validate channels match
+    if (leftChannel.length !== rightChannel.length) {
+      throw new Error(
+        `Channel length mismatch: left=${leftChannel.length}, right=${rightChannel.length}`
+      );
+    }
+
     const numChannels = 2;
     const bitsPerSample = 16;
     const bytesPerSample = bitsPerSample / 8;
     const blockAlign = numChannels * bytesPerSample;
     const numSamples = leftChannel.length;
     const dataSize = numSamples * blockAlign;
-    const fileSize = 44 + dataSize; // 44 bytes header + data
+    const fileSize = WAV_HEADER_SIZE + dataSize;
+
+    // Check WAV file size limit (4GB)
+    if (fileSize > MAX_WAV_FILE_SIZE) {
+      const fileSizeMB = (fileSize / (1024 * 1024)).toFixed(2);
+      const maxSizeMB = (MAX_WAV_FILE_SIZE / (1024 * 1024)).toFixed(2);
+      const durationSeconds = (numSamples / sampleRate).toFixed(1);
+
+      throw new Error(
+        `WAV file too large: ${fileSizeMB} MB exceeds ${maxSizeMB} MB limit. ` +
+        `Duration: ${durationSeconds}s. Try reducing loop count.`
+      );
+    }
+
+    // Check for reasonable file size warning threshold (500MB)
+    if (fileSize > WARNING_THRESHOLD) {
+      const fileSizeMB = (fileSize / (1024 * 1024)).toFixed(2);
+      console.warn(
+        `[WAVEncoder] Large file warning: ${fileSizeMB} MB. ` +
+        `Consider reducing loop count for better performance.`
+      );
+    }
 
     // Create buffer for entire WAV file
     const buffer = new ArrayBuffer(fileSize);

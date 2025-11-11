@@ -16,6 +16,7 @@ import { hasNotes } from '../utils/exportHelpers';
 import { TrackerGrid } from './TrackerGrid';
 import { Modal } from './Modal';
 import { ExportModal } from './ExportModal';
+import { ErrorBoundary } from './ErrorBoundary';
 import './Tracker.css';
 
 export interface TrackerProps {
@@ -675,17 +676,19 @@ export function Tracker({
           title="Export to WAV"
           width="medium"
         >
-          <ExportModal
-            patternName={selectedExample || 'Untitled Pattern'}
-            pattern={pattern}
-            trackInstruments={trackInstruments}
-            instrumentBank={instrumentBank}
-            bpm={bpm}
-            onClose={() => setShowExportModal(false)}
-            onExportComplete={(filename) => {
-              console.log(`[Tracker] Export complete: ${filename}`);
-            }}
-          />
+          <ErrorBoundary>
+            <ExportModal
+              patternName={selectedExample || 'Untitled Pattern'}
+              pattern={pattern}
+              trackInstruments={trackInstruments}
+              instrumentBank={instrumentBank}
+              bpm={bpm}
+              onClose={() => setShowExportModal(false)}
+              onExportComplete={(filename) => {
+                console.log(`[Tracker] Export complete: ${filename}`);
+              }}
+            />
+          </ErrorBoundary>
         </Modal>
       )}
     </div>

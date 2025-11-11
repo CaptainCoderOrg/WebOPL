@@ -44,9 +44,15 @@ export interface ExportModalProps {
   /** Callback when modal should close */
   onClose: () => void;
 
+  /** Maximum loop count allowed (default: 100) */
+  maxLoopCount?: number;
+
   /** Callback when export completes successfully */
   onExportComplete?: (filename: string) => void;
 }
+
+// Maximum loop count to prevent excessive file sizes
+const MAX_LOOP_COUNT = 100;
 
 export function ExportModal({
   patternName = 'Untitled Pattern',
@@ -56,6 +62,7 @@ export function ExportModal({
   bpm,
   onClose,
   onExportComplete,
+  maxLoopCount = MAX_LOOP_COUNT,
 }: ExportModalProps) {
   // Page state (1 = setup, 2 = post-processing)
   const [currentPage, setCurrentPage] = useState<1 | 2>(1);
@@ -258,18 +265,49 @@ export function ExportModal({
   const applyCustomLoopCount = () => {
     const parsed = parseInt(customLoopInput, 10);
 
-    if (isNaN(parsed) || parsed < 0) {
-      // Invalid or < 0: set to 1 (0x) and select button 1
+    // Handle invalid input
+    if (isNaN(parsed) || customLoopInput.trim() === '') {
+      console.warn('[ExportModal] Invalid loop count input, defaulting to 0x');
       setLoopCount(1);
       setEditingCustomLoop(false);
-    } else if (parsed >= 0 && parsed <= 3) {
-      // 0-3: select the appropriate button (parsed + 1 = actual loop count)
+      setCustomLoopInput('');
+      return;
+    }
+
+    // Handle negative numbers
+    if (parsed < 0) {
+      console.warn('[ExportModal] Negative loop count not allowed, defaulting to 0x');
+      setLoopCount(1);
+      setEditingCustomLoop(false);
+      return;
+    }
+
+    // Handle 0 explicitly
+    if (parsed === 0) {
+      setLoopCount(1); // 0x = 1 loop
+      setEditingCustomLoop(false);
+      return;
+    }
+
+    // Handle 1-3 (snap to buttons)
+    if (parsed >= 1 && parsed <= 3) {
       setLoopCount(parsed + 1);
       setEditingCustomLoop(false);
-    } else {
-      // >= 4: keep custom (parsed + 1 = actual loop count)
+      return;
+    }
+
+    // Handle 4+ (custom)
+    if (parsed >= 4) {
+      // Check for unreasonably large values
+      if (parsed >= maxLoopCount) {
+        console.warn(`[ExportModal] Loop count ${parsed} exceeds maximum ${maxLoopCount}`);
+        alert(`Loop count too high. Maximum is ${maxLoopCount - 1}x (${maxLoopCount} loops).`);
+        return;
+      }
+
       setLoopCount(parsed + 1);
       setEditingCustomLoop(false);
+      return;
     }
   };
 
@@ -664,7 +702,7 @@ export function ExportModal({
           </div>
 
           {/* Waveform Player Section */}
-          {waveformData && generatedWAV && (
+          {waveformData && generatedWAV && waveformData.length > 0 && (
             <div className="export-progress-section">
               <div className="export-progress-row">
                 <WaveformDisplay

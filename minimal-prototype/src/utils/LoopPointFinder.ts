@@ -1,8 +1,18 @@
 /**
- * LoopPointFinder - Find optimal loop points in extended audio renders
+ * LoopPointFinder - DEPRECATED
  *
- * Searches for zero-crossings near musical boundaries to minimize
- * clicks and pops when audio loops back to the beginning.
+ * This utility was part of an earlier approach to seamless loop export.
+ * It was replaced with context-aware rendering which doesn't need explicit
+ * loop point detection - the musical loop boundary is naturally included
+ * in the rendered audio stream.
+ *
+ * Kept for reference and potential future use.
+ *
+ * @deprecated Use context-aware rendering instead (exportSeamlessLoop)
+ * @see export/exportPattern.ts - exportSeamlessLoop function
+ * @see features/export-audio/SEAMLESS_LOOPS.md - Full documentation
+ *
+ * NOTE: This file is not currently used in the codebase.
  */
 
 export class LoopPointFinder {
