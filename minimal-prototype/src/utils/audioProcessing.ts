@@ -3,13 +3,12 @@
  * Functions for post-processing audio buffers
  */
 
-// WAV file format constants
-const WAV_HEADER_SIZE = 44; // Bytes in standard WAV header
-const INT16_MAX = 32767;    // Maximum value for 16-bit signed integer
-const INT16_MIN = -32768;   // Minimum value for 16-bit signed integer
-
-// Processing constants
-const CLIPPING_WARNING_THRESHOLD = 0.01; // Warn if >1% of samples clip
+import {
+  WAV_HEADER_SIZE,
+  INT16_MAX,
+  INT16_MIN,
+  CLIPPING_WARNING_THRESHOLD,
+} from '../constants/audioConstants';
 
 /**
  * Normalize audio to a target dB level

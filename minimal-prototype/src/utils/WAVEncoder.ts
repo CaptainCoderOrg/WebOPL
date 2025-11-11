@@ -4,10 +4,11 @@
  * Supports SMPL chunk for loop point metadata
  */
 
-// WAV file format constants
-const MAX_WAV_FILE_SIZE = 4294967295; // 2^32 - 1 bytes (4GB limit)
-const WAV_HEADER_SIZE = 44;
-const WARNING_THRESHOLD = 500 * 1024 * 1024; // 500MB
+import {
+  MAX_WAV_FILE_SIZE,
+  WAV_HEADER_SIZE,
+  WARNING_FILE_SIZE,
+} from '../constants/audioConstants';
 
 export class WAVEncoder {
   /**
@@ -52,7 +53,7 @@ export class WAVEncoder {
     }
 
     // Check for reasonable file size warning threshold (500MB)
-    if (fileSize > WARNING_THRESHOLD) {
+    if (fileSize > WARNING_FILE_SIZE) {
       const fileSizeMB = (fileSize / (1024 * 1024)).toFixed(2);
       console.warn(
         `[WAVEncoder] Large file warning: ${fileSizeMB} MB. ` +
