@@ -243,6 +243,380 @@
         "management"
       ],
       "isDefault": false
+    },
+    {
+      "id": "mega-man-x",
+      "name": "Mega Man X",
+      "description": "Action platformer with energetic soundtrack",
+      "category": "ail",
+      "path": "ail/mega-man-x.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/MegaManX.ad",
+      "license": "MIT",
+      "author": "Capcom",
+      "game": "Mega Man X",
+      "year": 1995,
+      "instrumentCount": 181,
+      "tags": [
+        "mega-man",
+        "capcom",
+        "action",
+        "platformer",
+        "classic"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "super-street-fighter-2",
+      "name": "Super Street Fighter II",
+      "description": "Fighting game with intense battle music",
+      "category": "ail",
+      "path": "ail/super-street-fighter-2.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/SuperStreetFighter2.opl",
+      "license": "MIT",
+      "author": "Capcom",
+      "game": "Super Street Fighter II",
+      "year": 1994,
+      "instrumentCount": 256,
+      "tags": [
+        "street-fighter",
+        "capcom",
+        "fighting",
+        "arcade",
+        "classic"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "simfarm",
+      "name": "SimFarm",
+      "description": "Farm simulation game soundtrack",
+      "category": "ail",
+      "path": "ail/simfarm.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/simfarm.opl",
+      "license": "MIT",
+      "author": "Maxis",
+      "game": "SimFarm",
+      "year": 1993,
+      "instrumentCount": 256,
+      "tags": [
+        "simfarm",
+        "maxis",
+        "simulation",
+        "farming"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "little-big-adventure",
+      "name": "Little Big Adventure",
+      "description": "Adventure game with whimsical soundtrack",
+      "category": "ail",
+      "path": "ail/little-big-adventure.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/LittleBigAdventure.opl",
+      "license": "MIT",
+      "author": "Adeline Software International",
+      "game": "Little Big Adventure",
+      "year": 1994,
+      "instrumentCount": 256,
+      "tags": [
+        "little-big-adventure",
+        "adventure",
+        "action",
+        "fantasy"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "fifa-international-soccer",
+      "name": "FIFA International Soccer",
+      "description": "Soccer simulation game soundtrack",
+      "category": "ail",
+      "path": "ail/fifa-international-soccer.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/FIFAInternationalSoccer.opl",
+      "license": "MIT",
+      "author": "EA Sports",
+      "game": "FIFA International Soccer",
+      "year": 1993,
+      "instrumentCount": 197,
+      "tags": [
+        "fifa",
+        "ea-sports",
+        "soccer",
+        "sports",
+        "simulation"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "syndicate-wars",
+      "name": "Syndicate Wars",
+      "description": "Cyberpunk tactical sequel soundtrack",
+      "category": "ail",
+      "path": "ail/syndicate-wars.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/SyndicateWars.opl",
+      "license": "MIT",
+      "author": "Bullfrog Productions",
+      "game": "Syndicate Wars",
+      "year": 1996,
+      "instrumentCount": 162,
+      "tags": [
+        "syndicate",
+        "bullfrog",
+        "cyberpunk",
+        "tactical",
+        "sequel"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "heroes-of-might-and-magic",
+      "name": "Heroes of Might and Magic",
+      "description": "Fantasy strategy game soundtrack",
+      "category": "ail",
+      "path": "ail/heroes-of-might-and-magic.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/Heroes.ad",
+      "license": "MIT",
+      "author": "New World Computing",
+      "game": "Heroes of Might and Magic",
+      "year": 1995,
+      "instrumentCount": 181,
+      "tags": [
+        "heroes",
+        "might-and-magic",
+        "strategy",
+        "fantasy",
+        "turn-based"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "master-of-magic-standard",
+      "name": "Master of Magic (Standard)",
+      "description": "Classic fantasy 4X strategy game",
+      "category": "ail",
+      "path": "ail/master-of-magic-standard.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/master_of_magic_standard.opl",
+      "license": "MIT",
+      "author": "Simtex",
+      "game": "Master of Magic",
+      "year": 1994,
+      "instrumentCount": 256,
+      "tags": [
+        "master-of-magic",
+        "strategy",
+        "fantasy",
+        "4x",
+        "classic"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "master-of-magic-orchestral",
+      "name": "Master of Magic (Orchestral)",
+      "description": "Orchestral version with enhanced instrumentation",
+      "category": "ail",
+      "path": "ail/master-of-magic-orchestral.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/master_of_magic_orchestral.opl",
+      "license": "MIT",
+      "author": "Simtex",
+      "game": "Master of Magic",
+      "year": 1994,
+      "instrumentCount": 256,
+      "tags": [
+        "master-of-magic",
+        "strategy",
+        "fantasy",
+        "orchestral",
+        "enhanced"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "monopoly-deluxe",
+      "name": "Monopoly Deluxe",
+      "description": "Board game adaptation soundtrack",
+      "category": "ail",
+      "path": "ail/monopoly-deluxe.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/MonopolyDeluxe.ad",
+      "license": "MIT",
+      "author": "Westwood Studios",
+      "game": "Monopoly Deluxe",
+      "year": 1992,
+      "instrumentCount": 204,
+      "tags": [
+        "monopoly",
+        "westwood",
+        "board-game",
+        "casual"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "death-gate",
+      "name": "Death Gate",
+      "description": "Fantasy adventure game based on novels",
+      "category": "ail",
+      "path": "ail/death-gate.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/DeathGate.opl",
+      "license": "MIT",
+      "author": "Legend Entertainment",
+      "game": "Death Gate",
+      "year": 1994,
+      "instrumentCount": 185,
+      "tags": [
+        "death-gate",
+        "adventure",
+        "fantasy",
+        "legend-entertainment"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "terra-nova",
+      "name": "Terra Nova: Strike Force Centauri",
+      "description": "Sci-fi tactical mech combat game",
+      "category": "ail",
+      "path": "ail/terra-nova.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/TerraNovaStrikeForceCenturi.opl",
+      "license": "MIT",
+      "author": "Looking Glass Technologies",
+      "game": "Terra Nova: Strike Force Centauri",
+      "year": 1996,
+      "instrumentCount": 181,
+      "tags": [
+        "terra-nova",
+        "looking-glass",
+        "sci-fi",
+        "tactical",
+        "mech"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "nhl-pa-hockey-93",
+      "name": "NHL PA Hockey 93",
+      "description": "Hockey sports game soundtrack",
+      "category": "ail",
+      "path": "ail/nhl-pa-hockey-93.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/NationalHockeyLeaguePA.opl",
+      "license": "MIT",
+      "author": "EA Sports",
+      "game": "NHL PA Hockey 93",
+      "year": 1992,
+      "instrumentCount": 188,
+      "tags": [
+        "nhl",
+        "hockey",
+        "ea-sports",
+        "sports",
+        "arcade"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "bubble-bobble",
+      "name": "Bubble Bobble",
+      "description": "Classic arcade puzzle platformer",
+      "category": "ail",
+      "path": "ail/bubble-bobble.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/BubbleBobble.opl",
+      "license": "MIT",
+      "author": "Taito",
+      "game": "Bubble Bobble",
+      "year": 1986,
+      "instrumentCount": 188,
+      "tags": [
+        "bubble-bobble",
+        "taito",
+        "arcade",
+        "puzzle",
+        "platformer",
+        "classic"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "advanced-civilization",
+      "name": "Advanced Civilization",
+      "description": "Historical strategy board game adaptation",
+      "category": "ail",
+      "path": "ail/advanced-civilization.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/AdvancedCivilization.opl",
+      "license": "MIT",
+      "author": "Avalon Hill",
+      "game": "Advanced Civilization",
+      "year": 1995,
+      "instrumentCount": 185,
+      "tags": [
+        "civilization",
+        "avalon-hill",
+        "strategy",
+        "historical",
+        "board-game"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "guilty",
+      "name": "Guilty",
+      "description": "Mystery detective adventure game",
+      "category": "ail",
+      "path": "ail/guilty.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/Guilty.opl",
+      "license": "MIT",
+      "author": "Divide by Zero",
+      "game": "Guilty",
+      "year": 1995,
+      "instrumentCount": 256,
+      "tags": [
+        "guilty",
+        "mystery",
+        "adventure",
+        "detective"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "putt-putt-saves-the-zoo",
+      "name": "Putt-Putt Saves the Zoo",
+      "description": "Children's educational adventure game",
+      "category": "ail",
+      "path": "ail/putt-putt-saves-the-zoo.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/Putt-Putt-2.opl",
+      "license": "MIT",
+      "author": "Humongous Entertainment",
+      "game": "Putt-Putt Saves the Zoo",
+      "year": 1995,
+      "instrumentCount": 181,
+      "tags": [
+        "putt-putt",
+        "humongous",
+        "kids",
+        "educational",
+        "adventure"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "ultimate-soccer-manager",
+      "name": "Ultimate Soccer Manager",
+      "description": "Soccer management simulation game",
+      "category": "ail",
+      "path": "ail/ultimate-soccer-manager.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/UltimateSoccerManager.opl",
+      "license": "MIT",
+      "author": "Impressions Games",
+      "game": "Ultimate Soccer Manager",
+      "year": 1995,
+      "instrumentCount": 115,
+      "tags": [
+        "soccer",
+        "management",
+        "simulation",
+        "impressions",
+        "sports"
+      ],
+      "isDefault": false
     }
   ]
 }
