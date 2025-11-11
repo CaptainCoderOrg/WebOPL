@@ -121,6 +121,128 @@
         "rpg"
       ],
       "isDefault": false
+    },
+    {
+      "id": "warcraft2",
+      "name": "Warcraft II: Tides of Darkness",
+      "description": "Epic fantasy RTS soundtrack instruments",
+      "category": "ail",
+      "path": "ail/warcraft2.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/warcraft2.ad",
+      "license": "MIT",
+      "author": "Blizzard Entertainment",
+      "game": "Warcraft II: Tides of Darkness",
+      "year": 1995,
+      "instrumentCount": 181,
+      "tags": [
+        "warcraft",
+        "blizzard",
+        "fantasy",
+        "rts",
+        "classic"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "star-control-3",
+      "name": "Star Control 3",
+      "description": "Sci-fi space adventure soundtrack",
+      "category": "ail",
+      "path": "ail/star-control-3.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/star_control_3.opl",
+      "license": "MIT",
+      "author": "Legend Entertainment",
+      "game": "Star Control 3",
+      "year": 1996,
+      "instrumentCount": 181,
+      "tags": [
+        "star-control",
+        "sci-fi",
+        "space",
+        "adventure"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "syndicate",
+      "name": "Syndicate",
+      "description": "Cyberpunk tactical game instruments",
+      "category": "ail",
+      "path": "ail/syndicate.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/Syndicate.opl",
+      "license": "MIT",
+      "author": "Bullfrog Productions",
+      "game": "Syndicate",
+      "year": 1993,
+      "instrumentCount": 162,
+      "tags": [
+        "syndicate",
+        "bullfrog",
+        "cyberpunk",
+        "tactical"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "system-shock",
+      "name": "System Shock",
+      "description": "Atmospheric sci-fi horror soundtrack",
+      "category": "ail",
+      "path": "ail/system-shock.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/SystemShock.opl",
+      "license": "MIT",
+      "author": "Looking Glass Technologies",
+      "game": "System Shock",
+      "year": 1994,
+      "instrumentCount": 181,
+      "tags": [
+        "system-shock",
+        "looking-glass",
+        "sci-fi",
+        "horror",
+        "atmospheric"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "discworld",
+      "name": "Discworld",
+      "description": "Terry Pratchett adventure game soundtrack",
+      "category": "ail",
+      "path": "ail/discworld.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/Discworld.opl",
+      "license": "MIT",
+      "author": "Teeny Weeny Games / Perfect 10 Productions",
+      "game": "Discworld",
+      "year": 1995,
+      "instrumentCount": 256,
+      "tags": [
+        "discworld",
+        "adventure",
+        "comedy",
+        "fantasy"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "theme-hospital",
+      "name": "Theme Hospital",
+      "description": "Hospital simulation game instruments",
+      "category": "ail",
+      "path": "ail/theme-hospital.json",
+      "source": "https://raw.githubusercontent.com/Wohlstand/libADLMIDI/master/fm_banks/ail/ThemeHospital.opl",
+      "license": "MIT",
+      "author": "Bullfrog Productions",
+      "game": "Theme Hospital",
+      "year": 1997,
+      "instrumentCount": 190,
+      "tags": [
+        "theme-hospital",
+        "bullfrog",
+        "simulation",
+        "management"
+      ],
+      "isDefault": false
     }
   ]
 }
