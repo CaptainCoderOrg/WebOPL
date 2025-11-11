@@ -1,0 +1,126 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-11-11",
+  "defaultCollection": "legacy/GENMIDI.json",
+  "collections": [
+    {
+      "id": "genmidi-dmxopl3",
+      "name": "GENMIDI (DMXOPL3)",
+      "description": "Original GENMIDI bank from Doom - 128 General MIDI compatible instruments",
+      "category": "legacy",
+      "path": "legacy/GENMIDI.json",
+      "source": "https://github.com/Wohlstand/libADLMIDI",
+      "license": "MIT",
+      "author": "DMXOPL3 Project",
+      "game": "Doom",
+      "year": 1993,
+      "instrumentCount": 128,
+      "tags": [
+        "doom",
+        "default",
+        "general-midi"
+      ],
+      "isDefault": true
+    },
+    {
+      "id": "doom1-bobby-prince-v1",
+      "name": "Doom (Bobby Prince v1)",
+      "description": "Original Doom instrument bank by Bobby Prince",
+      "category": "dmx",
+      "path": "dmx/doom1.json",
+      "source": "https://github.com/Wohlstand/libADLMIDI",
+      "license": "MIT",
+      "author": "Bobby Prince",
+      "game": "Doom",
+      "year": 1993,
+      "instrumentCount": 128,
+      "tags": [
+        "doom",
+        "id-software",
+        "bobby-prince",
+        "classic"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "doom2-bobby-prince-v2",
+      "name": "Doom 2 (Bobby Prince v2)",
+      "description": "Doom 2 instrument bank with improved patches",
+      "category": "dmx",
+      "path": "dmx/doom2.json",
+      "source": "https://github.com/Wohlstand/libADLMIDI",
+      "license": "MIT",
+      "author": "Bobby Prince",
+      "game": "Doom 2",
+      "year": 1994,
+      "instrumentCount": 128,
+      "tags": [
+        "doom",
+        "doom2",
+        "id-software",
+        "bobby-prince"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "heretic-cygnus",
+      "name": "Heretic (Cygnus Studios)",
+      "description": "Heretic instrument bank - default DMX sound",
+      "category": "dmx",
+      "path": "dmx/heretic.json",
+      "source": "https://github.com/Wohlstand/libADLMIDI",
+      "license": "MIT",
+      "author": "Cygnus Studios",
+      "game": "Heretic",
+      "year": 1994,
+      "instrumentCount": 128,
+      "tags": [
+        "heretic",
+        "id-software",
+        "raven-software",
+        "fantasy"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "raptor",
+      "name": "Raptor: Call of the Shadows",
+      "description": "Raptor: Call of the Shadows instrument bank",
+      "category": "dmx",
+      "path": "dmx/raptor.json",
+      "source": "https://github.com/Wohlstand/libADLMIDI",
+      "license": "MIT",
+      "author": "Apogee Software",
+      "game": "Raptor: Call of the Shadows",
+      "year": 1994,
+      "instrumentCount": 128,
+      "tags": [
+        "raptor",
+        "apogee",
+        "shooter",
+        "action"
+      ],
+      "isDefault": false
+    },
+    {
+      "id": "strife",
+      "name": "Strife",
+      "description": "Strife: Quest for the Sigil instrument bank",
+      "category": "dmx",
+      "path": "dmx/strife.json",
+      "source": "https://github.com/Wohlstand/libADLMIDI",
+      "license": "MIT",
+      "author": "Rogue Entertainment",
+      "game": "Strife",
+      "year": 1996,
+      "instrumentCount": 128,
+      "tags": [
+        "strife",
+        "id-software",
+        "rogue-entertainment",
+        "rpg"
+      ],
+      "isDefault": false
+    }
+  ]
+}

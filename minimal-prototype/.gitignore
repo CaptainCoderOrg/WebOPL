@@ -25,3 +25,4 @@ dist-ssr
 
 # Cached binary files
 scripts/GENMIDI.op2
+.cache/

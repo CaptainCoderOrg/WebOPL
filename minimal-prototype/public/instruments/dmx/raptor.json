@@ -1,0 +1,8973 @@
+{
+  "name": "Raptor: Call of the Shadows",
+  "version": "1.0",
+  "source": "https://github.com/Wohlstand/libADLMIDI",
+  "license": "MIT",
+  "author": "Apogee Software",
+  "game": "Raptor: Call of the Shadows",
+  "year": 1994,
+  "instruments": [
+    {
+      "id": 0,
+      "name": "Acoustic Grand Piano",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 15,
+          "release": 3,
+          "wave": 1,
+          "ksl": 1,
+          "out": 20
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 15,
+          "release": 4,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 1,
+      "name": "Bright Acoustic Piano",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 15,
+          "release": 3,
+          "wave": 0,
+          "ksl": 1,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 15,
+          "release": 4,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 2,
+      "name": "Electric Grand Piano",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 14,
+          "decay": 1,
+          "sustain": 15,
+          "release": 3,
+          "wave": 1,
+          "ksl": 1,
+          "out": 14
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 15,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 14,
+          "decay": 8,
+          "sustain": 1,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 1,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 3,
+      "name": "Honky-tonk Piano",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 5,
+          "release": 3,
+          "wave": 1,
+          "ksl": 1,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 1,
+          "sustain": 15,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 5,
+          "release": 3,
+          "wave": 0,
+          "ksl": 1,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 13,
+          "decay": 1,
+          "sustain": 15,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 4,
+      "name": "Rhodes Paino",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 5,
+          "release": 1,
+          "wave": 0,
+          "ksl": 1,
+          "out": 38
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 13,
+          "decay": 2,
+          "sustain": 14,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 5,
+      "name": "Chorused Piano",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 14,
+          "release": 6,
+          "wave": 0,
+          "ksl": 1,
+          "out": 17
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 14,
+          "release": 5,
+          "wave": 0,
+          "ksl": 1,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 7,
+          "release": 9,
+          "wave": 0,
+          "ksl": 1,
+          "out": 3
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 9,
+          "release": 9,
+          "wave": 0,
+          "ksl": 1,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 6,
+      "name": "Harpsichord",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 0,
+          "release": 1,
+          "wave": 2,
+          "ksl": 2,
+          "out": 7
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 12,
+          "decay": 1,
+          "sustain": 15,
+          "release": 4,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 7,
+      "name": "Clavinet",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 6,
+          "release": 2,
+          "wave": 1,
+          "ksl": 2,
+          "out": 14
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 10,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 8,
+      "name": "Celesta",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 8,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 6,
+          "release": 4,
+          "wave": 1,
+          "ksl": 1,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 14,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 9,
+      "name": "* Glockenspiel",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 3,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 1,
+          "release": 1,
+          "wave": 0,
+          "ksl": 0,
+          "out": 14
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 4,
+          "attack": 7,
+          "decay": 13,
+          "sustain": 3,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 10,
+      "name": "* Music Box",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 4,
+          "release": 1,
+          "wave": 0,
+          "ksl": 0,
+          "out": 15
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 2,
+          "sustain": 9,
+          "release": 2,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 11,
+      "name": "Vibraphone",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 15,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 2
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 15,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 12,
+      "name": "Marimba",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 9,
+          "sustain": 1,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 7,
+          "release": 5,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 13,
+      "name": "Xylophone",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 4,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 9,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 31
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 5,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 14,
+      "name": "* Tubular-bell",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 11,
+          "decay": 6,
+          "sustain": 1,
+          "release": 3,
+          "wave": 1,
+          "ksl": 2,
+          "out": 25
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 1,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 15,
+      "name": "* Dulcimer",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 1,
+          "release": 1,
+          "wave": 0,
+          "ksl": 1,
+          "out": 7
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 2,
+          "sustain": 5,
+          "release": 3,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 16,
+      "name": "Hammond Organ",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 11,
+          "decay": 1,
+          "sustain": 1,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 8
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 13,
+          "decay": 1,
+          "sustain": 1,
+          "release": 7,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 17,
+      "name": "Percussive Organ",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 4,
+          "attack": 15,
+          "decay": 4,
+          "sustain": 3,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 18,
+      "name": "Rock Organ",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 30
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 0,
+          "release": 7,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 1,
+          "release": 7,
+          "wave": 1,
+          "ksl": 2,
+          "out": 30
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 0,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 19,
+      "name": "Church Organ",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 0,
+          "sustain": 0,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 4,
+          "sustain": 1,
+          "release": 4,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 4,
+          "sustain": 1,
+          "release": 4,
+          "wave": 2,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 4,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 20,
+      "name": "Reed Organ",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 0,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 1,
+          "out": 9
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 1,
+          "release": 7,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 21,
+      "name": "Accordion",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 2,
+          "sustain": 1,
+          "release": 5,
+          "wave": 0,
+          "ksl": 1,
+          "out": 8
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 4,
+          "decay": 1,
+          "sustain": 2,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 2,
+          "sustain": 1,
+          "release": 5,
+          "wave": 0,
+          "ksl": 1,
+          "out": 10
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 4,
+          "decay": 6,
+          "sustain": 2,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 22,
+      "name": "Harmonica",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 3,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 12
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 2,
+          "attack": 4,
+          "decay": 2,
+          "sustain": 1,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 3,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 12
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 2,
+          "attack": 4,
+          "decay": 2,
+          "sustain": 1,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 12
+      }
+    },
+    {
+      "id": 23,
+      "name": "Tango Accordion",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 2,
+          "sustain": 0,
+          "release": 5,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 2,
+          "sustain": 0,
+          "release": 5,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 24,
+      "name": "Acoustic Guitar (nylon)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 3,
+          "sustain": 9,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 12
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 14,
+          "decay": 3,
+          "sustain": 12,
+          "release": 8,
+          "wave": 0,
+          "ksl": 1,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 0,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 0,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 25,
+      "name": "Acoustic Guitar (steel)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 14,
+          "decay": 1,
+          "sustain": 14,
+          "release": 4,
+          "wave": 1,
+          "ksl": 2,
+          "out": 13
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 14,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 26,
+      "name": "Electric Guitar (jazz)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 1,
+          "release": 15,
+          "wave": 2,
+          "ksl": 0,
+          "out": 33
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 4,
+          "sustain": 8,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 27,
+      "name": "* Electric Guitar (clean)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 14,
+          "decay": 10,
+          "sustain": 3,
+          "release": 2,
+          "wave": 1,
+          "ksl": 2,
+          "out": 7
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 2,
+          "sustain": 14,
+          "release": 7,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 28,
+      "name": "Electric Guitar (muted)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 14,
+          "decay": 0,
+          "sustain": 15,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 15,
+          "release": 5,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 29,
+      "name": "Overdriven Guitar",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 1,
+          "release": 3,
+          "wave": 1,
+          "ksl": 2,
+          "out": 12
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 14,
+          "decay": 3,
+          "sustain": 2,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 30,
+      "name": "Distortion Guitar",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 0,
+          "sustain": 2,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 6
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 11,
+          "decay": 2,
+          "sustain": 3,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 31,
+      "name": "* Guitar Harmonics",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 9,
+          "release": 7,
+          "wave": 2,
+          "ksl": 1,
+          "out": 3
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 14,
+          "decay": 1,
+          "sustain": 14,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 32,
+      "name": "Acoustic Bass",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 5,
+          "sustain": 1,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 40
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 13,
+          "decay": 2,
+          "sustain": 10,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 33,
+      "name": "Electric Bass (finger)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 2,
+          "out": 22
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 15,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 34,
+      "name": "Electric Bass (pick)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 14,
+          "decay": 0,
+          "sustain": 1,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 14,
+          "decay": 1,
+          "sustain": 13,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 35,
+      "name": "Fretless Bass",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 10,
+          "decay": 0,
+          "sustain": 0,
+          "release": 0,
+          "wave": 1,
+          "ksl": 0,
+          "out": 21
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 11,
+          "decay": 1,
+          "sustain": 15,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 36,
+      "name": "* Slap Bass 1",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 14,
+          "release": 7,
+          "wave": 2,
+          "ksl": 0,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 4,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 14,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 13
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 14,
+          "release": 7,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 37,
+      "name": "Slap Bass 2",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 14,
+          "release": 5,
+          "wave": 0,
+          "ksl": 2,
+          "out": 16
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 15,
+          "release": 5,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 38,
+      "name": "Synth Bass 1",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 4,
+          "sustain": 15,
+          "release": 5,
+          "wave": 1,
+          "ksl": 0,
+          "out": 10
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 3,
+          "sustain": 15,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 39,
+      "name": "Synth Bass 2",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 8,
+          "decay": 3,
+          "sustain": 4,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 21
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 13,
+          "decay": 2,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 8,
+          "decay": 3,
+          "sustain": 4,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 21
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 13,
+          "decay": 2,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 40,
+      "name": "Violin",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 0,
+          "sustain": 4,
+          "release": 5,
+          "wave": 1,
+          "ksl": 0,
+          "out": 23
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 4,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 41,
+      "name": "Viola",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 4,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 4,
+          "decay": 1,
+          "sustain": 1,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 42,
+      "name": "Cello",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 0,
+          "sustain": 1,
+          "release": 4,
+          "wave": 2,
+          "ksl": 0,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 6,
+          "decay": 2,
+          "sustain": 1,
+          "release": 7,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 43,
+      "name": "Contrabass",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 11,
+          "decay": 1,
+          "sustain": 1,
+          "release": 1,
+          "wave": 2,
+          "ksl": 2,
+          "out": 10
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 0,
+          "sustain": 1,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 44,
+      "name": "Tremolo Strings",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 12,
+          "decay": 3,
+          "sustain": 0,
+          "release": 1,
+          "wave": 2,
+          "ksl": 2,
+          "out": 9
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 8,
+          "decay": 3,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 1,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 11,
+          "decay": 3,
+          "sustain": 0,
+          "release": 1,
+          "wave": 2,
+          "ksl": 2,
+          "out": 9
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 3,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 45,
+      "name": "Pizzicato Strings",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 15,
+          "release": 9,
+          "wave": 2,
+          "ksl": 2,
+          "out": 23
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 6,
+          "sustain": 14,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 46,
+      "name": "Orchestral Harp",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 3,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 36
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 3,
+          "sustain": 11,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 47,
+      "name": "* Timpani",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 1,
+          "out": 11
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 0,
+          "release": 4,
+          "wave": 0,
+          "ksl": 1,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 0,
+          "release": 4,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 48,
+      "name": "String Ensemble 1",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 0,
+          "sustain": 0,
+          "release": 4,
+          "wave": 1,
+          "ksl": 1,
+          "out": 17
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 5,
+          "sustain": 0,
+          "release": 4,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 2,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 0,
+          "release": 4,
+          "wave": 1,
+          "ksl": 1,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 5,
+          "sustain": 0,
+          "release": 4,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 49,
+      "name": "String Ensemble 2",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 17
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 7,
+          "decay": 5,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 2,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 0,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 6,
+          "decay": 5,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 50,
+      "name": "Synth Strings 1",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 9,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 19
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 6,
+          "sustain": 0,
+          "release": 2,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 6,
+          "decay": 9,
+          "sustain": 0,
+          "release": 5,
+          "wave": 2,
+          "ksl": 2,
+          "out": 19
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 6,
+          "decay": 6,
+          "sustain": 0,
+          "release": 2,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": -12
+      }
+    },
+    {
+      "id": 51,
+      "name": "Synth Strings 2",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 3,
+          "decay": 2,
+          "sustain": 0,
+          "release": 3,
+          "wave": 0,
+          "ksl": 1,
+          "out": 13
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 2,
+          "decay": 1,
+          "sustain": 0,
+          "release": 4,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 1,
+          "decay": 1,
+          "sustain": 3,
+          "release": 3,
+          "wave": 2,
+          "ksl": 2,
+          "out": 2
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 3,
+          "decay": 1,
+          "sustain": 3,
+          "release": 6,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 52,
+      "name": "Choir Aahs",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 1,
+          "out": 13
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 0,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 0,
+          "release": 4,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 53,
+      "name": "Voice Oohs",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 11,
+          "decay": 1,
+          "sustain": 11,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 25
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 2,
+          "sustain": 8,
+          "release": 5,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 6,
+          "decay": 6,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 3,
+          "out": 6
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 10,
+          "decay": 14,
+          "sustain": 11,
+          "release": 6,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": -12
+      }
+    },
+    {
+      "id": 54,
+      "name": "Synth Voice",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 1,
+          "out": 26
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 0,
+          "sustain": 7,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 55,
+      "name": "Orchestra Hit",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 0,
+          "sustain": 4,
+          "release": 3,
+          "wave": 0,
+          "ksl": 2,
+          "out": 16
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 4,
+          "sustain": 1,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": -24
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 5,
+          "decay": 0,
+          "sustain": 4,
+          "release": 2,
+          "wave": 0,
+          "ksl": 2,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 4,
+          "sustain": 4,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": -12
+      }
+    },
+    {
+      "id": 56,
+      "name": "Trumpet",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 0,
+          "sustain": 1,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 14
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 3,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 57,
+      "name": "Trombone",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 7,
+          "decay": 1,
+          "sustain": 1,
+          "release": 15,
+          "wave": 0,
+          "ksl": 0,
+          "out": 26
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 2,
+          "sustain": 3,
+          "release": 11,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 58,
+      "name": "Tuba",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 0,
+          "sustain": 4,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 22
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 2,
+          "sustain": 5,
+          "release": 6,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 59,
+      "name": "Muted Trumpet",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 0,
+          "sustain": 14,
+          "release": 6,
+          "wave": 1,
+          "ksl": 2,
+          "out": 13
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 15,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 60,
+      "name": "French Horn",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 11,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 34
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 9,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 11,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 35
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 9,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 61,
+      "name": "Brass Section",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 1,
+          "release": 5,
+          "wave": 1,
+          "ksl": 2,
+          "out": 14
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 3,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 1,
+          "release": 7,
+          "wave": 1,
+          "ksl": 2,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 3,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 62,
+      "name": "Synth Brass 1",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 10,
+          "release": 6,
+          "wave": 2,
+          "ksl": 1,
+          "out": 13
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 1,
+          "sustain": 9,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 10,
+          "release": 6,
+          "wave": 2,
+          "ksl": 2,
+          "out": 12
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 9,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 63,
+      "name": "Synth Bass 2",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 8,
+          "decay": 1,
+          "sustain": 10,
+          "release": 6,
+          "wave": 2,
+          "ksl": 1,
+          "out": 16
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 9,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 8,
+          "decay": 1,
+          "sustain": 10,
+          "release": 6,
+          "wave": 2,
+          "ksl": 1,
+          "out": 10
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 9,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 64,
+      "name": "Soprano Sax",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 2,
+          "out": 22
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 2,
+          "sustain": 1,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 65,
+      "name": "Alto Sax",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 0,
+          "release": 6,
+          "wave": 1,
+          "ksl": 2,
+          "out": 9
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 2,
+          "sustain": 1,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 66,
+      "name": "Tenor Sax",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 8,
+          "sustain": 0,
+          "release": 11,
+          "wave": 0,
+          "ksl": 1,
+          "out": 10
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 7,
+          "decay": 3,
+          "sustain": 0,
+          "release": 11,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 67,
+      "name": "Baritone Sax",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 0,
+          "release": 11,
+          "wave": 1,
+          "ksl": 2,
+          "out": 5
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 3,
+          "sustain": 1,
+          "release": 11,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 68,
+      "name": "Oboe",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 1,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 16
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 5,
+          "decay": 12,
+          "sustain": 0,
+          "release": 8,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 69,
+      "name": "English Horn",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 8,
+          "sustain": 0,
+          "release": 7,
+          "wave": 0,
+          "ksl": 1,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 7,
+          "decay": 3,
+          "sustain": 0,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 70,
+      "name": "Bassoon",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 1,
+          "release": 9,
+          "wave": 0,
+          "ksl": 2,
+          "out": 17
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 1,
+          "release": 11,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 71,
+      "name": "Clarinet",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 10,
+          "decay": 5,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 13
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 3,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 72,
+      "name": "Piccolo",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 14,
+          "sustain": 8,
+          "release": 15,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 5,
+          "sustain": 2,
+          "release": 10,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 73,
+      "name": "Flute",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 0,
+          "sustain": 8,
+          "release": 8,
+          "wave": 0,
+          "ksl": 2,
+          "out": 19
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 5,
+          "sustain": 2,
+          "release": 10,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 74,
+      "name": "Recorder",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 5,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 10
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 4,
+          "sustain": 2,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 75,
+      "name": "Pan Flute",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 2,
+          "decay": 4,
+          "sustain": 2,
+          "release": 7,
+          "wave": 1,
+          "ksl": 2,
+          "out": 4
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 4,
+          "decay": 5,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 1,
+          "decay": 7,
+          "sustain": 15,
+          "release": 0,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 2,
+          "decay": 5,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 76,
+      "name": "Bottle Blow",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 5,
+          "decay": 7,
+          "sustain": 0,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 45
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 7,
+          "sustain": 3,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 77,
+      "name": "* Shakuhachi",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 7,
+          "sustain": 3,
+          "release": 4,
+          "wave": 3,
+          "ksl": 0,
+          "out": 40
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 6,
+          "decay": 7,
+          "sustain": 5,
+          "release": 13,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 78,
+      "name": "Whistle",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 1,
+          "sustain": 0,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 7
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 2,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 79,
+      "name": "Ocarina",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 3,
+          "out": 7
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 4,
+          "decay": 2,
+          "sustain": 2,
+          "release": 9,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 80,
+      "name": "Lead 1 (square)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 5,
+          "release": 11,
+          "wave": 1,
+          "ksl": 1,
+          "out": 18
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 0,
+          "sustain": 2,
+          "release": 5,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 5,
+          "release": 11,
+          "wave": 1,
+          "ksl": 1,
+          "out": 13
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 2,
+          "release": 5,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 81,
+      "name": "Lead 2 (sawtooth)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 1,
+          "sustain": 9,
+          "release": 11,
+          "wave": 1,
+          "ksl": 1,
+          "out": 3
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 12,
+          "decay": 0,
+          "sustain": 6,
+          "release": 5,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 11,
+          "decay": 1,
+          "sustain": 10,
+          "release": 11,
+          "wave": 1,
+          "ksl": 1,
+          "out": 1
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 82,
+      "name": "Lead 3 (calliope)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 5,
+          "decay": 7,
+          "sustain": 3,
+          "release": 3,
+          "wave": 3,
+          "ksl": 0,
+          "out": 40
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 7,
+          "sustain": 0,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 83,
+      "name": "Lead 4 (chiffer)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 7,
+          "sustain": 0,
+          "release": 4,
+          "wave": 3,
+          "ksl": 0,
+          "out": 35
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 7,
+          "sustain": 4,
+          "release": 13,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 0,
+          "release": 4,
+          "wave": 3,
+          "ksl": 0,
+          "out": 35
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 7,
+          "sustain": 4,
+          "release": 13,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 84,
+      "name": "Lead 5 (charang)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 10,
+          "decay": 8,
+          "sustain": 0,
+          "release": 11,
+          "wave": 1,
+          "ksl": 1,
+          "out": 8
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 3,
+          "sustain": 2,
+          "release": 8,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 85,
+      "name": "Lead 6 (voice)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 0,
+          "sustain": 5,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 33
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 1,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 5,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 33
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 2,
+          "sustain": 1,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 86,
+      "name": "Lead 7 (5th sawtooth)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 1,
+          "sustain": 9,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 3
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 7,
+          "decay": 0,
+          "sustain": 6,
+          "release": 3,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 9,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 9
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 6,
+          "release": 3,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": -5
+      }
+    },
+    {
+      "id": 87,
+      "name": "Lead 8 (bass & lead)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 4,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 0,
+          "release": 7,
+          "wave": 1,
+          "ksl": 1,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 2,
+          "release": 9,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 88,
+      "name": "* Lead 8 (bass & lead)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 4,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 0,
+          "release": 7,
+          "wave": 1,
+          "ksl": 1,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 2,
+          "release": 9,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 89,
+      "name": "Pad 2 (warm)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 3,
+          "decay": 2,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 3,
+          "decay": 3,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 3,
+          "decay": 2,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 1,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 3,
+          "decay": 3,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 90,
+      "name": "Pad 3 (polysynth)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 10,
+          "release": 5,
+          "wave": 2,
+          "ksl": 2,
+          "out": 15
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 9,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 10,
+          "release": 5,
+          "wave": 2,
+          "ksl": 2,
+          "out": 15
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 9,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 91,
+      "name": "Pad 4 (choir)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 1,
+          "out": 4
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 1,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 0,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 4
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 1,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 92,
+      "name": "Pad 5 (bowed glass)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 3,
+          "release": 3,
+          "wave": 0,
+          "ksl": 2,
+          "out": 10
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 2,
+          "sustain": 5,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 93,
+      "name": "Pad 6 (metal)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 8,
+          "decay": 0,
+          "sustain": 5,
+          "release": 2,
+          "wave": 1,
+          "ksl": 2,
+          "out": 29
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 2,
+          "decay": 3,
+          "sustain": 5,
+          "release": 3,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 94,
+      "name": "Pad 7 (halo)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 4,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 13
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 4,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 5,
+          "decay": 1,
+          "sustain": 4,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 13
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 1,
+          "sustain": 4,
+          "release": 6,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 95,
+      "name": "Pad 8 (sweep)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 1,
+          "decay": 1,
+          "sustain": 5,
+          "release": 2,
+          "wave": 1,
+          "ksl": 2,
+          "out": 12
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 0,
+          "sustain": 7,
+          "release": 3,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 96,
+      "name": "FX 1 (rain)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 7,
+          "decay": 2,
+          "sustain": 4,
+          "release": 7,
+          "wave": 0,
+          "ksl": 1,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 1,
+          "release": 9,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 97,
+      "name": "FX 2 (soundtrack)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 5,
+          "sustain": 0,
+          "release": 2,
+          "wave": 1,
+          "ksl": 3,
+          "out": 18
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 4,
+          "decay": 5,
+          "sustain": 1,
+          "release": 2,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 4,
+          "decay": 5,
+          "sustain": 0,
+          "release": 3,
+          "wave": 0,
+          "ksl": 3,
+          "out": 18
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 3,
+          "attack": 3,
+          "decay": 5,
+          "sustain": 3,
+          "release": 5,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": -5
+      }
+    },
+    {
+      "id": 98,
+      "name": "* FX 3 (crystal)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 4,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 7,
+          "release": 4,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 10,
+          "decay": 3,
+          "sustain": 2,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": -24
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 99,
+      "name": "FX 4 (atmosphere)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 12,
+          "decay": 0,
+          "sustain": 13,
+          "release": 2,
+          "wave": 0,
+          "ksl": 2,
+          "out": 14
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 1,
+          "sustain": 13,
+          "release": 2,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 0,
+          "sustain": 13,
+          "release": 2,
+          "wave": 0,
+          "ksl": 2,
+          "out": 14
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 13,
+          "release": 2,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 100,
+      "name": "FX 5 (brightness)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 15,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 18
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 2,
+          "sustain": 15,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 9,
+          "decay": 0,
+          "sustain": 15,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 18
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 2,
+          "sustain": 15,
+          "release": 2,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 101,
+      "name": "FX 6 (goblin)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 1,
+          "decay": 3,
+          "sustain": 5,
+          "release": 2,
+          "wave": 1,
+          "ksl": 0,
+          "out": 26
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 3,
+          "decay": 3,
+          "sustain": 1,
+          "release": 3,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 102,
+      "name": "FX 7 (echo drops)",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 4,
+          "decay": 5,
+          "sustain": 11,
+          "release": 10,
+          "wave": 0,
+          "ksl": 0,
+          "out": 26
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 2,
+          "sustain": 9,
+          "release": 1,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 103,
+      "name": "* FX 8 (star-theme)",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 5,
+          "decay": 8,
+          "sustain": 0,
+          "release": 2,
+          "wave": 1,
+          "ksl": 0,
+          "out": 24
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 4,
+          "decay": 2,
+          "sustain": 7,
+          "release": 2,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 104,
+      "name": "Sitar",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 6,
+          "decay": 3,
+          "sustain": 11,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 8
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 4,
+          "attack": 6,
+          "decay": 3,
+          "sustain": 11,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 105,
+      "name": "Banjo",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 7,
+          "decay": 7,
+          "sustain": 1,
+          "release": 2,
+          "wave": 0,
+          "ksl": 0,
+          "out": 13
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 15,
+          "decay": 3,
+          "sustain": 15,
+          "release": 4,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 2,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 15,
+          "release": 10,
+          "wave": 2,
+          "ksl": 0,
+          "out": 10
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 15,
+          "release": 10,
+          "wave": 3,
+          "ksl": 1,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 106,
+      "name": "Shamisen",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 3,
+          "release": 3,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 4,
+          "sustain": 7,
+          "release": 3,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 7,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 10,
+          "release": 12,
+          "wave": 2,
+          "ksl": 0,
+          "out": 26
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 15,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 2,
+          "release": 9,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 107,
+      "name": "Koto",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 5,
+          "release": 3,
+          "wave": 1,
+          "ksl": 0,
+          "out": 33
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 9,
+          "decay": 1,
+          "sustain": 14,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 108,
+      "name": "Kalimba",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 1,
+          "sustain": 3,
+          "release": 9,
+          "wave": 3,
+          "ksl": 1,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 5,
+          "attack": 13,
+          "decay": 6,
+          "sustain": 7,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 109,
+      "name": "Bag Pipe",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 8,
+          "decay": 9,
+          "sustain": 1,
+          "release": 5,
+          "wave": 1,
+          "ksl": 1,
+          "out": 2
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 6,
+          "decay": 11,
+          "sustain": 0,
+          "release": 7,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 110,
+      "name": "Fiddle",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 0,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 31
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 5,
+          "decay": 2,
+          "sustain": 2,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 111,
+      "name": "Shanai",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 4,
+          "decay": 0,
+          "sustain": 1,
+          "release": 3,
+          "wave": 0,
+          "ksl": 0,
+          "out": 19
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 6,
+          "decay": 1,
+          "sustain": 1,
+          "release": 6,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 112,
+      "name": "Tinkle Bell",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 3,
+          "attack": 10,
+          "decay": 1,
+          "sustain": 3,
+          "release": 2,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 11,
+          "decay": 2,
+          "sustain": 7,
+          "release": 2,
+          "wave": 1,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": -7
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 113,
+      "name": "Agogo",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 5,
+          "attack": 14,
+          "decay": 7,
+          "sustain": 0,
+          "release": 1,
+          "wave": 0,
+          "ksl": 2,
+          "out": 1
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 6,
+          "attack": 9,
+          "decay": 6,
+          "sustain": 6,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 2,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 114,
+      "name": "Steel Drums",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 0,
+          "release": 4,
+          "wave": 1,
+          "ksl": 1,
+          "out": 9
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 8,
+          "decay": 2,
+          "sustain": 0,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 115,
+      "name": "Woodblock",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 3,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 13,
+          "release": 1,
+          "wave": 0,
+          "ksl": 1,
+          "out": 4
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 7,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 116,
+      "name": "Taiko Drum",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 10,
+          "decay": 7,
+          "sustain": 14,
+          "release": 12,
+          "wave": 0,
+          "ksl": 0,
+          "out": 11
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 5,
+          "sustain": 15,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 117,
+      "name": "Melodic Tom",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": false,
+          "multi": 0,
+          "attack": 10,
+          "decay": 8,
+          "sustain": 12,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 13,
+          "decay": 6,
+          "sustain": 11,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 118,
+      "name": "Synth Drum",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 12,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 11
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 13,
+          "decay": 3,
+          "sustain": 11,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 119,
+      "name": "Reverse Cymbal",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 12,
+          "attack": 4,
+          "decay": 1,
+          "sustain": 3,
+          "release": 1,
+          "wave": 0,
+          "ksl": 2,
+          "out": 15
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 2,
+          "decay": 1,
+          "sustain": 1,
+          "release": 13,
+          "wave": 3,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 120,
+      "name": "Guitar Fret Noise",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 2,
+          "attack": 3,
+          "decay": 4,
+          "sustain": 11,
+          "release": 3,
+          "wave": 1,
+          "ksl": 0,
+          "out": 33
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 1,
+          "attack": 5,
+          "decay": 4,
+          "sustain": 15,
+          "release": 7,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 121,
+      "name": "Breath Noise",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": true,
+          "multi": 1,
+          "attack": 3,
+          "decay": 7,
+          "sustain": 0,
+          "release": 4,
+          "wave": 0,
+          "ksl": 2,
+          "out": 45
+        },
+        "car": {
+          "trem": false,
+          "vib": true,
+          "sus": false,
+          "ksr": true,
+          "multi": 0,
+          "attack": 3,
+          "decay": 7,
+          "sustain": 3,
+          "release": 4,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 122,
+      "name": "Seashore",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 3,
+          "decay": 14,
+          "sustain": 0,
+          "release": 1,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 8,
+          "attack": 1,
+          "decay": 4,
+          "sustain": 15,
+          "release": 3,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 123,
+      "name": "Bird Tweet",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 5,
+          "attack": 14,
+          "decay": 11,
+          "sustain": 0,
+          "release": 3,
+          "wave": 0,
+          "ksl": 3,
+          "out": 20
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 6,
+          "attack": 4,
+          "decay": 5,
+          "sustain": 6,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 124,
+      "name": "Telephone Ring",
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 13,
+          "decay": 10,
+          "sustain": 7,
+          "release": 1,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 10,
+          "attack": 11,
+          "decay": 0,
+          "sustain": 1,
+          "release": 7,
+          "wave": 1,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 125,
+      "name": "Helicopter",
+      "note": 17,
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 0,
+          "attack": 1,
+          "decay": 14,
+          "sustain": 1,
+          "release": 1,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 2,
+          "attack": 2,
+          "decay": 1,
+          "sustain": 1,
+          "release": 1,
+          "wave": 1,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": true,
+        "baseNote": -24
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 126,
+      "name": "Applause",
+      "note": 65,
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 15,
+          "attack": 5,
+          "decay": 3,
+          "sustain": 0,
+          "release": 0,
+          "wave": 2,
+          "ksl": 2,
+          "out": 6
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 15,
+          "attack": 1,
+          "decay": 0,
+          "sustain": 0,
+          "release": 2,
+          "wave": 3,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 127,
+      "name": "Gun Shot",
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 12,
+          "attack": 15,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 4,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 14,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": true,
+        "baseNote": 0
+      }
+    }
+  ]
+}
