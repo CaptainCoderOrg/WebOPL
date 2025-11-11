@@ -3,16 +3,27 @@
  * Functions for post-processing audio buffers
  */
 
+// WAV file format constants
+const WAV_HEADER_SIZE = 44; // Bytes in standard WAV header
+const INT16_MAX = 32767;    // Maximum value for 16-bit signed integer
+const INT16_MIN = -32768;   // Minimum value for 16-bit signed integer
+
+// Processing constants
+const CLIPPING_WARNING_THRESHOLD = 0.01; // Warn if >1% of samples clip
+
 /**
  * Normalize audio to a target dB level
+ *
+ * Finds the peak amplitude in the audio and applies gain to reach
+ * the target dB level (relative to full scale).
+ *
  * @param wavBuffer - Input WAV file as ArrayBuffer
- * @param targetDb - Target peak level in dB (e.g., -0.1 for near-maximum without clipping)
+ * @param targetDb - Target peak level in dB (e.g., -1.0 for -1 dB)
  * @returns Normalized WAV file as ArrayBuffer
  */
 export function normalizeAudio(wavBuffer: ArrayBuffer, targetDb: number): ArrayBuffer {
   // Parse WAV header
   const dataView = new DataView(wavBuffer);
-  const headerSize = 44;
 
   // Read header information
   const subchunk2Size = dataView.getUint32(40, true);
@@ -25,7 +36,7 @@ export function normalizeAudio(wavBuffer: ArrayBuffer, targetDb: number): ArrayB
   // Find peak amplitude in the audio data
   let peakAmplitude = 0;
   for (let i = 0; i < totalSamples; i++) {
-    const offset = headerSize + i * bytesPerSample;
+    const offset = WAV_HEADER_SIZE + i * bytesPerSample;
     const sample = dataView.getInt16(offset, true);
     const absValue = Math.abs(sample);
     if (absValue > peakAmplitude) {
@@ -35,35 +46,50 @@ export function normalizeAudio(wavBuffer: ArrayBuffer, targetDb: number): ArrayB
 
   // If audio is silent, return original
   if (peakAmplitude === 0) {
+    console.warn('[normalizeAudio] Audio is silent, skipping normalization');
     return wavBuffer;
   }
 
   // Calculate normalization factor
   // Convert target dB to linear scale
   const targetLinear = Math.pow(10, targetDb / 20);
-  const maxValue = 32767; // Max value for 16-bit signed integer
-  const targetPeak = maxValue * targetLinear;
+  const targetPeak = INT16_MAX * targetLinear;
   const normalizationFactor = targetPeak / peakAmplitude;
 
-  // Create new buffer with normalized audio
-  const newBuffer = new ArrayBuffer(wavBuffer.byteLength);
+  console.log(
+    `[normalizeAudio] Peak: ${peakAmplitude}, ` +
+    `Target: ${targetPeak.toFixed(0)}, ` +
+    `Factor: ${normalizationFactor.toFixed(3)}`
+  );
+
+  // Clone entire buffer at once (much faster than byte-by-byte)
+  const newBuffer = wavBuffer.slice(0);
   const newDataView = new DataView(newBuffer);
 
-  // Copy header
-  for (let i = 0; i < headerSize; i++) {
-    newDataView.setUint8(i, dataView.getUint8(i));
-  }
-
-  // Normalize and copy audio data
+  // Apply normalization to audio data (header is already copied)
+  let clippedSamples = 0;
   for (let i = 0; i < totalSamples; i++) {
-    const offset = headerSize + i * bytesPerSample;
+    const offset = WAV_HEADER_SIZE + i * bytesPerSample;
     const sample = dataView.getInt16(offset, true);
     const normalizedSample = Math.round(sample * normalizationFactor);
 
     // Clamp to prevent overflow
-    const clampedSample = Math.max(-32768, Math.min(32767, normalizedSample));
+    const clampedSample = Math.max(INT16_MIN, Math.min(INT16_MAX, normalizedSample));
+
+    if (normalizedSample !== clampedSample) {
+      clippedSamples++;
+    }
 
     newDataView.setInt16(offset, clampedSample, true);
+  }
+
+  // Warn if significant clipping occurred
+  if (clippedSamples > totalSamples * CLIPPING_WARNING_THRESHOLD) {
+    console.warn(
+      `[normalizeAudio] ${clippedSamples} samples clipped ` +
+      `(${(clippedSamples/totalSamples*100).toFixed(2)}%). ` +
+      `Consider lower target dB.`
+    );
   }
 
   return newBuffer;
@@ -71,6 +97,10 @@ export function normalizeAudio(wavBuffer: ArrayBuffer, targetDb: number): ArrayB
 
 /**
  * Apply fade in and/or fade out to audio
+ *
+ * Applies linear fades to the audio. Fade in goes from 0 to 1,
+ * fade out goes from 1 to 0.
+ *
  * @param wavBuffer - Input WAV file as ArrayBuffer
  * @param fadeInMs - Fade in duration in milliseconds (0 to skip)
  * @param fadeOutMs - Fade out duration in milliseconds (0 to skip)
@@ -83,7 +113,6 @@ export function applyFades(
 ): ArrayBuffer {
   // Parse WAV header
   const dataView = new DataView(wavBuffer);
-  const headerSize = 44;
 
   // Read header information
   const sampleRate = dataView.getUint32(24, true);
@@ -99,16 +128,17 @@ export function applyFades(
   const fadeInSamples = Math.floor((fadeInMs / 1000) * sampleRate);
   const fadeOutSamples = Math.floor((fadeOutMs / 1000) * sampleRate);
 
-  // Create new buffer with faded audio
-  const newBuffer = new ArrayBuffer(wavBuffer.byteLength);
+  console.log(
+    `[applyFades] Fade in: ${fadeInSamples} samples, ` +
+    `Fade out: ${fadeOutSamples} samples, ` +
+    `Total: ${totalSamplesPerChannel} samples`
+  );
+
+  // Clone entire buffer at once (much faster than byte-by-byte)
+  const newBuffer = wavBuffer.slice(0);
   const newDataView = new DataView(newBuffer);
 
-  // Copy header
-  for (let i = 0; i < headerSize; i++) {
-    newDataView.setUint8(i, dataView.getUint8(i));
-  }
-
-  // Apply fades to audio data
+  // Apply fades to audio data (header is already copied)
   for (let i = 0; i < totalSamplesPerChannel; i++) {
     let gain = 1.0;
 
@@ -125,12 +155,12 @@ export function applyFades(
 
     // Apply gain to all channels
     for (let ch = 0; ch < numChannels; ch++) {
-      const offset = headerSize + (i * numChannels + ch) * bytesPerSample;
+      const offset = WAV_HEADER_SIZE + (i * numChannels + ch) * bytesPerSample;
       const sample = dataView.getInt16(offset, true);
       const fadedSample = Math.round(sample * gain);
 
       // Clamp to prevent overflow
-      const clampedSample = Math.max(-32768, Math.min(32767, fadedSample));
+      const clampedSample = Math.max(INT16_MIN, Math.min(INT16_MAX, fadedSample));
 
       newDataView.setInt16(offset, clampedSample, true);
     }

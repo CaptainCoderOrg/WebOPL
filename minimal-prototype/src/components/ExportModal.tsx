@@ -160,6 +160,12 @@ export function ExportModal({
         });
       }
 
+      // Check if aborted before updating success state
+      if (controller.signal.aborted) {
+        console.log('[ExportModal] Export aborted, not updating state');
+        return;
+      }
+
       // Store the original WAV (before any post-processing)
       setOriginalWAV(wavBuffer);
 
@@ -170,19 +176,26 @@ export function ExportModal({
       const waveform = generateWaveformFromWAV(wavBuffer, 1000);
       setWaveformData(waveform);
 
-      setIsExporting(false);
-      setAbortController(null);
-
       // Auto-navigate to page 2 after successful generation
       setCurrentPage(2);
 
       // Call success callback
       onExportComplete?.(filename);
 
-    } catch (err) {
+    } catch (err: any) {
+      // Check if error is due to abort
+      if (err.name === 'AbortError' || controller.signal.aborted) {
+        console.log('[ExportModal] Export aborted');
+        return;
+      }
+
       console.error('[ExportModal] Export failed:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Export failed';
+      const errorMessage = err instanceof Error
+        ? `Export failed: ${err.message}`
+        : 'Export failed due to an unknown error. Please try again.';
       setError(errorMessage);
+    } finally {
+      // Always cleanup
       setIsExporting(false);
       setAbortController(null);
     }

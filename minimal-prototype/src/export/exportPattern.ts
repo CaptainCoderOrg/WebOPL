@@ -11,6 +11,7 @@ import { PatternRenderer } from './PatternRenderer';
 import { SimpleSynth } from '../SimpleSynth';
 import { DirectOPLChip } from '../adapters/DirectOPLChip';
 import { WAVEncoder } from '../utils/WAVEncoder';
+import { loadOPL3Library } from '../utils/opl3Loader';
 
 const SAMPLE_RATE = 49716; // OPL3 native sample rate
 
@@ -57,31 +58,6 @@ export interface StandardExportOptions extends ExportOptions {
 export interface SeamlessLoopExportOptions extends ExportOptions {
   /** Number of context rows for seamless loop rendering */
   contextRows: number;
-}
-
-/**
- * Load the OPL3 library from global window object
- */
-async function loadOPL3Library(): Promise<any> {
-  // Check if already loaded
-  if ((globalThis as any).OPL3) {
-    return (globalThis as any).OPL3.OPL3;
-  }
-
-  // Load OPL3 library
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = '/node_modules/opl3/dist/opl3.js';
-    script.onload = () => {
-      if ((globalThis as any).OPL3) {
-        resolve((globalThis as any).OPL3.OPL3);
-      } else {
-        reject(new Error('OPL3 library failed to load'));
-      }
-    };
-    script.onerror = () => reject(new Error('Failed to load OPL3 script'));
-    document.head.appendChild(script);
-  });
 }
 
 /**

@@ -8,6 +8,7 @@ import { DirectOPLChip } from '../adapters/DirectOPLChip';
 import { PatternRenderer, type RenderablePattern } from './PatternRenderer';
 import { WAVEncoder } from '../utils/WAVEncoder';
 import { loadGENMIDI } from '../utils/genmidiParser';
+import { loadOPL3Library } from '../utils/opl3Loader';
 import type { OPLPatch } from '../types/OPLPatch';
 import type { PatternFile } from '../types/PatternFile';
 
@@ -36,11 +37,10 @@ export class OfflineAudioRenderer {
 
     // Load OPL3 library
     console.log('[OfflineAudioRenderer] Loading OPL3 library...');
-    await this.loadOPL3Library();
+    const OPL3Class = await loadOPL3Library();
     console.log('[OfflineAudioRenderer] OPL3 library loaded');
 
     // Create OPL3 chip instance
-    const OPL3Class = (globalThis as any).OPL3.OPL3;
     const chip = new OPL3Class();
     console.log('[OfflineAudioRenderer] OPL3 chip created');
 
@@ -161,32 +161,4 @@ export class OfflineAudioRenderer {
     console.log('[OfflineAudioRenderer] OPL3 chip initialized');
   }
 
-  /**
-   * Load OPL3 library from node_modules
-   * Uses script injection (not eval) for security
-   */
-  private static async loadOPL3Library(): Promise<void> {
-    if (typeof (globalThis as any).OPL3?.OPL3 !== 'undefined') {
-      return; // Already loaded
-    }
-
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = '/node_modules/opl3/dist/opl3.js';
-
-      script.onload = () => {
-        if (typeof (globalThis as any).OPL3?.OPL3 !== 'undefined') {
-          resolve();
-        } else {
-          reject(new Error('OPL3 library loaded but OPL3.OPL3 not found'));
-        }
-      };
-
-      script.onerror = () => {
-        reject(new Error('Failed to load OPL3 script from /node_modules/opl3/dist/opl3.js'));
-      };
-
-      document.head.appendChild(script);
-    });
-  }
 }
