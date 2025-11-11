@@ -2,7 +2,7 @@
 
 **Comprehensive reference documentation for the WebOrchestra OPL3 Music Tracker**
 
-Last Updated: 2025-01-06
+Last Updated: 2025-01-11
 
 ---
 
@@ -28,6 +28,7 @@ The documentation is organized to serve as both:
 | **[AUDIO_ENGINE.md](AUDIO_ENGINE.md)** | SimpleSynth, OPL3 details, AudioWorklet | Audio developers |
 | **[TRACKER_SYSTEM.md](TRACKER_SYSTEM.md)** | Pattern playback, UI components, timing | UI developers |
 | **[INSTRUMENT_SYSTEM.md](INSTRUMENT_SYSTEM.md)** | OPL3 patches, GENMIDI, instrument editor | Sound designers |
+| **[EXPORT_FEATURE.md](EXPORT_FEATURE.md)** | WAV export, seamless loops, post-processing | Audio developers |
 | **[DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)** | Setup, adding features, testing, troubleshooting | All developers |
 
 ### Original Project Documentation
@@ -64,8 +65,8 @@ Located in `../minimal-prototype/`:
 **...understand the system architecture**
 → Read [ARCHITECTURE.md](ARCHITECTURE.md)
 
-**...add WAV export functionality**
-→ Check the main project for implementation plans
+**...export patterns to WAV files**
+→ Read [EXPORT_FEATURE.md](EXPORT_FEATURE.md)
 
 ---
 
@@ -80,13 +81,7 @@ Located in `../minimal-prototype/`:
 - **Validation** - Real-time error checking
 - **Volume Control** - Master gain adjustment
 - **Polish** - Loading states, error handling, keyboard shortcuts
-
-### What's Next 🔴
-
-**Primary Goal:** WAV Export Functionality
-- Export patterns to WAV audio files
-- Progress tracking and cancel support
-- File download with proper naming
+- **WAV Export** - Seamless loops, post-processing, waveform preview
 
 ---
 
