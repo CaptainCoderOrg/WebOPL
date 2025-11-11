@@ -33,13 +33,16 @@ The documentation is organized to serve as both:
 
 ### Original Project Documentation
 
-Located in `../minimal-prototype/`:
+- **[README.md](../minimal-prototype/README.md)** - Main project README (active)
 
-- **[README.md](../minimal-prototype/README.md)** - Main project README
-- **[PART2_SUMMARY.md](../minimal-prototype/PART2_SUMMARY.md)** - Core engine implementation
-- **[PART3_SUMMARY.md](../minimal-prototype/PART3_SUMMARY.md)** - Tracker UI implementation
-- **[PART4_SUMMARY.md](../minimal-prototype/PART4_SUMMARY.md)** - Polish and validation
-- **[MIGRATION_COMPLETE.md](../minimal-prototype/MIGRATION_COMPLETE.md)** - OPL3 library migration
+### Archived Documentation
+
+Historical implementation and migration documents:
+
+- **[PART2_SUMMARY.md](../archived/implementation-summaries/PART2_SUMMARY.md)** - Core engine implementation
+- **[PART3_SUMMARY.md](../archived/implementation-summaries/PART3_SUMMARY.md)** - Tracker UI implementation
+- **[PART4_SUMMARY.md](../archived/implementation-summaries/PART4_SUMMARY.md)** - Polish and validation
+- **[MIGRATION_COMPLETE.md](../archived/opl3-migration/MIGRATION_COMPLETE.md)** - OPL3 library migration
 
 ---
 
