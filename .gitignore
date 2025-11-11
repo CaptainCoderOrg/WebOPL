@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Development/testing scripts
+check-*.js
+
+# Prototype files
+**/prototypes/*.html
+**/prototypes/*.ts
+!**/prototypes/*.md
+
+# Integration tests
+**/integration-test.*
+**/test-*.html
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
