@@ -42,31 +42,71 @@ export function WaveformDisplay({
   useEffect(() => {
     if (!wavBuffer) return;
 
+    let isCancelled = false;
+
     const setupAudio = async () => {
-      // Create AudioContext
+      // Close any existing context FIRST
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        try {
+          await audioContextRef.current.close();
+        } catch (err) {
+          console.error('[WaveformDisplay] Error closing previous AudioContext:', err);
+        }
+      }
+
+      // Check if cancelled during close
+      if (isCancelled) return;
+
+      // Create new AudioContext
       const audioContext = new AudioContext();
       audioContextRef.current = audioContext;
 
-      // Decode the WAV buffer
-      const audioBuffer = await audioContext.decodeAudioData(wavBuffer.slice(0));
-      audioBufferRef.current = audioBuffer;
+      try {
+        // Decode the WAV buffer
+        const audioBuffer = await audioContext.decodeAudioData(wavBuffer.slice(0));
+
+        // Check if cancelled during decoding
+        if (isCancelled) {
+          await audioContext.close();
+          return;
+        }
+
+        audioBufferRef.current = audioBuffer;
+      } catch (err) {
+        console.error('[WaveformDisplay] Failed to decode audio data:', err);
+        if (!isCancelled) {
+          await audioContext.close();
+        }
+        return;
+      }
     };
 
     setupAudio().catch((err) => {
       console.error('[WaveformDisplay] Failed to setup audio:', err);
     });
 
-    // Cleanup
+    // Cleanup function
     return () => {
+      isCancelled = true;
+
+      // Stop and disconnect source node
       if (sourceNodeRef.current) {
-        sourceNodeRef.current.stop();
-        sourceNodeRef.current.disconnect();
+        try {
+          sourceNodeRef.current.stop();
+          sourceNodeRef.current.disconnect();
+        } catch (e) {
+          // Ignore errors if already stopped
+        }
         sourceNodeRef.current = null;
       }
-      if (audioContextRef.current) {
+
+      // Close audio context
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
         audioContextRef.current.close();
         audioContextRef.current = null;
       }
+
+      // Clear refs
       audioBufferRef.current = null;
       setIsPlaying(false);
       setPlaybackPosition(0);

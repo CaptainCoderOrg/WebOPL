@@ -163,22 +163,30 @@ export class OfflineAudioRenderer {
 
   /**
    * Load OPL3 library from node_modules
+   * Uses script injection (not eval) for security
    */
   private static async loadOPL3Library(): Promise<void> {
     if (typeof (globalThis as any).OPL3?.OPL3 !== 'undefined') {
       return; // Already loaded
     }
 
-    const response = await fetch('/node_modules/opl3/dist/opl3.js');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch OPL3: ${response.statusText}`);
-    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = '/node_modules/opl3/dist/opl3.js';
 
-    const code = await response.text();
-    eval(code);
+      script.onload = () => {
+        if (typeof (globalThis as any).OPL3?.OPL3 !== 'undefined') {
+          resolve();
+        } else {
+          reject(new Error('OPL3 library loaded but OPL3.OPL3 not found'));
+        }
+      };
 
-    if (typeof (globalThis as any).OPL3?.OPL3 === 'undefined') {
-      throw new Error('OPL3 not available after loading');
-    }
+      script.onerror = () => {
+        reject(new Error('Failed to load OPL3 script from /node_modules/opl3/dist/opl3.js'));
+      };
+
+      document.head.appendChild(script);
+    });
   }
 }

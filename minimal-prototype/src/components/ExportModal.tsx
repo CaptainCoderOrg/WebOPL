@@ -382,24 +382,38 @@ export function ExportModal({
   useEffect(() => {
     if (!originalWAV) return;
 
-    let processedWAV = originalWAV;
+    let isCancelled = false;
 
-    // Apply normalization if enabled
-    if (normalizeEnabled && typeof normalizeDb === 'number') {
-      processedWAV = normalizeAudio(processedWAV, normalizeDb);
-    }
+    // Process audio
+    const processAudio = () => {
+      let processedWAV = originalWAV;
 
-    // Apply fades if enabled
-    if (fadeIn || fadeOut) {
-      const fadeInMs = fadeIn && typeof fadeInDuration === 'number' ? fadeInDuration : 0;
-      const fadeOutMs = fadeOut && typeof fadeOutDuration === 'number' ? fadeOutDuration : 0;
-      processedWAV = applyFades(processedWAV, fadeInMs, fadeOutMs);
-    }
+      // Apply normalization if enabled
+      if (normalizeEnabled && typeof normalizeDb === 'number') {
+        processedWAV = normalizeAudio(processedWAV, normalizeDb);
+      }
 
-    // Update the generated WAV and waveform
-    setGeneratedWAV(processedWAV);
-    const waveform = generateWaveformFromWAV(processedWAV, 1000);
-    setWaveformData(waveform);
+      // Apply fades if enabled
+      if (fadeIn || fadeOut) {
+        const fadeInMs = fadeIn && typeof fadeInDuration === 'number' ? fadeInDuration : 0;
+        const fadeOutMs = fadeOut && typeof fadeOutDuration === 'number' ? fadeOutDuration : 0;
+        processedWAV = applyFades(processedWAV, fadeInMs, fadeOutMs);
+      }
+
+      // Only update state if not cancelled
+      if (!isCancelled) {
+        setGeneratedWAV(processedWAV);
+        const waveform = generateWaveformFromWAV(processedWAV, 1000);
+        setWaveformData(waveform);
+      }
+    };
+
+    processAudio();
+
+    // Cleanup function
+    return () => {
+      isCancelled = true;
+    };
   }, [normalizeEnabled, normalizeDb, fadeIn, fadeInDuration, fadeOut, fadeOutDuration, originalWAV]);
 
   return (
