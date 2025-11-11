@@ -13,7 +13,9 @@ import { PianoKeyboardTest } from './components/PianoKeyboardTest';
 import { VolumeControl } from './components/VolumeControl';
 import { defaultPatches } from './data/defaultPatches';
 import { loadGENMIDI } from './utils/genmidiParser';
+import { loadCatalog, loadDefaultCollection, loadCollectionById } from './utils/catalogLoader';
 import type { OPLPatch } from './types/OPLPatch';
+import type { InstrumentCatalog } from './types/Catalog';
 import './App.css';
 
 function App() {
@@ -21,6 +23,13 @@ function App() {
   const [player, setPlayer] = useState<SimplePlayer | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
+
+  // Catalog state
+  const [catalog, setCatalog] = useState<InstrumentCatalog | null>(null);
+  const [catalogLoaded, setCatalogLoaded] = useState(false);
+
+  // Current collection
+  const [currentCollectionId, setCurrentCollectionId] = useState<string | null>(null);
 
   // Instrument bank (starts with defaults)
   const [instrumentBank, setInstrumentBank] = useState<OPLPatch[]>(defaultPatches);
@@ -76,37 +85,106 @@ function App() {
 
 
   /**
-   * Load GENMIDI instrument bank
+   * Load catalog on mount
+   */
+  useEffect(() => {
+    const initCatalog = async () => {
+      if (catalogLoaded) return;
+
+      try {
+        console.log('[App] Loading instrument catalog...');
+        const cat = await loadCatalog();
+        setCatalog(cat);
+        setCatalogLoaded(true);
+
+        // Load saved collection ID from localStorage, or use default
+        const savedCollectionId = localStorage.getItem('selected-collection-id');
+        const defaultEntry = cat.collections.find(c => c.isDefault) || cat.collections[0];
+
+        if (savedCollectionId && cat.collections.some(c => c.id === savedCollectionId)) {
+          setCurrentCollectionId(savedCollectionId);
+          console.log('[App] Using saved collection:', savedCollectionId);
+        } else {
+          setCurrentCollectionId(defaultEntry.id);
+          console.log('[App] Using default collection:', defaultEntry.id);
+        }
+      } catch (error) {
+        console.error('[App] Failed to load catalog:', error);
+        const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+        setBankError(errorMsg);
+        setCatalogLoaded(true); // Mark as loaded to prevent retry loop
+
+        // Fallback: try loading legacy GENMIDI directly
+        console.log('[App] Falling back to legacy GENMIDI loading');
+        loadLegacyGENMIDI();
+      }
+    };
+
+    initCatalog();
+  }, [catalogLoaded]);
+
+  /**
+   * Load instruments when collection changes
    */
   useEffect(() => {
     const loadInstruments = async () => {
-      // Only load once, after synth is ready
-      if (!isReady || bankLoaded || instrumentBank.length > 4) return;
+      // Wait for synth to be ready and catalog to be loaded
+      if (!isReady || !catalogLoaded || !currentCollectionId || bankLoaded) return;
 
       try {
-        console.log('[App] Loading GENMIDI instrument bank...');
+        console.log('[App] Loading collection:', currentCollectionId);
         setBankError(null);
 
-        const bank = await loadGENMIDI();
+        if (!catalog) {
+          throw new Error('Catalog not loaded');
+        }
+
+        const bank = await loadCollectionById(catalog, currentCollectionId);
 
         console.log(`[App] Loaded ${bank.patches.length} instruments from ${bank.name}`);
         setInstrumentBank(bank.patches);
         setBankLoaded(true);
 
-        console.log('[App] GENMIDI bank loaded successfully');
+        console.log('[App] Collection loaded successfully');
       } catch (error) {
-        console.error('[App] Failed to load GENMIDI:', error);
+        console.error('[App] Failed to load collection:', error);
         const errorMsg = error instanceof Error ? error.message : 'Unknown error';
         setBankError(errorMsg);
 
-        // Keep using default patches
-        console.log('[App] Using default instrument patches as fallback');
-        setBankLoaded(true); // Mark as "loaded" to prevent retry loop
+        // Fallback to legacy GENMIDI
+        console.log('[App] Falling back to legacy GENMIDI loading');
+        loadLegacyGENMIDI();
       }
     };
 
     loadInstruments();
-  }, [isReady, synth, bankLoaded, instrumentBank.length]);
+  }, [isReady, catalogLoaded, currentCollectionId, catalog, bankLoaded]);
+
+  /**
+   * Fallback: Load legacy GENMIDI.json directly
+   */
+  const loadLegacyGENMIDI = async () => {
+    try {
+      console.log('[App] Loading legacy GENMIDI instrument bank...');
+      setBankError(null);
+
+      const bank = await loadGENMIDI();
+
+      console.log(`[App] Loaded ${bank.patches.length} instruments from ${bank.name}`);
+      setInstrumentBank(bank.patches);
+      setBankLoaded(true);
+
+      console.log('[App] GENMIDI bank loaded successfully');
+    } catch (error) {
+      console.error('[App] Failed to load legacy GENMIDI:', error);
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      setBankError(errorMsg);
+
+      // Keep using default patches
+      console.log('[App] Using default instrument patches as fallback');
+      setBankLoaded(true); // Mark as "loaded" to prevent retry loop
+    }
+  };
 
 
   /**
@@ -156,6 +234,23 @@ function App() {
   const handleCancelEdit = () => {
     console.log('[App] Cancelled editing');
     setEditorOpen(false);
+  };
+
+  /**
+   * Switch to a different collection
+   */
+  const handleCollectionChange = async (collectionId: string) => {
+    console.log('[App] Switching to collection:', collectionId);
+
+    try {
+      setBankLoaded(false); // Reset to trigger reload
+      setCurrentCollectionId(collectionId);
+
+      // Save to localStorage
+      localStorage.setItem('selected-collection-id', collectionId);
+    } catch (error) {
+      console.error('[App] Failed to switch collection:', error);
+    }
   };
 
   // Show loading/error screen if not ready
@@ -232,6 +327,9 @@ function App() {
           bankLoaded={bankLoaded}
           bankError={bankError}
           onEditInstrument={handleEditClick}
+          catalog={catalog}
+          currentCollectionId={currentCollectionId}
+          onCollectionChange={handleCollectionChange}
         />
       </Route>
 

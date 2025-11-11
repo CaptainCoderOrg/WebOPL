@@ -9,6 +9,7 @@ import type { SimplePlayer } from '../SimplePlayer';
 import type { TrackerPattern, TrackerNote } from '../SimplePlayer';
 import type { OPLPatch } from '../types/OPLPatch';
 import type { PatternCatalogEntry } from '../types/PatternFile';
+import type { InstrumentCatalog } from '../types/Catalog';
 import { noteNameToMIDI } from '../utils/noteConversion';
 import { validatePattern, formatValidationErrors } from '../utils/patternValidation';
 import { loadPatternCatalog, loadPattern } from '../utils/patternLoader';
@@ -17,6 +18,7 @@ import { TrackerGrid } from './TrackerGrid';
 import { Modal } from './Modal';
 import { ExportModal } from './ExportModal';
 import { ErrorBoundary } from './ErrorBoundary';
+import { CollectionSelector } from './CollectionSelector';
 import './Tracker.css';
 
 export interface TrackerProps {
@@ -37,6 +39,15 @@ export interface TrackerProps {
 
   /** Callback when user clicks edit on an instrument */
   onEditInstrument: (trackId: number) => void;
+
+  /** Instrument catalog */
+  catalog?: InstrumentCatalog | null;
+
+  /** Currently selected collection ID */
+  currentCollectionId?: string | null;
+
+  /** Callback when collection changes */
+  onCollectionChange?: (collectionId: string) => void;
 }
 
 export function Tracker({
@@ -46,6 +57,9 @@ export function Tracker({
   bankLoaded,
   bankError,
   onEditInstrument,
+  catalog,
+  currentCollectionId,
+  onCollectionChange,
 }: TrackerProps) {
   // Playback state
   const [isPlaying, setIsPlaying] = useState(false);
@@ -536,6 +550,16 @@ export function Tracker({
           </button>
         </div>
       </div>
+
+      {/* Collection Selector */}
+      {catalog && onCollectionChange && (
+        <CollectionSelector
+          catalog={catalog}
+          currentCollectionId={currentCollectionId || null}
+          onCollectionChange={onCollectionChange}
+          disabled={isPlaying || !bankLoaded}
+        />
+      )}
 
       {/* Instrument Bank Status */}
       {!bankLoaded && (

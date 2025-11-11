@@ -79,4 +79,11 @@ export interface InstrumentBank {
   name: string;                 // Bank name (e.g., "GENMIDI", "Custom")
   version: string;              // Version string
   patches: OPLPatch[];          // Array of instruments (typically 128 for GM)
+  metadata?: {                  // Optional collection metadata
+    source?: string;            // Source URL
+    license?: string;           // License type
+    author?: string;            // Author name
+    game?: string;              // Associated game
+    year?: number;              // Year of creation
+  };
 }
