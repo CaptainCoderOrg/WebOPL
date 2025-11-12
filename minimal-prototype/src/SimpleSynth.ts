@@ -420,7 +420,7 @@ export class SimpleSynth {
       }
 
       const [ch1, ch2] = channels;
-      console.log(`[SimpleSynth] Dual-voice: ${noteId} -> OPL channels [${ch1}, ${ch2}]`);
+      console.log(`[SimpleSynth] 🎵 DUAL-VOICE: ${patch.name} (${noteId}) -> OPL channels [${ch1}, ${ch2}] | V1 baseNote:${patch.voice1!.baseNote || 0} V2 baseNote:${patch.voice2!.baseNote || 0}`);
 
       // Program Voice 1 on channel 1
       this.programVoice(ch1, patch.voice1!, patch);
@@ -471,7 +471,7 @@ export class SimpleSynth {
         return;
       }
 
-      console.log(`[SimpleSynth] Single-voice: ${noteId} -> OPL channel ${oplChannel}`);
+      console.log(`[SimpleSynth] Single-voice: ${patch.name} (${noteId}) -> OPL channel ${oplChannel} | isDualVoice=${patch.isDualVoice}`);
 
       // Use backward-compatible single-voice programming
       this.loadPatch(oplChannel, patch);

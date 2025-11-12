@@ -195,10 +195,10 @@ function parseInstrument(buffer, offset, index, names) {
   const name = names[index] || `Unknown ${index}`;
 
   // Determine if this is a dual-voice instrument
-  // Check if voice2 has any non-zero operator data OR if bit 2 of flags is set
-  const voice2HasData = hasOperatorData(mod2) || hasOperatorData(car2);
-  const flagsDualVoice = (flags & 0x04) !== 0; // Bit 2: dual-voice flag
-  const isDualVoice = voice2HasData || flagsDualVoice;
+  // IMPORTANT: Only use dual-voice if bit 2 of flags is set (the official enable flag)
+  // Even though many instruments have voice2 data, the original Doom only enabled dual-voice
+  // for specific instruments via this flag
+  const isDualVoice = (flags & 0x04) !== 0; // Bit 2: dual-voice flag
 
   return {
     id: index,

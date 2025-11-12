@@ -961,7 +961,7 @@
       "name": "Xylophone",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -2786,7 +2786,7 @@
       "name": "Synth Bass 1",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -3005,7 +3005,7 @@
       "name": "Viola",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -3151,7 +3151,7 @@
       "name": "Contrabass",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -4319,7 +4319,7 @@
       "name": "Muted Trumpet",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -4757,7 +4757,7 @@
       "name": "Alto Sax",
       "flags": 2,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -4830,7 +4830,7 @@
       "name": "Tenor Sax",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -4903,7 +4903,7 @@
       "name": "Baritone Sax",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -5049,7 +5049,7 @@
       "name": "English Horn",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -5122,7 +5122,7 @@
       "name": "Bassoon",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -5268,7 +5268,7 @@
       "name": "Piccolo",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": true,
@@ -5341,7 +5341,7 @@
       "name": "Flute",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": true,
@@ -5414,7 +5414,7 @@
       "name": "Recorder",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -5706,7 +5706,7 @@
       "name": "Whistle",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": true,
@@ -5779,7 +5779,7 @@
       "name": "Ocarina",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": true,
@@ -6144,7 +6144,7 @@
       "name": "Lead 5 (charang)",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -7823,7 +7823,7 @@
       "name": "Koto",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -7896,7 +7896,7 @@
       "name": "Kalimba",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -8042,7 +8042,7 @@
       "name": "Fiddle",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -8115,7 +8115,7 @@
       "name": "Shanai",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -8188,7 +8188,7 @@
       "name": "Tinkle Bell",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -8261,7 +8261,7 @@
       "name": "Agogo",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": true,
@@ -8407,7 +8407,7 @@
       "name": "Woodblock",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -8772,7 +8772,7 @@
       "name": "Guitar Fret Noise (DMX)",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
@@ -8992,7 +8992,7 @@
       "name": "Bird Tweet",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": true,
@@ -9286,7 +9286,7 @@
       "name": "Gun Shot",
       "flags": 0,
       "finetune": 128,
-      "isDualVoice": true,
+      "isDualVoice": false,
       "voice1": {
         "mod": {
           "trem": false,
