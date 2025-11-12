@@ -37,9 +37,8 @@ The documentation is organized to serve as both:
 
 ### Roadmap & Future Plans
 
-Active planning documentation for unimplemented features:
+Active planning documentation for future features:
 
-- **[Tracker Extensions](../roadmap/tracker-extensions/)** - Extend tracker format to preserve MIDI data (velocity, duration, polyphony, effects)
 - **[Roadmap Overview](../roadmap/README.md)** - Complete roadmap and planning documentation
 
 ### Archived Documentation
@@ -81,8 +80,8 @@ Historical implementation and migration documents:
 **...emulate Sound Blaster 16 hardware**
 → Read [AUDIO_ENGINE.md#sound-blaster-16-mode](AUDIO_ENGINE.md#sound-blaster-16-mode)
 
-**...extend the tracker format (future)**
-→ Read [Tracker Extensions Roadmap](../roadmap/tracker-extensions/)
+**...use the extended tracker format with velocity and effects**
+→ Read [TRACKER_SYSTEM.md#extended-tracker-format](TRACKER_SYSTEM.md#extended-tracker-format)
 
 ---
 
@@ -99,6 +98,7 @@ Historical implementation and migration documents:
 - **Polish** - Loading states, error handling, keyboard shortcuts
 - **WAV Export** - Seamless loops, post-processing, waveform preview
 - **Sound Blaster 16 Mode** - Analog hardware emulation with biquad filters
+- **Extended Tracker Format** - Velocity, note-offs, polyphony, effect commands (2025-11-12)
 
 ---
 

@@ -5,7 +5,8 @@ This is WebOPL, a web-based OPL3 FM synthesis tracker for creating retro game mu
 
 ## Important Directories
 - **roadmap/** - Current project plans and documentation
-- **OPL3-Prototype/** - Active development directory
+- **minimal-prototype/** - Active development directory of the React Vite TypeScript app
+- **OPL3-Prototype/** - Primary core documentation of the project
 - **archived/** - Historical documentation (READ ONLY - blocked by hooks)
 
 ## Development Guidelines
@@ -14,10 +15,11 @@ This is WebOPL, a web-based OPL3 FM synthesis tracker for creating retro game mu
 - Test audio features in the browser
 - Document all new features in roadmap/
 
-## File Locations
-- **Instruments:** `OPL3-Prototype/src/instruments/`
-- **Components:** `OPL3-Prototype/src/components/`
-- **Documentation:** `roadmap/*.md`
-
 ## Current Focus
 Check the roadmap/ directory for current development priorities.
+
+## General Guidelines
+* When you finish a task, always update documentation
+* Before starting a task, always create an implementation plan in the appropriate directory
+* When starting a new feature, always create a subdirectory within roadmap/
+* If you need to update a date/time in a document always use the `date` command and use a datetime

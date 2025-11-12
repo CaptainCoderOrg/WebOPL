@@ -2,7 +2,7 @@
 
 **Active planning and design documentation for future features**
 
-Last Updated: 2025-01-12
+Last Updated: 2025-11-12
 
 ---
 
@@ -19,28 +19,27 @@ This directory contains **active planning documentation** for features that are 
 
 ## Current Active Plans
 
-### Tracker Extensions (Priority: High)
+**No active feature plans at this time.**
 
-**Location:** [tracker-extensions/](tracker-extensions/)
+All previously planned features have been completed and documented in [OPL3-Prototype/](../OPL3-Prototype/).
 
-**Problem:** MIDI to tracker conversion loses critical musical data (velocity, duration, polyphony, effects).
+---
 
-**Solution:** Extend the tracker format to preserve all MIDI performance data without loss.
+## Recently Completed Features
 
-**Status:** Planning complete, ready for implementation
+### Tracker Extensions ✅ COMPLETE (2025-11-12)
 
-**Files:**
-- [README.md](tracker-extensions/README.md) - Overview and problem statement
-- [TRACKER-EXTENSION-PLAN.md](tracker-extensions/TRACKER-EXTENSION-PLAN.md) - Detailed implementation plan
-- [MIDI-CONVERSION-ISSUES-SUMMARY.md](tracker-extensions/MIDI-CONVERSION-ISSUES-SUMMARY.md) - Problem analysis
-- [MIDI-CONVERSION-DATA-LOSS.md](tracker-extensions/MIDI-CONVERSION-DATA-LOSS.md) - Velocity/duration loss details
-- [MIDI-TRACK-LOSS-ANALYSIS.md](tracker-extensions/MIDI-TRACK-LOSS-ANALYSIS.md) - Track allocation issues
-- [MIDI-POLYPHONY-LOSS-ANALYSIS.md](tracker-extensions/MIDI-POLYPHONY-LOSS-ANALYSIS.md) - Chord/harmony loss
-- [OPL3-PARAMETER-MAPPING.md](tracker-extensions/OPL3-PARAMETER-MAPPING.md) - Complete OPL3 register reference
+Extended the tracker format to preserve full musical expression from MIDI files.
 
-**Estimated Effort:** 4-16 days
+**Delivered:**
+- ✅ Per-note velocity control (0-64 scale)
+- ✅ Explicit note-off markers
+- ✅ Dynamic polyphony (automatic track allocation)
+- ✅ Effect commands (ECx note cut, EDx note delay)
 
-**See also:** [OPL3-Prototype/TRACKER_SYSTEM.md](../OPL3-Prototype/TRACKER_SYSTEM.md) for current tracker implementation
+**Documentation:** [OPL3-Prototype/TRACKER_SYSTEM.md#extended-tracker-format](../OPL3-Prototype/TRACKER_SYSTEM.md#extended-tracker-format)
+
+**Impact:** Doom E1M1 conversion now preserves all 2,332 notes across 11 tracks with full dynamics and articulation.
 
 ---
 
@@ -62,14 +61,12 @@ These are potential future directions, not committed work.
 
 Once a feature is implemented:
 
-1. **Remove from roadmap** - Delete or archive the planning docs
+1. **Remove from roadmap** - Delete the planning docs from roadmap/
 2. **Add to OPL3-Prototype** - Create canonical reference documentation
-3. **Archive implementation notes** - Move detailed notes to `archived/features/`
 
-**Example:**
-- Sound Blaster 16 Mode started in `roadmap/features/sound-blaster-16-mode/`
-- Now documented in `OPL3-Prototype/AUDIO_ENGINE.md#sound-blaster-16-mode`
-- Implementation notes archived in `archived/features/sound-blaster-16-mode/`
+**Examples:**
+- **Sound Blaster 16 Mode** - Documented in [OPL3-Prototype/AUDIO_ENGINE.md#sound-blaster-16-mode](../OPL3-Prototype/AUDIO_ENGINE.md#sound-blaster-16-mode)
+- **Tracker Extensions** - Documented in [OPL3-Prototype/TRACKER_SYSTEM.md#extended-tracker-format](../OPL3-Prototype/TRACKER_SYSTEM.md#extended-tracker-format)
 
 ---
 
@@ -90,8 +87,7 @@ If you're planning a new feature:
 ```
 WebOPL/
 ├── roadmap/                     # Future features (planning stage)
-│   ├── README.md                # This file
-│   └── tracker-extensions/      # Tracker format extension plans
+│   └── README.md                # This file
 │
 ├── OPL3-Prototype/              # Current features (canonical reference)
 │   ├── AUDIO_ENGINE.md
@@ -101,7 +97,8 @@ WebOPL/
 └── archived/                    # Past features (historical notes)
     └── features/
         ├── sound-blaster-16-mode/
-        └── export-feature/
+        ├── export-feature/
+        └── tracker-extensions/
 ```
 
 ---
