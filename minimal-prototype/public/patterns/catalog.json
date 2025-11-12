@@ -40,5 +40,11 @@
     "name": "Orchestral Fanfare",
     "description": "Triumphant orchestral fanfare with full brass and string sections",
     "file": "orchestral-fanfare.yaml"
+  },
+  {
+    "id": "e1m1",
+    "name": "E1M1 - At Doom's Gate",
+    "description": "Iconic heavy metal soundtrack from Doom (1993)",
+    "file": "e1m1.yaml"
   }
 ]

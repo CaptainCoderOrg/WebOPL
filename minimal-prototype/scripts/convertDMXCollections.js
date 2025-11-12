@@ -184,14 +184,14 @@ function parseInstrument(buffer, offset, index, names) {
       mod: mod1,
       car: car1,
       feedback: (feedback1 >> 1) & 0x07,
-      additive: (feedback1 & 0x01) === 0,
+      additive: (feedback1 & 0x01) !== 0, // Bit 0: 0=FM, 1=Additive
       baseNote: baseNote1
     },
     voice2: {
       mod: mod2,
       car: car2,
       feedback: (feedback2 >> 1) & 0x07,
-      additive: (feedback2 & 0x01) === 0,
+      additive: (feedback2 & 0x01) !== 0, // Bit 0: 0=FM, 1=Additive
       baseNote: baseNote2
     }
   };
