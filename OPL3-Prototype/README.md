@@ -2,7 +2,7 @@
 
 **Comprehensive reference documentation for the WebOrchestra OPL3 Music Tracker**
 
-Last Updated: 2025-01-11
+Last Updated: 2025-01-12
 
 ---
 
@@ -25,7 +25,7 @@ The documentation is organized to serve as both:
 |----------|---------|----------|
 | **[OVERVIEW.md](OVERVIEW.md)** | Project introduction, capabilities, quick start | Everyone |
 | **[ARCHITECTURE.md](ARCHITECTURE.md)** | System design, component diagrams, data flow | Developers |
-| **[AUDIO_ENGINE.md](AUDIO_ENGINE.md)** | SimpleSynth, OPL3 details, AudioWorklet | Audio developers |
+| **[AUDIO_ENGINE.md](AUDIO_ENGINE.md)** | SimpleSynth, OPL3 details, AudioWorklet, SB16 mode | Audio developers |
 | **[TRACKER_SYSTEM.md](TRACKER_SYSTEM.md)** | Pattern playback, UI components, timing | UI developers |
 | **[INSTRUMENT_SYSTEM.md](INSTRUMENT_SYSTEM.md)** | OPL3 patches, GENMIDI, instrument editor | Sound designers |
 | **[EXPORT_FEATURE.md](EXPORT_FEATURE.md)** | WAV export, seamless loops, post-processing | Audio developers |
@@ -71,6 +71,9 @@ Historical implementation and migration documents:
 **...export patterns to WAV files**
 → Read [EXPORT_FEATURE.md](EXPORT_FEATURE.md)
 
+**...emulate Sound Blaster 16 hardware**
+→ Read [AUDIO_ENGINE.md#sound-blaster-16-mode](AUDIO_ENGINE.md#sound-blaster-16-mode)
+
 ---
 
 ## Project Status
@@ -85,6 +88,7 @@ Historical implementation and migration documents:
 - **Volume Control** - Master gain adjustment
 - **Polish** - Loading states, error handling, keyboard shortcuts
 - **WAV Export** - Seamless loops, post-processing, waveform preview
+- **Sound Blaster 16 Mode** - Analog hardware emulation with biquad filters
 
 ---
 

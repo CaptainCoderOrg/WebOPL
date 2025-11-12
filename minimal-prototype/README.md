@@ -2,7 +2,7 @@
 
 A minimal web-based music tracker with OPL3 (AdLib/Sound Blaster) FM synthesis.
 
-**Current Status:** Part 3 Complete ✅
+**Current Status:** All 4 Parts Complete ✅ + WAV Export + Sound Blaster 16 Mode
 
 ---
 
@@ -40,11 +40,28 @@ Open http://localhost:5173 and test the audio engine!
 - **Current row highlighting** during playback
 - **Pattern loading/clearing**
 
-### 🚧 Part 4: Polish (Coming Next)
-- Pattern validation
-- Keyboard shortcuts
-- Error handling
-- Visual feedback
+### ✅ Part 4: Polish
+- **Pattern validation** (real-time error checking)
+- **Keyboard shortcuts** (space, arrows, delete, etc.)
+- **Error handling** (graceful failures, user feedback)
+- **Visual feedback** (loading states, active states)
+- **Master volume control**
+- **Instrument selector** with 175 GENMIDI patches
+
+### ✅ WAV Export Feature
+- **Standard export** with optional fade in/out
+- **Seamless loop export** with context-aware rendering
+- **Waveform preview** with real-time visualization
+- **Post-processing** (trim silence, normalization)
+- **Progress indicators** with cancellation support
+
+### ✅ Sound Blaster 16 Mode
+- **Analog hardware emulation** using biquad filters
+- **High-shelf filter** (-2 dB @ 8 kHz for warmth)
+- **Low-pass filter** (16 kHz cutoff for anti-aliasing)
+- **Soft clipping** (subtle analog saturation)
+- **Real-time toggle** with localStorage persistence
+- **Export integration** (optional filtering in WAV output)
 
 ---
 

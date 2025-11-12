@@ -1,6 +1,6 @@
 # WebOrchestra - Audio Engine Documentation
 
-**Last Updated:** 2025-01-06
+**Last Updated:** 2025-01-12
 
 ---
 
@@ -15,6 +15,7 @@
 7. [Frequency Calculation](#frequency-calculation)
 8. [Register Reference](#register-reference)
 9. [AudioWorklet Implementation](#audioworklet-implementation)
+10. [Sound Blaster 16 Mode](#sound-blaster-16-mode)
 
 ---
 
@@ -72,6 +73,9 @@ synth.getMasterVolume(): number
 synth.start(): void
 synth.stop(): void
 await synth.resumeAudio(): Promise<void>
+
+// Audio filtering
+synth.setSB16Mode(enabled): void       // Enable/disable Sound Blaster 16 analog filtering
 
 // State queries
 synth.isReady(): boolean
@@ -677,6 +681,144 @@ for (let i = 0; i < 128; i++) {
 chip.read(bigBuffer); // Read 128 samples at once ❌
 // Timing will be wrong!
 ```
+
+---
+
+## Sound Blaster 16 Mode
+
+WebOrchestra includes an optional **Sound Blaster 16 Mode** that emulates the analog output characteristics of Creative Labs Sound Blaster 16 hardware (CT1740 chipset).
+
+### File Locations
+- [minimal-prototype/src/audio/SB16Filter.ts](../minimal-prototype/src/audio/SB16Filter.ts) - TypeScript filter implementation
+- [minimal-prototype/public/opl-worklet-processor.js](../minimal-prototype/public/opl-worklet-processor.js) - JavaScript version for AudioWorklet
+
+### What It Does
+
+The OPL3 chip produces mathematically perfect digital output, but real Sound Blaster 16 cards added analog coloration through:
+- 16-bit DAC conversion
+- Analog anti-aliasing filter
+- Output amplifier characteristics
+
+SB16 Mode emulates these characteristics with a post-processing filter chain:
+
+```
+OPL3 Output → High-Shelf Filter → Low-Pass Filter → Soft Clipping → Output
+```
+
+### Filter Specifications
+
+**1. High-Shelf Filter**
+- Center frequency: 8 kHz
+- Gain: -2 dB
+- Q factor: 0.707 (Butterworth)
+- Purpose: Reduces high-frequency harshness (analog warmth)
+
+**2. Low-Pass Filter**
+- Cutoff frequency: 16 kHz
+- Q factor: 0.707 (Butterworth)
+- Purpose: Anti-aliasing filter rolloff
+
+**3. Soft Clipping**
+- Threshold: 0.95 (95% of full scale)
+- Amount: 10% (tanh curve)
+- Purpose: Subtle analog saturation
+
+### Usage
+
+**Real-Time Playback:**
+```typescript
+// Enable SB16 mode
+synth.setSB16Mode(true);
+
+// Disable SB16 mode
+synth.setSB16Mode(false);
+```
+
+The setting is automatically persisted to localStorage and restored on page load.
+
+**WAV Export:**
+```typescript
+// Enable in ExportOptions
+const wavBuffer = await exportStandard({
+  pattern,
+  trackInstruments,
+  instrumentBank,
+  bpm,
+  loopCount,
+  sb16Mode: true,  // ← Enable SB16 filtering
+  fadeIn: false,
+  fadeOut: false,
+  // ...
+});
+```
+
+### Implementation Details
+
+**Biquad Filter Coefficients:**
+The filter uses the Audio EQ Cookbook formulas (Robert Bristow-Johnson) for calculating biquad filter coefficients:
+
+**High-Shelf:**
+```typescript
+w0 = 2π × freq / sampleRate
+A = 10^(gainDB / 40)
+α = sin(w0) / (2 × Q)
+
+b0 = A × ((A+1) + (A-1)×cos(w0) + β×sin(w0))
+b1 = -2A × ((A-1) + (A+1)×cos(w0))
+b2 = A × ((A+1) + (A-1)×cos(w0) - β×sin(w0))
+a0 = (A+1) - (A-1)×cos(w0) + β×sin(w0)
+a1 = 2 × ((A-1) - (A+1)×cos(w0))
+a2 = (A+1) - (A-1)×cos(w0) - β×sin(w0)
+```
+
+**Low-Pass:**
+```typescript
+w0 = 2π × freq / sampleRate
+α = sin(w0) / (2 × Q)
+
+b0 = (1 - cos(w0)) / 2
+b1 = 1 - cos(w0)
+b2 = (1 - cos(w0)) / 2
+a0 = 1 + α
+a1 = -2 × cos(w0)
+a2 = 1 - α
+```
+
+**Processing:**
+```typescript
+// Direct Form II Transposed
+y[n] = b0×x[n] + b1×x[n-1] + b2×x[n-2] - a1×y[n-1] - a2×y[n-2]
+```
+
+### Audible Effect
+
+The effect is intentionally subtle (matching real hardware):
+- **Warmer, less harsh** sound on cymbals/hi-hats
+- **Softer high frequencies** (reduced "digital edge")
+- **Slightly "darker"** overall tone
+- **Gentle rolloff** above 8-16 kHz (visible in FFT)
+
+### Performance
+
+- **Real-time:** Negligible CPU impact (2 biquad filters per channel)
+- **Export:** Adds ~5-10% to WAV export time
+- **Memory:** < 1 KB filter state per instance
+
+### Historical Context
+
+Sound Blaster 16 (1992) was the first SB card with:
+- **OPL3** (Yamaha YMF262) for FM synthesis
+- **16-bit stereo DAC** (vs 8-bit mono in earlier models)
+- **Analog anti-aliasing filter** above 16 kHz
+- **Line-level output** with characteristic warmth
+
+The filter recreates the "Sound Blaster sound" that Doom players remember from 1993.
+
+### Documentation
+
+For complete implementation details, see:
+- [docs/features/sound-blaster-16-mode/README.md](../docs/features/sound-blaster-16-mode/README.md)
+- [docs/features/sound-blaster-16-mode/IMPLEMENTATION-PLAN.md](../docs/features/sound-blaster-16-mode/IMPLEMENTATION-PLAN.md)
 
 ---
 
