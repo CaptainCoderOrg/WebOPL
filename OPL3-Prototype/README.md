@@ -35,6 +35,13 @@ The documentation is organized to serve as both:
 
 - **[README.md](../minimal-prototype/README.md)** - Main project README (active)
 
+### Roadmap & Future Plans
+
+Active planning documentation for unimplemented features:
+
+- **[Tracker Extensions](../roadmap/tracker-extensions/)** - Extend tracker format to preserve MIDI data (velocity, duration, polyphony, effects)
+- **[Roadmap Overview](../roadmap/README.md)** - Complete roadmap and planning documentation
+
 ### Archived Documentation
 
 Historical implementation and migration documents:
@@ -73,6 +80,9 @@ Historical implementation and migration documents:
 
 **...emulate Sound Blaster 16 hardware**
 → Read [AUDIO_ENGINE.md#sound-blaster-16-mode](AUDIO_ENGINE.md#sound-blaster-16-mode)
+
+**...extend the tracker format (future)**
+→ Read [Tracker Extensions Roadmap](../roadmap/tracker-extensions/)
 
 ---
 

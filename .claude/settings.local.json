@@ -12,7 +12,8 @@
       "Bash(node scripts/convertMIDIToPattern.js:*)",
       "Bash(node scripts/testVelocityLoad.js:*)",
       "Bash(node scripts/testVelocityLoad.cjs:*)",
-      "Bash(npm run)"
+      "Bash(npm run)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []
