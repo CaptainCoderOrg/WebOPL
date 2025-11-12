@@ -70,5 +70,11 @@
     "name": "Velocity Ramp Test",
     "description": "C-3 repeating with velocity ramp 0→64 (Phase 1 verification)",
     "file": "velocity-ramp-test.yaml"
+  },
+  {
+    "id": "velocity-multi-test",
+    "name": "Multi-Track Velocity Test",
+    "description": "4 tracks with different velocity patterns (up, down, triangle, constant)",
+    "file": "velocity-multi-test.yaml"
   }
 ]
