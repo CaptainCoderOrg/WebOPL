@@ -7,6 +7,7 @@
  */
 
 import type { OPLPatch } from '../types/OPLPatch';
+import type { PatternCellData } from '../types/PatternFile';
 import { PatternRenderer } from './PatternRenderer';
 import { SimpleSynth } from '../SimpleSynth';
 import { DirectOPLChip } from '../adapters/DirectOPLChip';
@@ -19,8 +20,8 @@ export interface ExportOptions {
   /** Pattern name (for filename) */
   patternName: string;
 
-  /** Pattern data (2D array of cell strings) */
-  pattern: string[][];
+  /** Pattern data (2D array of cells - strings or objects) */
+  pattern: PatternCellData[][];
 
   /** Track instrument assignments */
   trackInstruments: number[];
@@ -64,7 +65,7 @@ export interface SeamlessLoopExportOptions extends ExportOptions {
  * Render pattern to audio buffers
  */
 async function renderPatternToBuffers(
-  pattern: string[][],
+  pattern: PatternCellData[][],
   trackInstruments: number[],
   instrumentBank: OPLPatch[],
   bpm: number,

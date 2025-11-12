@@ -209,6 +209,12 @@ function readVariableLength(buffer, offset) {
 
 /**
  * Convert MIDI to WebOrchestra pattern
+ *
+ * PHASE 3: Dynamic Track Allocation with Polyphony Support
+ * --------------------------------------------------------
+ * Each MIDI channel can map to multiple output tracks to preserve polyphony.
+ * When a channel needs to play multiple simultaneous notes, we allocate
+ * additional "overflow" tracks dynamically.
  */
 function midiToPattern(midiData, options = {}) {
   const {
@@ -246,67 +252,134 @@ function midiToPattern(midiData, options = {}) {
   // Sort by time
   timeline.sort((a, b) => a.time - b.time);
 
-  // Convert to rows
+  // Convert to rows with dynamic track allocation
   const ticksPerRow = midiData.ticksPerQuarterNote / rowsPerBeat;
   const rows = [];
-  const channelState = {}; // Track active notes and instruments per channel
+
+  // NEW: Dynamic track allocation state
+  const channelToTracks = {};  // Map: MIDI channel → track allocation info
+  let totalOutputTracks = 0;   // Total number of output tracks allocated
 
   let currentRow = 0;
-  let lastRowTime = 0;
 
+  // Helper: Find or allocate an available output track for a MIDI channel
+  function findAvailableTrack(midiChannel, rowIndex) {
+    const mapping = channelToTracks[midiChannel];
+
+    // Ensure row exists with enough tracks
+    if (!rows[rowIndex]) {
+      rows[rowIndex] = [];
+    }
+
+    // Try primary track first
+    if (!rows[rowIndex][mapping.primaryTrack] || rows[rowIndex][mapping.primaryTrack].note === null) {
+      return mapping.primaryTrack;
+    }
+
+    // Try existing overflow tracks
+    for (const overflowTrack of mapping.overflowTracks) {
+      if (!rows[rowIndex][overflowTrack] || rows[rowIndex][overflowTrack].note === null) {
+        return overflowTrack;
+      }
+    }
+
+    // Allocate new overflow track
+    const newTrackIdx = totalOutputTracks++;
+    mapping.overflowTracks.push(newTrackIdx);
+    console.log(`🎵 Polyphony detected on MIDI channel ${midiChannel + 1}: allocating overflow track ${newTrackIdx} (total: ${mapping.overflowTracks.length + 1} tracks)`);
+
+    return newTrackIdx;
+  }
+
+  // Helper: Ensure row has enough track slots
+  function ensureRowSize(rowIndex, minTracks) {
+    if (!rows[rowIndex]) {
+      rows[rowIndex] = [];
+    }
+
+    while (rows[rowIndex].length < minTracks) {
+      rows[rowIndex].push({
+        note: null,
+        instrument: null,
+        volume: null,
+        effect: null,
+        effectValue: null
+      });
+    }
+  }
+
+  // Process timeline events
   for (const event of timeline) {
     const rowTime = Math.round(event.time / ticksPerRow);
 
     // Create empty rows up to current event
     while (currentRow < rowTime) {
-      if (!rows[currentRow]) {
-        rows[currentRow] = createEmptyRow(maxChannels);
-      }
+      ensureRowSize(currentRow, totalOutputTracks);
       currentRow++;
     }
 
     // Ensure current row exists
-    if (!rows[currentRow]) {
-      rows[currentRow] = createEmptyRow(maxChannels);
-    }
+    ensureRowSize(currentRow, totalOutputTracks);
 
     const channel = event.channel;
     if (channel >= maxChannels) continue;
 
-    // Initialize channel state
-    if (!channelState[channel]) {
-      // Check if this is a percussion channel (MIDI channel 10)
+    // Initialize channel-to-track mapping
+    if (!channelToTracks[channel]) {
       const isPercussionChannel = (channel === percussionChannel);
 
-      channelState[channel] = {
+      // Allocate primary track for this MIDI channel
+      const primaryTrack = totalOutputTracks++;
+
+      channelToTracks[channel] = {
+        primaryTrack: primaryTrack,
+        overflowTracks: [],  // Additional tracks for polyphony
+        activeNotes: new Map(),  // Map: MIDI note → {outputTrack, startRow}
         instrument: isPercussionChannel ? percussionKitId : 0,
-        activeNotes: new Map(),
         isPercussionChannel: isPercussionChannel
       };
 
-      if (isPercussionChannel) {
-        console.log(`🥁 Detected percussion on MIDI channel ${channel + 1} (0-indexed: ${channel})`);
-      }
+      console.log(`🎼 MIDI channel ${channel + 1} → output track ${primaryTrack}${isPercussionChannel ? ' (percussion)' : ''}`);
     }
+
+    const mapping = channelToTracks[channel];
 
     // Process event
     if (event.eventName === 'noteOn') {
-      rows[currentRow][channel] = {
+      // Find available output track (may allocate overflow track)
+      const outputTrack = findAvailableTrack(channel, currentRow);
+
+      // Ensure we have enough tracks
+      ensureRowSize(currentRow, totalOutputTracks);
+
+      // Write note to pattern
+      rows[currentRow][outputTrack] = {
         note: midiNoteToName(event.note),
-        instrument: channelState[channel].instrument,
+        instrument: mapping.instrument,
         volume: Math.round((event.velocity / 127) * 64),
         effect: null,
         effectValue: null
       };
-      channelState[channel].activeNotes.set(event.note, currentRow);
+
+      // Record which output track has this note
+      mapping.activeNotes.set(event.note, {
+        outputTrack: outputTrack,
+        startRow: currentRow
+      });
+
     } else if (event.eventName === 'noteOff') {
-      // Find the row where this note started
-      const startRow = channelState[channel].activeNotes.get(event.note);
-      if (startRow !== undefined) {
-        // Write note-off marker to pattern
-        // Only write if the note-off is on a different row than note-on
-        if (currentRow !== startRow && rows[currentRow][channel].note === null) {
-          rows[currentRow][channel] = {
+      // Find which output track has this note
+      const noteInfo = mapping.activeNotes.get(event.note);
+      if (noteInfo) {
+        const { outputTrack, startRow } = noteInfo;
+
+        // Ensure row has enough tracks
+        ensureRowSize(currentRow, totalOutputTracks);
+
+        // Write note-off marker (only if on different row and slot is empty)
+        if (currentRow !== startRow &&
+            (!rows[currentRow][outputTrack] || rows[currentRow][outputTrack].note === null)) {
+          rows[currentRow][outputTrack] = {
             note: 'OFF',
             instrument: null,
             volume: null,
@@ -314,21 +387,24 @@ function midiToPattern(midiData, options = {}) {
             effectValue: null
           };
         }
-        channelState[channel].activeNotes.delete(event.note);
+
+        mapping.activeNotes.delete(event.note);
       }
+
     } else if (event.eventName === 'programChange') {
-      // Percussion channels (MIDI channel 10) ignore program changes in General MIDI
-      if (channelState[channel].isPercussionChannel) {
+      // Percussion channels ignore program changes in General MIDI
+      if (mapping.isPercussionChannel) {
         console.log(`🥁 Ignoring program change ${event.program} on percussion channel ${channel + 1}`);
         continue;
       }
 
-      // For non-percussion channels, update instrument
-      channelState[channel].instrument = event.program;
+      // Update instrument for this MIDI channel (affects all its output tracks)
+      mapping.instrument = event.program;
 
-      // Add program change command to current row
-      if (rows[currentRow][channel].note === null) {
-        rows[currentRow][channel] = {
+      // Add program change command to primary track if empty
+      ensureRowSize(currentRow, totalOutputTracks);
+      if (!rows[currentRow][mapping.primaryTrack] || rows[currentRow][mapping.primaryTrack].note === null) {
+        rows[currentRow][mapping.primaryTrack] = {
           note: null,
           instrument: event.program,
           volume: null,
@@ -339,14 +415,28 @@ function midiToPattern(midiData, options = {}) {
     }
   }
 
+  // Ensure all rows have consistent track count
+  const finalRows = rows.filter(row => row !== undefined);
+  for (const row of finalRows) {
+    ensureRowSize(rows.indexOf(row), totalOutputTracks);
+  }
+
+  console.log(`\n📊 Track Allocation Summary:`);
+  console.log(`   Total output tracks: ${totalOutputTracks}`);
+  for (const [midiChannel, mapping] of Object.entries(channelToTracks)) {
+    const trackCount = 1 + mapping.overflowTracks.length;
+    const trackList = [mapping.primaryTrack, ...mapping.overflowTracks].join(', ');
+    console.log(`   MIDI ch ${parseInt(midiChannel) + 1} → ${trackCount} track(s): [${trackList}]`);
+  }
+
   // Convert to pattern format
   return {
     name: 'Converted from MIDI',
     tempo: globalTempo,
     rowsPerBeat: rowsPerBeat,
-    channels: maxChannels,
-    channelState: channelState, // Include channel state for instrument detection
-    rows: rows.filter(row => row !== undefined)
+    channels: totalOutputTracks,  // NEW: Use actual track count instead of maxChannels
+    channelToTracks: channelToTracks,  // NEW: Include mapping for debugging
+    rows: finalRows
   };
 }
 
@@ -415,6 +505,25 @@ function patternToYAML(pattern, filename) {
 
   const activeTrackCount = newTrackIdx;
 
+  // Build reverse mapping: output track → MIDI channel
+  // (needed because channelToTracks maps MIDI channel → output tracks)
+  const outputTrackToMidiChannel = [];
+  if (pattern.channelToTracks) {
+    for (const [midiChannel, mapping] of Object.entries(pattern.channelToTracks)) {
+      const channelNum = parseInt(midiChannel);
+      // Primary track
+      if (trackHasNotes[mapping.primaryTrack]) {
+        outputTrackToMidiChannel[mapping.primaryTrack] = channelNum;
+      }
+      // Overflow tracks
+      for (const overflowTrack of mapping.overflowTracks) {
+        if (trackHasNotes[overflowTrack]) {
+          outputTrackToMidiChannel[overflowTrack] = channelNum;
+        }
+      }
+    }
+  }
+
   // Determine instrument for each active track
   const trackInstruments = [];
   for (let trackIdx = 0; trackIdx < pattern.channels; trackIdx++) {
@@ -422,9 +531,11 @@ function patternToYAML(pattern, filename) {
 
     let instrument = 0; // Default to instrument 0 (Acoustic Grand Piano)
 
-    // Use channelState if available (has instrument info including percussion)
-    if (pattern.channelState && pattern.channelState[trackIdx]) {
-      instrument = pattern.channelState[trackIdx].instrument;
+    // PHASE 3: Use channelToTracks mapping
+    if (pattern.channelToTracks && outputTrackToMidiChannel[trackIdx] !== undefined) {
+      const midiChannel = outputTrackToMidiChannel[trackIdx];
+      const mapping = pattern.channelToTracks[midiChannel];
+      instrument = mapping.instrument;
     } else {
       // Fallback: search through all rows to find the first instrument used on this track
       for (const row of pattern.rows) {
@@ -449,19 +560,35 @@ function patternToYAML(pattern, filename) {
 
   lines.push('# Instrument assignments (patch indices)');
 
-  // Add comment showing percussion tracks
-  if (pattern.channelState) {
+  // Add comment showing percussion tracks and channel mapping
+  if (pattern.channelToTracks) {
     const percussionTracks = [];
-    let outputTrackIdx = 0;
+    const trackComments = [];
+
     for (let trackIdx = 0; trackIdx < pattern.channels; trackIdx++) {
       if (!trackHasNotes[trackIdx]) continue;
-      if (pattern.channelState[trackIdx]?.isPercussionChannel) {
-        percussionTracks.push(outputTrackIdx);
+
+      const midiChannel = outputTrackToMidiChannel[trackIdx];
+      if (midiChannel !== undefined) {
+        const mapping = pattern.channelToTracks[midiChannel];
+        const outputIdx = trackMapping[trackIdx];
+        const label = mapping.isPercussionChannel ? ' (percussion)' : '';
+
+        // Track which output tracks are from which MIDI channel
+        trackComments.push(`# Track ${outputIdx}: MIDI channel ${midiChannel + 1}${label}`);
+
+        if (mapping.isPercussionChannel) {
+          percussionTracks.push(outputIdx);
+        }
       }
-      outputTrackIdx++;
     }
+
+    // Add descriptive comments
     if (percussionTracks.length > 0) {
-      lines.push(`# Note: Track(s) ${percussionTracks.join(', ')} use Percussion Kit (ID 999)`);
+      lines.push(`# Percussion tracks: ${percussionTracks.join(', ')} (using Percussion Kit, ID 999)`);
+    }
+    for (const comment of trackComments) {
+      lines.push(comment);
     }
   }
 

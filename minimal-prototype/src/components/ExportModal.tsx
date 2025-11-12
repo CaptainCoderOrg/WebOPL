@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react';
 import type { OPLPatch } from '../types/OPLPatch';
+import type { PatternCellData } from '../types/PatternFile';
 import {
   calculateDuration,
   calculateFileSize,
@@ -29,8 +30,8 @@ export interface ExportModalProps {
   /** Pattern name (for filename) */
   patternName?: string;
 
-  /** Pattern data (2D array of cell strings) */
-  pattern: string[][];
+  /** Pattern data (2D array of cells - strings or objects) */
+  pattern: PatternCellData[][];
 
   /** Track instrument assignments */
   trackInstruments: number[];

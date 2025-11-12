@@ -4,6 +4,7 @@
  */
 
 import { CellProcessor } from '../core/CellProcessor';
+import type { PatternCellData } from '../types/PatternFile';
 
 export interface NoteEvent {
   type: 'note-on' | 'note-off';
@@ -20,8 +21,8 @@ export interface PatternTimeline {
 
 export interface RenderablePattern {
   name: string;
-  pattern?: string[][]; // Standard field name
-  rows?: string[][]; // Alias for pattern (for compatibility)
+  pattern?: PatternCellData[][]; // Standard field name (strings or objects)
+  rows?: PatternCellData[][]; // Alias for pattern (for compatibility)
   instruments: number[];
   bpm?: number;
   rowsPerBeat?: number;

@@ -82,5 +82,11 @@
     "name": "Note-Off Test",
     "description": "Short vs sustained notes with explicit OFF markers (Phase 2 test)",
     "file": "noteoff-test.yaml"
+  },
+  {
+    "id": "e1m1-polyphony",
+    "name": "E1M1 - At Doom's Gate (Polyphony)",
+    "description": "E1M1 with full polyphony preserved - 10 tracks, 2,332 notes (Phase 3 test)",
+    "file": "e1m1-polyphony.yaml"
   }
 ]

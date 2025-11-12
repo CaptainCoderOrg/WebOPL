@@ -8,7 +8,7 @@ import type { SimpleSynth } from '../SimpleSynth';
 import type { SimplePlayer } from '../SimplePlayer';
 import type { TrackerPattern, TrackerNote } from '../SimplePlayer';
 import type { OPLPatch } from '../types/OPLPatch';
-import type { PatternCatalogEntry } from '../types/PatternFile';
+import type { PatternCatalogEntry, PatternCellData } from '../types/PatternFile';
 import type { InstrumentCatalog } from '../types/Catalog';
 import { noteNameToMIDI } from '../utils/noteConversion';
 import { validatePattern, formatValidationErrors } from '../utils/patternValidation';
@@ -73,7 +73,7 @@ export function Tracker({
   const [numRows, setNumRows] = useState(16);
 
   // Pattern state: numRows rows × numTracks tracks
-  const [pattern, setPattern] = useState<string[][]>(() =>
+  const [pattern, setPattern] = useState<PatternCellData[][]>(() =>
     Array(numRows)
       .fill(null)
       .map(() => Array(numTracks).fill('---'))
