@@ -433,18 +433,26 @@ export class SimpleSynth {
         console.warn(`[SimpleSynth] Dual-voice degraded to single channel for ${noteId}`);
       }
 
-      // Trigger both channels with same note
-      const { fnum, block } = getOPLParams(adjustedNote);
+      // Trigger both channels with per-voice pitch offsets (baseNote)
+      // Voice 1: Apply voice1.baseNote offset (in semitones)
+      const voice1Note = adjustedNote + (patch.voice1!.baseNote || 0);
+      const voice1NoteClamp = Math.max(0, Math.min(127, voice1Note));
+      const { fnum: fnum1, block: block1 } = getOPLParams(voice1NoteClamp);
 
       // Trigger channel 1
-      this.writeOPL(this.getChannelRegister(0xA0, ch1), fnum & 0xFF);
-      const keyOnByte = 0x20 | ((block & 0x07) << 2) | ((fnum >> 8) & 0x03);
-      this.writeOPL(this.getChannelRegister(0xB0, ch1), keyOnByte);
+      this.writeOPL(this.getChannelRegister(0xA0, ch1), fnum1 & 0xFF);
+      const keyOnByte1 = 0x20 | ((block1 & 0x07) << 2) | ((fnum1 >> 8) & 0x03);
+      this.writeOPL(this.getChannelRegister(0xB0, ch1), keyOnByte1);
 
-      // Trigger channel 2 (if different)
+      // Trigger channel 2 (if different) with voice2.baseNote offset
       if (ch1 !== ch2) {
-        this.writeOPL(this.getChannelRegister(0xA0, ch2), fnum & 0xFF);
-        this.writeOPL(this.getChannelRegister(0xB0, ch2), keyOnByte);
+        const voice2Note = adjustedNote + (patch.voice2!.baseNote || 0);
+        const voice2NoteClamp = Math.max(0, Math.min(127, voice2Note));
+        const { fnum: fnum2, block: block2 } = getOPLParams(voice2NoteClamp);
+
+        this.writeOPL(this.getChannelRegister(0xA0, ch2), fnum2 & 0xFF);
+        const keyOnByte2 = 0x20 | ((block2 & 0x07) << 2) | ((fnum2 >> 8) & 0x03);
+        this.writeOPL(this.getChannelRegister(0xB0, ch2), keyOnByte2);
       }
 
       // Track active note

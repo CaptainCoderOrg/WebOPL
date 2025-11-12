@@ -50,8 +50,8 @@ function transformVoice(json: any): any {
     modulator: transformOperator(json.mod),
     carrier: transformOperator(json.car),
     feedback: json.feedback,
-    connection: json.additive ? 1 : 0, // additive = 1 (parallel), else 0 (serial)
-    noteOffset: json.baseNote || 0
+    connection: json.additive ? 'additive' : 'fm', // Convert boolean to string
+    baseNote: json.baseNote || 0
   };
 }
 
