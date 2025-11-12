@@ -407,7 +407,9 @@ export class SimpleSynth {
     const noteId = `ch${channel}-note${midiNote}`;
 
     // Check if dual-voice is enabled AND both voices exist
-    const isDualVoice = patch.dualVoiceEnabled && patch.voice1 && patch.voice2;
+    // Use isDualVoice field (new) or fall back to dualVoiceEnabled (backward compat)
+    const isDualVoiceEnabled = patch.isDualVoice ?? patch.dualVoiceEnabled ?? false;
+    const isDualVoice = isDualVoiceEnabled && patch.voice1 && patch.voice2;
 
     if (isDualVoice) {
       // === DUAL-VOICE PATH ===

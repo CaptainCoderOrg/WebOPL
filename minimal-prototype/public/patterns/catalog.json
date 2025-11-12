@@ -46,5 +46,11 @@
     "name": "E1M1 - At Doom's Gate",
     "description": "Iconic heavy metal soundtrack from Doom (1993)",
     "file": "e1m1.yaml"
+  },
+  {
+    "id": "e1m1-short",
+    "name": "E1M1 - Short",
+    "description": "Iconic heavy metal soundtrack from Doom (1993)",
+    "file": "e1m1-copy.yaml"
   }
 ]

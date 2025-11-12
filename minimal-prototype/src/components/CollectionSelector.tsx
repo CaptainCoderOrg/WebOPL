@@ -4,7 +4,7 @@
  * Allows users to browse and switch between instrument collections
  */
 
-import type { InstrumentCatalog, CollectionEntry } from '../types/Catalog';
+import type { InstrumentCatalog } from '../types/Catalog';
 import './CollectionSelector.css';
 
 export interface CollectionSelectorProps {

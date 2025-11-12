@@ -13,7 +13,7 @@ import { PianoKeyboardTest } from './components/PianoKeyboardTest';
 import { VolumeControl } from './components/VolumeControl';
 import { defaultPatches } from './data/defaultPatches';
 import { loadGENMIDI } from './utils/genmidiParser';
-import { loadCatalog, loadDefaultCollection, loadCollectionById } from './utils/catalogLoader';
+import { loadCatalog, loadCollectionById } from './utils/catalogLoader';
 import type { OPLPatch } from './types/OPLPatch';
 import type { InstrumentCatalog } from './types/Catalog';
 import './App.css';

@@ -155,6 +155,24 @@ function parseOperator(buffer, offset) {
 }
 
 /**
+ * Check if an operator has any non-zero data
+ */
+function hasOperatorData(operator) {
+  return operator.multi !== 0 ||
+         operator.attack !== 0 ||
+         operator.decay !== 0 ||
+         operator.sustain !== 0 ||
+         operator.release !== 0 ||
+         operator.wave !== 0 ||
+         operator.ksl !== 0 ||
+         operator.out !== 0 ||
+         operator.trem ||
+         operator.vib ||
+         operator.sus ||
+         operator.ksr;
+}
+
+/**
  * Parse a single instrument entry
  */
 function parseInstrument(buffer, offset, index, names) {
@@ -176,10 +194,19 @@ function parseInstrument(buffer, offset, index, names) {
 
   const name = names[index] || `Unknown ${index}`;
 
+  // Determine if this is a dual-voice instrument
+  // Check if voice2 has any non-zero operator data OR if bit 2 of flags is set
+  const voice2HasData = hasOperatorData(mod2) || hasOperatorData(car2);
+  const flagsDualVoice = (flags & 0x04) !== 0; // Bit 2: dual-voice flag
+  const isDualVoice = voice2HasData || flagsDualVoice;
+
   return {
     id: index,
     name: name,
+    flags: flags,                          // ADD: Store flags field
+    finetune: finetune,                    // ADD: Store finetune field
     note: note !== 0 ? note : undefined,
+    isDualVoice: isDualVoice,              // ADD: Computed dual-voice flag
     voice1: {
       mod: mod1,
       car: car1,

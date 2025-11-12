@@ -34,6 +34,10 @@ function transformInstrument(json: any): OPLPatch {
     voice1: voice1,
     voice2: transformVoice(json.voice2),
     isDualVoice: json.isDualVoice !== undefined ? json.isDualVoice : false,
+    // DMX/GENMIDI fields
+    flags: json.flags,
+    finetune: json.finetune,
+    // Metadata
     isCustom: json.isCustom !== undefined ? json.isCustom : false
   };
 }

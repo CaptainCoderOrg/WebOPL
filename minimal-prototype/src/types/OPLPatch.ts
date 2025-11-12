@@ -62,9 +62,12 @@ export interface OPLPatch {
   voice2?: OPLVoice;            // Voice 2 (detailed format)
 
   // Control flags
-  dualVoiceEnabled?: boolean;   // Use both voices if true (default: false for now)
+  isDualVoice?: boolean;        // True if instrument uses both voices (computed from voice2 data or flags)
+  dualVoiceEnabled?: boolean;   // DEPRECATED: Use isDualVoice instead (kept for backward compatibility)
 
-  // GENMIDI-specific
+  // GENMIDI/DMX-specific fields
+  flags?: number;               // OP2 flags field (bit 0=fixed pitch, bit 2=dual-voice)
+  finetune?: number;            // OP2 finetune field (128=normal, <128=flat, >128=sharp)
   noteOffset?: number;          // MIDI note offset (from GENMIDI 'note' field)
 
   // Metadata (for user customization tracking)
