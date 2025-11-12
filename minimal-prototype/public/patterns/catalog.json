@@ -100,5 +100,11 @@
     "name": "EDx Note Delay Test",
     "description": "Testing note delay effects for swing and humanization (Phase 4 test)",
     "file": "effect-edx-test.yaml"
+  },
+  {
+    "id": "e1m1-effects",
+    "name": "E1M1 - At Doom's Gate (Full Effects)",
+    "description": "E1M1 with polyphony + velocity + note-offs + 308 ECx effects (ALL PHASES)",
+    "file": "e1m1-effects.yaml"
   }
 ]

@@ -361,31 +361,73 @@ function midiToPattern(midiData, options = {}) {
         effectValue: null
       };
 
-      // Record which output track has this note
+      // Record which output track has this note (with timing for ECx effect detection)
       mapping.activeNotes.set(event.note, {
         outputTrack: outputTrack,
-        startRow: currentRow
+        startRow: currentRow,
+        startTime: event.time  // Absolute MIDI time in ticks
       });
 
     } else if (event.eventName === 'noteOff') {
       // Find which output track has this note
       const noteInfo = mapping.activeNotes.get(event.note);
       if (noteInfo) {
-        const { outputTrack, startRow } = noteInfo;
+        const { outputTrack, startRow, startTime } = noteInfo;
+
+        // Calculate note duration in MIDI ticks and rows
+        const durationTicks = event.time - startTime;
+        const durationRows = durationTicks / ticksPerRow;
 
         // Ensure row has enough tracks
         ensureRowSize(currentRow, totalOutputTracks);
 
-        // Write note-off marker (only if on different row and slot is empty)
-        if (currentRow !== startRow &&
-            (!rows[currentRow][outputTrack] || rows[currentRow][outputTrack].note === null)) {
-          rows[currentRow][outputTrack] = {
-            note: 'OFF',
-            instrument: null,
-            volume: null,
-            effect: null,
-            effectValue: null
-          };
+        // PHASE 4: Detect short notes and use ECx (note cut) effect
+        // If note is shorter than 1 row (6 player ticks = 1 row), use ECx instead of OFF
+        const TICKS_PER_PATTERN_ROW = 6; // Player tick resolution
+
+        if (currentRow === startRow && durationRows < 0.95) {
+          // Note starts and ends within same row - use ECx effect
+          // Convert MIDI tick duration to player tick duration
+          const playerTicks = Math.round(durationRows * TICKS_PER_PATTERN_ROW);
+          const cutTick = Math.max(1, Math.min(playerTicks, TICKS_PER_PATTERN_ROW - 1));
+
+          // Add ECx effect to the note-on cell
+          if (rows[startRow][outputTrack]) {
+            rows[startRow][outputTrack].effect = `EC${cutTick.toString(16).toUpperCase()}`;
+          }
+        } else if (currentRow !== startRow && durationRows < 1.5) {
+          // Note spans 1-1.5 rows - add ECx to note, might also need OFF
+          const rowsSpanned = currentRow - startRow;
+          const playerTicks = Math.round((durationRows - rowsSpanned) * TICKS_PER_PATTERN_ROW);
+
+          if (playerTicks > 0 && playerTicks < TICKS_PER_PATTERN_ROW) {
+            // Add ECx to note-on cell
+            if (rows[startRow][outputTrack]) {
+              rows[startRow][outputTrack].effect = `EC${(rowsSpanned * TICKS_PER_PATTERN_ROW + playerTicks).toString(16).toUpperCase()}`;
+            }
+          } else {
+            // Write explicit OFF marker for longer notes
+            if (!rows[currentRow][outputTrack] || rows[currentRow][outputTrack].note === null) {
+              rows[currentRow][outputTrack] = {
+                note: 'OFF',
+                instrument: null,
+                volume: null,
+                effect: null,
+                effectValue: null
+              };
+            }
+          }
+        } else if (currentRow !== startRow) {
+          // Note is longer than 1.5 rows - write explicit OFF marker
+          if (!rows[currentRow][outputTrack] || rows[currentRow][outputTrack].note === null) {
+            rows[currentRow][outputTrack] = {
+              note: 'OFF',
+              instrument: null,
+              volume: null,
+              effect: null,
+              effectValue: null
+            };
+          }
         }
 
         mapping.activeNotes.delete(event.note);
@@ -556,6 +598,8 @@ function patternToYAML(pattern, filename) {
   lines.push(`rows: ${pattern.rows.length}`);
   lines.push(`tracks: ${activeTrackCount}`);
   lines.push(`bpm: ${pattern.tempo}`);
+  lines.push(`rowsPerBeat: ${pattern.rowsPerBeat}`);
+  lines.push(`ticksPerRow: 6  # Tick resolution for effect commands`);
   lines.push('');
 
   lines.push('# Instrument assignments (patch indices)');
@@ -608,11 +652,22 @@ function patternToYAML(pattern, filename) {
       if (trackHasNotes[trackIdx]) {
         const cell = row[trackIdx];
 
-        // If cell has a note and non-default velocity, use object format
-        if (cell.note && cell.volume !== null && cell.volume !== 64) {
-          notes.push({ n: cell.note, v: cell.volume });
+        // Use object format if cell has non-default velocity OR effect command
+        const hasNonDefaultVelocity = cell.note && cell.volume !== null && cell.volume !== 64;
+        const hasEffect = cell.effect && cell.effect !== null;
+
+        if (hasNonDefaultVelocity || hasEffect) {
+          // Build object with only necessary fields
+          const obj = { n: cell.note || '---' };  // Use "---" for null notes
+          if (cell.volume !== null && cell.volume !== 64) {
+            obj.v = cell.volume;
+          }
+          if (cell.effect) {
+            obj.fx = cell.effect;
+          }
+          notes.push(obj);
         } else {
-          // Use simple string format for default velocity or empty cells
+          // Use simple string format for default velocity and no effects
           notes.push(cell.note || '---');
         }
       }
@@ -621,8 +676,11 @@ function patternToYAML(pattern, filename) {
     // Format the row - handle both strings and objects
     const notesStr = notes.map(n => {
       if (typeof n === 'object') {
-        // Object format: {n: "C-4", v: 48}
-        return `{n: "${n.n}", v: ${n.v}}`;
+        // Object format: {n: "C-4", v: 48, fx: "EC3"}
+        let parts = [`n: "${n.n}"`];
+        if (n.v !== undefined) parts.push(`v: ${n.v}`);
+        if (n.fx !== undefined) parts.push(`fx: "${n.fx}"`);
+        return `{${parts.join(', ')}}`;
       } else {
         // String format: "C-4" or "---"
         return `"${n}"`;
