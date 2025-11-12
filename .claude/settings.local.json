@@ -6,7 +6,8 @@
       "Bash(npm run type-check:*)",
       "Bash(mkdir:*)",
       "Bash(cat:*)",
-      "Bash(node scripts/convertDMXCollections.js:*)"
+      "Bash(node scripts/convertDMXCollections.js:*)",
+      "Bash(git mv:*)"
     ],
     "deny": [],
     "ask": []
