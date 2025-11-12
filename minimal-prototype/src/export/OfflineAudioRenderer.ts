@@ -9,6 +9,7 @@ import { PatternRenderer, type RenderablePattern } from './PatternRenderer';
 import { WAVEncoder } from '../utils/WAVEncoder';
 import { loadGENMIDI } from '../utils/genmidiParser';
 import { loadOPL3Library } from '../utils/opl3Loader';
+import { SB16Filter } from '../audio/SB16Filter';
 import type { OPLPatch } from '../types/OPLPatch';
 import type { PatternFile } from '../types/PatternFile';
 
@@ -20,12 +21,14 @@ export class OfflineAudioRenderer {
    * @param pattern - Pattern data (PatternFile format)
    * @param patches - Instrument patches (use null to auto-load GENMIDI)
    * @param progressCallback - Optional progress callback (0.0 to 1.0)
+   * @param sb16Mode - Enable Sound Blaster 16 analog filtering
    * @returns ArrayBuffer containing WAV file
    */
   static async renderToWAV(
     pattern: PatternFile,
     patches: OPLPatch[] | null = null,
-    progressCallback?: (progress: number) => void
+    progressCallback?: (progress: number) => void,
+    sb16Mode: boolean = false
   ): Promise<ArrayBuffer> {
     // Load GENMIDI patches if not provided
     if (!patches) {
@@ -134,7 +137,35 @@ export class OfflineAudioRenderer {
       progressCallback(1.0);
     }
 
-    console.log('[OfflineAudioRenderer] Rendering complete, encoding to WAV...');
+    console.log('[OfflineAudioRenderer] Rendering complete');
+
+    // Apply SB16 filtering if enabled
+    if (sb16Mode) {
+      console.log('[OfflineAudioRenderer] Applying Sound Blaster 16 filtering...');
+      const filter = new SB16Filter(this.SAMPLE_RATE);
+
+      // Convert Int16 to Float32 for filtering
+      const leftFloat = new Float32Array(totalSamples);
+      const rightFloat = new Float32Array(totalSamples);
+
+      for (let i = 0; i < totalSamples; i++) {
+        leftFloat[i] = leftChannel[i] / 32768.0;
+        rightFloat[i] = rightChannel[i] / 32768.0;
+      }
+
+      // Apply SB16 filter
+      const filtered = filter.processStereo(leftFloat, rightFloat);
+
+      // Convert back to Int16
+      for (let i = 0; i < totalSamples; i++) {
+        leftChannel[i] = Math.max(-32768, Math.min(32767, Math.round(filtered.left[i] * 32768.0)));
+        rightChannel[i] = Math.max(-32768, Math.min(32767, Math.round(filtered.right[i] * 32768.0)));
+      }
+
+      console.log('[OfflineAudioRenderer] SB16 filtering applied');
+    }
+
+    console.log('[OfflineAudioRenderer] Encoding to WAV...');
 
     // Encode to WAV
     const wavBuffer = WAVEncoder.encode(leftChannel, rightChannel, this.SAMPLE_RATE);

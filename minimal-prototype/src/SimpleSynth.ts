@@ -410,6 +410,24 @@ export class SimpleSynth {
   }
 
   /**
+   * Enable or disable Sound Blaster 16 filtering
+   * @param enabled true to enable SB16 analog filtering, false for clean digital output
+   */
+  public setSB16Mode(enabled: boolean): void {
+    if (!this.workletNode) {
+      console.warn('[SimpleSynth] Cannot set SB16 mode: worklet not initialized');
+      return;
+    }
+
+    this.workletNode.port.postMessage({
+      type: 'setSB16Mode',
+      enabled: enabled
+    });
+
+    console.log('[SimpleSynth] SB16 Mode:', enabled ? 'ON' : 'OFF');
+  }
+
+  /**
    * Program a single voice to a hardware channel (for dual-voice support)
    */
   private programVoice(

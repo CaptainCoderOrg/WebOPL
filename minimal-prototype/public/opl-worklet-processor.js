@@ -6,6 +6,166 @@
  * Generates audio samples from the OPL3 emulator
  */
 
+/**
+ * Sound Blaster 16 Audio Filter
+ * Emulates the analog output stage of Creative Labs Sound Blaster 16
+ *
+ * Filter Chain:
+ * 1. High-shelf filter (-2 dB @ 8 kHz) for analog warmth
+ * 2. Low-pass filter (cutoff @ 16 kHz) for anti-aliasing
+ * 3. Optional subtle saturation for analog character
+ */
+class SB16Filter {
+  constructor(sampleRate) {
+    this.sampleRate = sampleRate;
+
+    // High-shelf filter state
+    this.hsA1 = 0;
+    this.hsA2 = 0;
+    this.hsB0 = 0;
+    this.hsB1 = 0;
+    this.hsB2 = 0;
+    this.hsX1L = 0;
+    this.hsX2L = 0;
+    this.hsY1L = 0;
+    this.hsY2L = 0;
+    this.hsX1R = 0;
+    this.hsX2R = 0;
+    this.hsY1R = 0;
+    this.hsY2R = 0;
+
+    // Low-pass filter state
+    this.lpA1 = 0;
+    this.lpA2 = 0;
+    this.lpB0 = 0;
+    this.lpB1 = 0;
+    this.lpB2 = 0;
+    this.lpX1L = 0;
+    this.lpX2L = 0;
+    this.lpY1L = 0;
+    this.lpY2L = 0;
+    this.lpX1R = 0;
+    this.lpX2R = 0;
+    this.lpY1R = 0;
+    this.lpY2R = 0;
+
+    this.calculateCoefficients();
+  }
+
+  calculateCoefficients() {
+    // High-shelf filter: -2 dB @ 8000 Hz, Q = 0.707
+    this.calculateHighShelfCoefficients(8000, 0.707, -2);
+
+    // Low-pass filter: Cutoff @ 16000 Hz, Q = 0.707
+    this.calculateLowPassCoefficients(16000, 0.707);
+  }
+
+  calculateHighShelfCoefficients(freq, q, gainDB) {
+    const w0 = (2 * Math.PI * freq) / this.sampleRate;
+    const cosW0 = Math.cos(w0);
+    const sinW0 = Math.sin(w0);
+    const A = Math.pow(10, gainDB / 40);
+    const beta = Math.sqrt(A) / q;
+
+    const b0 = A * ((A + 1) + (A - 1) * cosW0 + beta * sinW0);
+    const b1 = -2 * A * ((A - 1) + (A + 1) * cosW0);
+    const b2 = A * ((A + 1) + (A - 1) * cosW0 - beta * sinW0);
+    const a0 = (A + 1) - (A - 1) * cosW0 + beta * sinW0;
+    const a1 = 2 * ((A - 1) - (A + 1) * cosW0);
+    const a2 = (A + 1) - (A - 1) * cosW0 - beta * sinW0;
+
+    this.hsB0 = b0 / a0;
+    this.hsB1 = b1 / a0;
+    this.hsB2 = b2 / a0;
+    this.hsA1 = a1 / a0;
+    this.hsA2 = a2 / a0;
+  }
+
+  calculateLowPassCoefficients(freq, q) {
+    const w0 = (2 * Math.PI * freq) / this.sampleRate;
+    const cosW0 = Math.cos(w0);
+    const sinW0 = Math.sin(w0);
+    const alpha = sinW0 / (2 * q);
+
+    const b0 = (1 - cosW0) / 2;
+    const b1 = 1 - cosW0;
+    const b2 = (1 - cosW0) / 2;
+    const a0 = 1 + alpha;
+    const a1 = -2 * cosW0;
+    const a2 = 1 - alpha;
+
+    this.lpB0 = b0 / a0;
+    this.lpB1 = b1 / a0;
+    this.lpB2 = b2 / a0;
+    this.lpA1 = a1 / a0;
+    this.lpA2 = a2 / a0;
+  }
+
+  processSampleLeft(input) {
+    // Stage 1: High-shelf filter
+    const hs = this.hsB0 * input + this.hsB1 * this.hsX1L + this.hsB2 * this.hsX2L
+              - this.hsA1 * this.hsY1L - this.hsA2 * this.hsY2L;
+
+    this.hsX2L = this.hsX1L;
+    this.hsX1L = input;
+    this.hsY2L = this.hsY1L;
+    this.hsY1L = hs;
+
+    // Stage 2: Low-pass filter
+    const lp = this.lpB0 * hs + this.lpB1 * this.lpX1L + this.lpB2 * this.lpX2L
+              - this.lpA1 * this.lpY1L - this.lpA2 * this.lpY2L;
+
+    this.lpX2L = this.lpX1L;
+    this.lpX1L = hs;
+    this.lpY2L = this.lpY1L;
+    this.lpY1L = lp;
+
+    // Stage 3: Subtle saturation
+    return this.softClip(lp);
+  }
+
+  processSampleRight(input) {
+    // Stage 1: High-shelf filter
+    const hs = this.hsB0 * input + this.hsB1 * this.hsX1R + this.hsB2 * this.hsX2R
+              - this.hsA1 * this.hsY1R - this.hsA2 * this.hsY2R;
+
+    this.hsX2R = this.hsX1R;
+    this.hsX1R = input;
+    this.hsY2R = this.hsY1R;
+    this.hsY1R = hs;
+
+    // Stage 2: Low-pass filter
+    const lp = this.lpB0 * hs + this.lpB1 * this.lpX1R + this.lpB2 * this.lpX2R
+              - this.lpA1 * this.lpY1R - this.lpA2 * this.lpY2R;
+
+    this.lpX2R = this.lpX1R;
+    this.lpX1R = hs;
+    this.lpY2R = this.lpY1R;
+    this.lpY1R = lp;
+
+    // Stage 3: Subtle saturation
+    return this.softClip(lp);
+  }
+
+  softClip(input) {
+    const threshold = 0.95;
+    const amount = 0.1;
+
+    if (Math.abs(input) < threshold) {
+      return input;
+    }
+
+    return Math.tanh(input * (1 + amount));
+  }
+
+  reset() {
+    this.hsX1L = this.hsX2L = this.hsY1L = this.hsY2L = 0;
+    this.hsX1R = this.hsX2R = this.hsY1R = this.hsY2R = 0;
+    this.lpX1L = this.lpX2L = this.lpY1L = this.lpY2L = 0;
+    this.lpX1R = this.lpX2R = this.lpY1R = this.lpY2R = 0;
+  }
+}
+
 class OPLWorkletProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
@@ -15,12 +175,17 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
     this.sampleCount = 0;
     this.nonZeroSampleCount = 0;
 
+    // Initialize SB16 filter (assume 48kHz, will work for 44.1kHz too)
+    this.sb16Filter = new SB16Filter(sampleRate);
+    this.sb16Enabled = false; // Default: off
+
     // Listen for messages from main thread
     this.port.onmessage = (event) => {
       this.handleMessage(event.data);
     };
 
     console.log('[OPLWorkletProcessor] Constructed, waiting for OPL3 code...');
+    console.log('[OPLWorkletProcessor] SB16 Filter initialized (disabled by default)');
   }
 
   /**
@@ -124,6 +289,14 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
         this.loadOPL3Code(payload.opl3Code);
         break;
 
+      case 'setSB16Mode':
+        this.sb16Enabled = data.enabled;
+        if (this.sb16Enabled) {
+          this.sb16Filter.reset(); // Reset filter state
+        }
+        console.log('[OPLWorkletProcessor] SB16 Mode:', this.sb16Enabled ? 'ON' : 'OFF');
+        break;
+
       case 'write-register':
         // New IOPLChip format: { array, address, value }
         if (this.isReady) {
@@ -194,8 +367,14 @@ class OPLWorkletProcessor extends AudioWorkletProcessor {
       this.chip.read(tempBuffer);
 
       // Convert Int16 to Float32
-      const left = tempBuffer[0] / 32768.0;
-      const right = tempBuffer[1] / 32768.0;
+      let left = tempBuffer[0] / 32768.0;
+      let right = tempBuffer[1] / 32768.0;
+
+      // Apply SB16 filtering if enabled
+      if (this.sb16Enabled) {
+        left = this.sb16Filter.processSampleLeft(left);
+        right = this.sb16Filter.processSampleRight(right);
+      }
 
       // Write to output channels (usually 2 for stereo)
       if (numChannels >= 1) output[0][i] = left;

@@ -100,6 +100,12 @@ export function ExportModal({
   const [normalizeEnabled, setNormalizeEnabled] = useState(true); // Enabled by default
   const [normalizeDb, setNormalizeDb] = useState<number>(-1); // Target dB (default to -1 dB)
 
+  // Sound Blaster 16 mode (analog filtering)
+  const [sb16Mode, setSB16Mode] = useState<boolean>(() => {
+    const saved = localStorage.getItem('sb16Mode');
+    return saved === 'true';
+  });
+
   // Calculate pattern info
   const rows = pattern.length;
   const tracks = pattern[0]?.length || 0;
@@ -147,6 +153,7 @@ export function ExportModal({
           bpm,
           loopCount,
           contextRows,
+          sb16Mode,
           onProgress,
           abortSignal: controller.signal,
         });
@@ -163,6 +170,7 @@ export function ExportModal({
           fadeInDuration: typeof fadeInDuration === 'number' ? fadeInDuration : 1000,
           fadeOut,
           fadeOutDuration: typeof fadeOutDuration === 'number' ? fadeOutDuration : 1000,
+          sb16Mode,
           onProgress,
           abortSignal: controller.signal,
         });
@@ -536,6 +544,22 @@ export function ExportModal({
             ? 'Uses context-aware rendering to create a perfect loop with no audible clicks at the loop boundary.'
             : 'Normal render that starts on the first beat and "rings" on the last notes.'}
         </p>
+
+        {/* Sound Blaster 16 Mode */}
+        <div className="export-option" style={{ marginTop: '16px', marginBottom: '4px' }}>
+          <label className="export-checkbox-label">
+            <input
+              type="checkbox"
+              checked={sb16Mode}
+              onChange={(e) => setSB16Mode(e.target.checked)}
+              className="export-checkbox"
+            />
+            <span className="export-checkbox-text">Sound Blaster 16 Mode</span>
+          </label>
+          <p className="export-option-description" style={{ marginTop: '4px' }}>
+            Emulates analog output characteristics of real Sound Blaster 16 hardware (warmer, less harsh sound).
+          </p>
+        </div>
 
         {/* Loop Count */}
         <div className="export-option" style={{ marginTop: '20px' }}>

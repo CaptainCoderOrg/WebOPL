@@ -321,6 +321,42 @@
   break-inside: avoid;
 }
 
+/* SB16 Toggle Button */
+.sb16-toggle {
+  padding: 8px 16px;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.sb16-toggle:hover:not(:disabled) {
+  background-color: #333;
+  border-color: #666;
+  transform: translateY(-1px);
+}
+
+.sb16-toggle.active {
+  background-color: #4a7c59;
+  border-color: #5a9c69;
+  color: white;
+  font-weight: 500;
+}
+
+.sb16-toggle.active:hover:not(:disabled) {
+  background-color: #5a8c69;
+  border-color: #6aac79;
+}
+
+.sb16-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .tracker-controls {

@@ -90,6 +90,12 @@ export function Tracker({
   // Compact mode state (narrow columns, minimal headers)
   const [compactMode, setCompactMode] = useState(false);
 
+  // Sound Blaster 16 mode (analog filtering)
+  const [sb16Mode, setSB16Mode] = useState<boolean>(() => {
+    const saved = localStorage.getItem('sb16Mode');
+    return saved === 'true';
+  });
+
   // Pattern catalog
   const [patternCatalog, setPatternCatalog] = useState<PatternCatalogEntry[]>([]);
   const [catalogLoaded, setCatalogLoaded] = useState(false);
@@ -130,6 +136,17 @@ export function Tracker({
       setCurrentRow(row);
     });
   }, [player]);
+
+  /**
+   * Apply SB16 mode setting when synth is ready
+   */
+  useEffect(() => {
+    if (!synth) return;
+
+    // Apply current SB16 mode setting to synth
+    synth.setSB16Mode(sb16Mode);
+    console.log('[Tracker] Applied SB16 mode to synth:', sb16Mode ? 'ON' : 'OFF');
+  }, [synth, sb16Mode]);
 
   /**
    * Initialize track patches when instrument bank loads
@@ -348,6 +365,24 @@ export function Tracker({
         .map(() => Array(numTracks).fill('---'))
     );
     console.log('Pattern cleared');
+  };
+
+  /**
+   * Toggle Sound Blaster 16 filtering mode
+   */
+  const toggleSB16Mode = () => {
+    const newMode = !sb16Mode;
+    setSB16Mode(newMode);
+
+    // Save to localStorage
+    localStorage.setItem('sb16Mode', String(newMode));
+
+    // Send to audio synth
+    if (synth) {
+      synth.setSB16Mode(newMode);
+    }
+
+    console.log('[Tracker] SB16 Mode:', newMode ? 'ON' : 'OFF');
   };
 
   /**
@@ -596,6 +631,17 @@ export function Tracker({
             }
           >
             💾 Export
+          </button>
+          <button
+            onClick={toggleSB16Mode}
+            className={`sb16-toggle ${sb16Mode ? 'active' : ''}`}
+            title={
+              sb16Mode
+                ? 'Sound Blaster 16 Mode ON - Click to disable analog filtering'
+                : 'Sound Blaster 16 Mode OFF - Click to enable analog filtering'
+            }
+          >
+            {sb16Mode ? '🔊 SB16' : '🔇 Clean'}
           </button>
         </div>
       </div>

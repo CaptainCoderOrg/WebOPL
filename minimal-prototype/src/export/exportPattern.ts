@@ -13,6 +13,7 @@ import { SimpleSynth } from '../SimpleSynth';
 import { DirectOPLChip } from '../adapters/DirectOPLChip';
 import { WAVEncoder } from '../utils/WAVEncoder';
 import { loadOPL3Library } from '../utils/opl3Loader';
+import { SB16Filter } from '../audio/SB16Filter';
 
 const SAMPLE_RATE = 49716; // OPL3 native sample rate
 
@@ -34,6 +35,9 @@ export interface ExportOptions {
 
   /** Number of times to repeat the pattern */
   loopCount: number;
+
+  /** Sound Blaster 16 Mode - Apply analog filtering */
+  sb16Mode?: boolean;
 
   /** Progress callback (0-100) */
   onProgress?: (progress: number, message: string) => void;
@@ -248,6 +252,7 @@ export async function exportStandard(options: StandardExportOptions): Promise<Ar
     fadeInDuration: _fadeInDuration,
     fadeOut: _fadeOut,
     fadeOutDuration: _fadeOutDuration,
+    sb16Mode,
     onProgress,
   } = options;
 
@@ -261,6 +266,29 @@ export async function exportStandard(options: StandardExportOptions): Promise<Ar
     onProgress,
     options.abortSignal
   );
+
+  // Apply SB16 filtering if enabled
+  if (sb16Mode) {
+    onProgress?.(91, 'Applying Sound Blaster 16 filtering...');
+    const filter = new SB16Filter(SAMPLE_RATE);
+
+    // Convert Int16 to Float32
+    const leftFloat = new Float32Array(buffers.left.length);
+    const rightFloat = new Float32Array(buffers.right.length);
+    for (let i = 0; i < buffers.left.length; i++) {
+      leftFloat[i] = buffers.left[i] / 32768.0;
+      rightFloat[i] = buffers.right[i] / 32768.0;
+    }
+
+    // Apply filter
+    const filtered = filter.processStereo(leftFloat, rightFloat);
+
+    // Convert back to Int16
+    for (let i = 0; i < buffers.left.length; i++) {
+      buffers.left[i] = Math.max(-32768, Math.min(32767, Math.round(filtered.left[i] * 32768.0)));
+      buffers.right[i] = Math.max(-32768, Math.min(32767, Math.round(filtered.right[i] * 32768.0)));
+    }
+  }
 
   // Trim trailing silence
   onProgress?.(92, 'Trimming silence...');
@@ -289,6 +317,7 @@ export async function exportSeamlessLoop(options: SeamlessLoopExportOptions): Pr
     bpm,
     loopCount,
     contextRows,
+    sb16Mode,
     onProgress,
   } = options;
 
@@ -314,6 +343,29 @@ export async function exportSeamlessLoop(options: SeamlessLoopExportOptions): Pr
     },
     options.abortSignal
   );
+
+  // Apply SB16 filtering if enabled (before extracting core loop)
+  if (sb16Mode) {
+    onProgress?.(84, 'Applying Sound Blaster 16 filtering...');
+    const filter = new SB16Filter(SAMPLE_RATE);
+
+    // Convert Int16 to Float32
+    const leftFloat = new Float32Array(buffers.left.length);
+    const rightFloat = new Float32Array(buffers.right.length);
+    for (let i = 0; i < buffers.left.length; i++) {
+      leftFloat[i] = buffers.left[i] / 32768.0;
+      rightFloat[i] = buffers.right[i] / 32768.0;
+    }
+
+    // Apply filter
+    const filtered = filter.processStereo(leftFloat, rightFloat);
+
+    // Convert back to Int16
+    for (let i = 0; i < buffers.left.length; i++) {
+      buffers.left[i] = Math.max(-32768, Math.min(32767, Math.round(filtered.left[i] * 32768.0)));
+      buffers.right[i] = Math.max(-32768, Math.min(32767, Math.round(filtered.right[i] * 32768.0)));
+    }
+  }
 
   onProgress?.(85, 'Extracting core loop...');
 
