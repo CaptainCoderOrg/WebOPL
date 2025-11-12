@@ -142,10 +142,28 @@ function App() {
         const bank = await loadCollectionById(catalog, currentCollectionId);
 
         console.log(`[App] Loaded ${bank.patches.length} instruments from ${bank.name}`);
-        setInstrumentBank(bank.patches);
+
+        // Create synthetic "Percussion Kit" instrument
+        const percussionKit: OPLPatch = {
+          id: 999,
+          name: '🥁 Percussion Kit (GM Drums)',
+          type: 'percussion',
+          isPercussionKit: true,
+          // Use first percussion instrument as template (or create silent patch)
+          modulator: bank.patches[128]?.modulator || bank.patches[0].modulator,
+          carrier: bank.patches[128]?.carrier || bank.patches[0].carrier,
+          feedback: 0,
+          connection: 'fm',
+          voice1: bank.patches[128]?.voice1 || bank.patches[0].voice1,
+          voice2: bank.patches[128]?.voice2 || bank.patches[0].voice2,
+        };
+
+        // Add percussion kit to the bank
+        const patchesWithKit = [...bank.patches, percussionKit];
+        setInstrumentBank(patchesWithKit);
         setBankLoaded(true);
 
-        console.log('[App] Collection loaded successfully');
+        console.log('[App] Collection loaded successfully (with Percussion Kit)');
       } catch (error) {
         console.error('[App] Failed to load collection:', error);
         const errorMsg = error instanceof Error ? error.message : 'Unknown error';
@@ -171,10 +189,28 @@ function App() {
       const bank = await loadGENMIDI();
 
       console.log(`[App] Loaded ${bank.patches.length} instruments from ${bank.name}`);
-      setInstrumentBank(bank.patches);
+
+      // Create synthetic "Percussion Kit" instrument
+      const percussionKit: OPLPatch = {
+        id: 999,
+        name: '🥁 Percussion Kit (GM Drums)',
+        type: 'percussion',
+        isPercussionKit: true,
+        // Use first percussion instrument as template (or create silent patch)
+        modulator: bank.patches[128]?.modulator || bank.patches[0].modulator,
+        carrier: bank.patches[128]?.carrier || bank.patches[0].carrier,
+        feedback: 0,
+        connection: 'fm',
+        voice1: bank.patches[128]?.voice1 || bank.patches[0].voice1,
+        voice2: bank.patches[128]?.voice2 || bank.patches[0].voice2,
+      };
+
+      // Add percussion kit to the bank
+      const patchesWithKit = [...bank.patches, percussionKit];
+      setInstrumentBank(patchesWithKit);
       setBankLoaded(true);
 
-      console.log('[App] GENMIDI bank loaded successfully');
+      console.log('[App] GENMIDI bank loaded successfully (with Percussion Kit)');
     } catch (error) {
       console.error('[App] Failed to load legacy GENMIDI:', error);
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
@@ -186,6 +222,21 @@ function App() {
     }
   };
 
+  /**
+   * Load percussion map into synth whenever synth or instrumentBank changes
+   * This ensures the percussion map is loaded even if synth is recreated (React StrictMode)
+   */
+  useEffect(() => {
+    if (!synth || instrumentBank.length === 0) return;
+
+    // Filter percussion instruments
+    const percussionInstruments = instrumentBank.filter(p => p.type === 'percussion' && !p.isPercussionKit);
+
+    if (percussionInstruments.length > 0) {
+      console.log(`[App] Loading percussion map into synth (${percussionInstruments.length} percussion instruments)`);
+      synth.loadPercussionMap(instrumentBank);
+    }
+  }, [synth, instrumentBank]);
 
   /**
    * Open instrument editor for a specific track

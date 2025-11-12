@@ -203,6 +203,7 @@ function parseInstrument(buffer, offset, index, names) {
   return {
     id: index,
     name: name,
+    type: index >= 128 ? 'percussion' : 'melodic', // Instruments 0-127: melodic, 128-174: percussion
     flags: flags,                          // ADD: Store flags field
     finetune: finetune,                    // ADD: Store finetune field
     note: note !== 0 ? note : undefined,
@@ -257,9 +258,9 @@ function parseOP2File(buffer, metadata) {
   const namesOffset = 8 + instrumentDataSize;
   const names = parseNames(buffer, namesOffset);
 
-  // Parse instruments (first 128 are General MIDI)
+  // Parse all 175 instruments (0-127: melodic, 128-174: percussion)
   const instruments = [];
-  for (let i = 0; i < 128; i++) {
+  for (let i = 0; i < 175; i++) {
     const offset = 8 + (i * 36);
     const instrument = parseInstrument(buffer, offset, i, names);
     instruments.push(instrument);

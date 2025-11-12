@@ -11,6 +11,12 @@ import type { OPLPatch, InstrumentBank } from '../types/OPLPatch';
 // Cache for loaded collections
 const collectionCache = new Map<string, InstrumentBank>();
 
+// Clear cache on module reload (for development)
+if (import.meta.hot) {
+  collectionCache.clear();
+  console.log('[Catalog] Cache cleared (HMR)');
+}
+
 // Cache for catalog
 let catalogCache: InstrumentCatalog | null = null;
 
@@ -21,6 +27,11 @@ let catalogCache: InstrumentCatalog | null = null;
 function transformInstrument(json: any): OPLPatch {
   const voice1 = transformVoice(json.voice1);
 
+  // Debug: log percussion instruments
+  if (json.type === 'percussion' && json.id >= 128 && json.id <= 135) {
+    console.log(`[Catalog] Transforming percussion ${json.id}: ${json.name}, note=${json.note}, noteOffset will be=${json.note !== undefined ? json.note : voice1.noteOffset}`);
+  }
+
   return {
     id: json.id,
     name: json.name,
@@ -29,12 +40,13 @@ function transformInstrument(json: any): OPLPatch {
     carrier: voice1.carrier,
     feedback: voice1.feedback,
     connection: voice1.connection === 1 ? 'additive' : 'fm',
-    noteOffset: voice1.noteOffset,
+    noteOffset: json.note !== undefined ? json.note : voice1.noteOffset, // Use json.note for percussion, voice1.noteOffset for melodic
     // Dual-voice support
     voice1: voice1,
     voice2: transformVoice(json.voice2),
     isDualVoice: json.isDualVoice !== undefined ? json.isDualVoice : false,
     // DMX/GENMIDI fields
+    type: json.type || 'melodic', // Default to melodic for backward compatibility
     flags: json.flags,
     finetune: json.finetune,
     // Metadata
@@ -132,7 +144,7 @@ async function createLegacyCatalog(): Promise<InstrumentCatalog> {
         description: 'Legacy GENMIDI instrument bank',
         category: 'legacy',
         path: 'GENMIDI.json',
-        instrumentCount: 128,
+        instrumentCount: 175,
         tags: ['legacy', 'default'],
         isDefault: true
       }

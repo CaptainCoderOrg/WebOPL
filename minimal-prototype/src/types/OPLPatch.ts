@@ -47,9 +47,10 @@ export interface OPLVoice {
  * Supports both single-voice (backward compatible) and dual-voice modes
  */
 export interface OPLPatch {
-  id: number;                   // Instrument ID (0-127 for GM compatibility)
+  id: number;                   // Instrument ID (0-174 for GM: 0-127 melodic, 128-174 percussion)
   name: string;                 // Display name (e.g., "Acoustic Grand Piano")
   category?: string;            // Optional category (e.g., "Piano", "Bass", "Lead")
+  type?: 'melodic' | 'percussion'; // Instrument type (melodic uses note for pitch, percussion uses note to select drum sound)
 
   // Backward compatibility: Single-voice format (always Voice 1)
   modulator: OPLOperator;       // Operator 1: Modulates the carrier
@@ -64,6 +65,7 @@ export interface OPLPatch {
   // Control flags
   isDualVoice?: boolean;        // True if instrument uses both voices (computed from voice2 data or flags)
   dualVoiceEnabled?: boolean;   // DEPRECATED: Use isDualVoice instead (kept for backward compatibility)
+  isPercussionKit?: boolean;    // True if this is the special "Percussion Kit" that auto-maps MIDI notes to drums
 
   // GENMIDI/DMX-specific fields
   flags?: number;               // OP2 flags field (bit 0=fixed pitch, bit 2=dual-voice)
@@ -81,7 +83,7 @@ export interface OPLPatch {
 export interface InstrumentBank {
   name: string;                 // Bank name (e.g., "GENMIDI", "Custom")
   version: string;              // Version string
-  patches: OPLPatch[];          // Array of instruments (typically 128 for GM)
+  patches: OPLPatch[];          // Array of instruments (175 for GM: 128 melodic + 47 percussion)
   metadata?: {                  // Optional collection metadata
     source?: string;            // Source URL
     license?: string;           // License type

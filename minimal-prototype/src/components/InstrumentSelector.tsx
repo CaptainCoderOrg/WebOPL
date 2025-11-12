@@ -51,11 +51,34 @@ export function InstrumentSelector({
                 className="instrument-dropdown"
                 aria-label={`Instrument for ${trackNames[trackIndex]}`}
               >
-                {instrumentBank.map((p, idx) => (
-                  <option key={idx} value={idx}>
-                    {String(idx).padStart(3, '0')} - {p.name}
-                  </option>
-                ))}
+                <optgroup label="🎹 Melodic Instruments">
+                  {instrumentBank
+                    .map((p, idx) => ({ patch: p, index: idx }))
+                    .filter(({ patch }) => patch.type !== 'percussion')
+                    .map(({ patch, index }) => (
+                      <option key={index} value={index}>
+                        {String(index).padStart(3, '0')} - {patch.name}
+                      </option>
+                    ))}
+                </optgroup>
+                <optgroup label="🥁 Percussion">
+                  {instrumentBank
+                    .map((p, idx) => ({ patch: p, index: idx }))
+                    .filter(({ patch }) => patch.isPercussionKit)
+                    .map(({ patch, index }) => (
+                      <option key={index} value={index}>
+                        {patch.name} (auto-maps MIDI notes to drums)
+                      </option>
+                    ))}
+                  {instrumentBank
+                    .map((p, idx) => ({ patch: p, index: idx }))
+                    .filter(({ patch }) => patch.type === 'percussion' && !patch.isPercussionKit)
+                    .map(({ patch, index }) => (
+                      <option key={index} value={index}>
+                        {String(index).padStart(3, '0')} - {patch.name}
+                      </option>
+                    ))}
+                </optgroup>
               </select>
 
               <button

@@ -10,6 +10,7 @@
     {
       "id": 0,
       "name": "Acoustic Grand Piano",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -83,6 +84,7 @@
     {
       "id": 1,
       "name": "Bright Acoustic Piano",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -156,6 +158,7 @@
     {
       "id": 2,
       "name": "Electric Grand Piano",
+      "type": "melodic",
       "flags": 4,
       "finetune": 128,
       "isDualVoice": true,
@@ -229,6 +232,7 @@
     {
       "id": 3,
       "name": "Honky-tonk Piano",
+      "type": "melodic",
       "flags": 4,
       "finetune": 130,
       "isDualVoice": true,
@@ -302,6 +306,7 @@
     {
       "id": 4,
       "name": "Rhodes Paino",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -375,6 +380,7 @@
     {
       "id": 5,
       "name": "Chorused Piano",
+      "type": "melodic",
       "flags": 4,
       "finetune": 128,
       "isDualVoice": true,
@@ -448,6 +454,7 @@
     {
       "id": 6,
       "name": "Harpsichord",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -521,6 +528,7 @@
     {
       "id": 7,
       "name": "Clavinet",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -594,6 +602,7 @@
     {
       "id": 8,
       "name": "Celesta",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -667,6 +676,7 @@
     {
       "id": 9,
       "name": "* Glockenspiel",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -740,6 +750,7 @@
     {
       "id": 10,
       "name": "* Music Box",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -813,6 +824,7 @@
     {
       "id": 11,
       "name": "Vibraphone",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -886,6 +898,7 @@
     {
       "id": 12,
       "name": "Marimba",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -959,6 +972,7 @@
     {
       "id": 13,
       "name": "Xylophone",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1032,6 +1046,7 @@
     {
       "id": 14,
       "name": "* Tubular-bell",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1105,6 +1120,7 @@
     {
       "id": 15,
       "name": "* Dulcimer",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1178,6 +1194,7 @@
     {
       "id": 16,
       "name": "Hammond Organ",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1251,6 +1268,7 @@
     {
       "id": 17,
       "name": "Percussive Organ",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1324,6 +1342,7 @@
     {
       "id": 18,
       "name": "Rock Organ",
+      "type": "melodic",
       "flags": 4,
       "finetune": 138,
       "isDualVoice": true,
@@ -1397,6 +1416,7 @@
     {
       "id": 19,
       "name": "Church Organ",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1470,6 +1490,7 @@
     {
       "id": 20,
       "name": "Reed Organ",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1543,6 +1564,7 @@
     {
       "id": 21,
       "name": "Accordion",
+      "type": "melodic",
       "flags": 4,
       "finetune": 125,
       "isDualVoice": true,
@@ -1616,6 +1638,7 @@
     {
       "id": 22,
       "name": "Harmonica",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1689,6 +1712,7 @@
     {
       "id": 23,
       "name": "Tango Accordion",
+      "type": "melodic",
       "flags": 4,
       "finetune": 129,
       "isDualVoice": true,
@@ -1762,6 +1786,7 @@
     {
       "id": 24,
       "name": "Acoustic Guitar (nylon)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1835,6 +1860,7 @@
     {
       "id": 25,
       "name": "Acoustic Guitar (steel)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1908,6 +1934,7 @@
     {
       "id": 26,
       "name": "Electric Guitar (jazz)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -1981,6 +2008,7 @@
     {
       "id": 27,
       "name": "* Electric Guitar (clean)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2054,6 +2082,7 @@
     {
       "id": 28,
       "name": "Electric Guitar (muted)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2127,6 +2156,7 @@
     {
       "id": 29,
       "name": "Overdriven Guitar",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2200,6 +2230,7 @@
     {
       "id": 30,
       "name": "Distortion Guitar",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2273,6 +2304,7 @@
     {
       "id": 31,
       "name": "* Guitar Harmonics",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2346,6 +2378,7 @@
     {
       "id": 32,
       "name": "Acoustic Bass",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2419,6 +2452,7 @@
     {
       "id": 33,
       "name": "Electric Bass (finger)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2492,6 +2526,7 @@
     {
       "id": 34,
       "name": "Electric Bass (pick)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2565,6 +2600,7 @@
     {
       "id": 35,
       "name": "Fretless Bass",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2638,6 +2674,7 @@
     {
       "id": 36,
       "name": "* Slap Bass 1",
+      "type": "melodic",
       "flags": 4,
       "finetune": 128,
       "isDualVoice": true,
@@ -2711,6 +2748,7 @@
     {
       "id": 37,
       "name": "Slap Bass 2",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2784,6 +2822,7 @@
     {
       "id": 38,
       "name": "Synth Bass 1",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -2857,6 +2896,7 @@
     {
       "id": 39,
       "name": "Synth Bass 2",
+      "type": "melodic",
       "flags": 4,
       "finetune": 118,
       "isDualVoice": true,
@@ -2930,6 +2970,7 @@
     {
       "id": 40,
       "name": "Violin",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3003,6 +3044,7 @@
     {
       "id": 41,
       "name": "Viola",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3076,6 +3118,7 @@
     {
       "id": 42,
       "name": "Cello",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3149,6 +3192,7 @@
     {
       "id": 43,
       "name": "Contrabass",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3222,6 +3266,7 @@
     {
       "id": 44,
       "name": "Tremolo Strings",
+      "type": "melodic",
       "flags": 4,
       "finetune": 139,
       "isDualVoice": true,
@@ -3295,6 +3340,7 @@
     {
       "id": 45,
       "name": "Pizzicato Strings",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3368,6 +3414,7 @@
     {
       "id": 46,
       "name": "Orchestral Harp",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3441,6 +3488,7 @@
     {
       "id": 47,
       "name": "* Timpani",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3514,6 +3562,7 @@
     {
       "id": 48,
       "name": "String Ensemble 1",
+      "type": "melodic",
       "flags": 4,
       "finetune": 120,
       "isDualVoice": true,
@@ -3587,6 +3636,7 @@
     {
       "id": 49,
       "name": "String Ensemble 2",
+      "type": "melodic",
       "flags": 4,
       "finetune": 133,
       "isDualVoice": true,
@@ -3660,6 +3710,7 @@
     {
       "id": 50,
       "name": "Synth Strings 1",
+      "type": "melodic",
       "flags": 4,
       "finetune": 123,
       "isDualVoice": true,
@@ -3733,6 +3784,7 @@
     {
       "id": 51,
       "name": "Synth Strings 2",
+      "type": "melodic",
       "flags": 4,
       "finetune": 132,
       "isDualVoice": true,
@@ -3806,6 +3858,7 @@
     {
       "id": 52,
       "name": "Choir Aahs",
+      "type": "melodic",
       "flags": 4,
       "finetune": 138,
       "isDualVoice": true,
@@ -3879,6 +3932,7 @@
     {
       "id": 53,
       "name": "Voice Oohs",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -3952,6 +4006,7 @@
     {
       "id": 54,
       "name": "Synth Voice",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4025,6 +4080,7 @@
     {
       "id": 55,
       "name": "Orchestra Hit",
+      "type": "melodic",
       "flags": 4,
       "finetune": 128,
       "isDualVoice": true,
@@ -4098,6 +4154,7 @@
     {
       "id": 56,
       "name": "Trumpet",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4171,6 +4228,7 @@
     {
       "id": 57,
       "name": "Trombone",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4244,6 +4302,7 @@
     {
       "id": 58,
       "name": "Tuba",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4317,6 +4376,7 @@
     {
       "id": 59,
       "name": "Muted Trumpet",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4390,6 +4450,7 @@
     {
       "id": 60,
       "name": "French Horn",
+      "type": "melodic",
       "flags": 4,
       "finetune": 129,
       "isDualVoice": true,
@@ -4463,6 +4524,7 @@
     {
       "id": 61,
       "name": "Brass Section",
+      "type": "melodic",
       "flags": 4,
       "finetune": 131,
       "isDualVoice": true,
@@ -4536,6 +4598,7 @@
     {
       "id": 62,
       "name": "Synth Brass 1",
+      "type": "melodic",
       "flags": 4,
       "finetune": 134,
       "isDualVoice": true,
@@ -4609,6 +4672,7 @@
     {
       "id": 63,
       "name": "Synth Bass 2",
+      "type": "melodic",
       "flags": 4,
       "finetune": 134,
       "isDualVoice": true,
@@ -4682,6 +4746,7 @@
     {
       "id": 64,
       "name": "Soprano Sax",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4755,6 +4820,7 @@
     {
       "id": 65,
       "name": "Alto Sax",
+      "type": "melodic",
       "flags": 2,
       "finetune": 128,
       "isDualVoice": false,
@@ -4828,6 +4894,7 @@
     {
       "id": 66,
       "name": "Tenor Sax",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4901,6 +4968,7 @@
     {
       "id": 67,
       "name": "Baritone Sax",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -4974,6 +5042,7 @@
     {
       "id": 68,
       "name": "Oboe",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5047,6 +5116,7 @@
     {
       "id": 69,
       "name": "English Horn",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5120,6 +5190,7 @@
     {
       "id": 70,
       "name": "Bassoon",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5193,6 +5264,7 @@
     {
       "id": 71,
       "name": "Clarinet",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5266,6 +5338,7 @@
     {
       "id": 72,
       "name": "Piccolo",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5339,6 +5412,7 @@
     {
       "id": 73,
       "name": "Flute",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5412,6 +5486,7 @@
     {
       "id": 74,
       "name": "Recorder",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5485,6 +5560,7 @@
     {
       "id": 75,
       "name": "Pan Flute",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5558,6 +5634,7 @@
     {
       "id": 76,
       "name": "Bottle Blow",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5631,6 +5708,7 @@
     {
       "id": 77,
       "name": "* Shakuhachi",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5704,6 +5782,7 @@
     {
       "id": 78,
       "name": "Whistle",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5777,6 +5856,7 @@
     {
       "id": 79,
       "name": "Ocarina",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -5850,6 +5930,7 @@
     {
       "id": 80,
       "name": "Lead 1 (square)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 130,
       "isDualVoice": true,
@@ -5923,6 +6004,7 @@
     {
       "id": 81,
       "name": "Lead 2 (sawtooth)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 127,
       "isDualVoice": true,
@@ -5996,6 +6078,7 @@
     {
       "id": 82,
       "name": "Lead 3 (calliope)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -6069,6 +6152,7 @@
     {
       "id": 83,
       "name": "Lead 4 (chiffer)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 130,
       "isDualVoice": true,
@@ -6142,6 +6226,7 @@
     {
       "id": 84,
       "name": "Lead 5 (charang)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -6215,6 +6300,7 @@
     {
       "id": 85,
       "name": "Lead 6 (voice)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 122,
       "isDualVoice": true,
@@ -6288,6 +6374,7 @@
     {
       "id": 86,
       "name": "Lead 7 (5th sawtooth)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 125,
       "isDualVoice": true,
@@ -6361,6 +6448,7 @@
     {
       "id": 87,
       "name": "Lead 8 (bass & lead)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -6434,6 +6522,7 @@
     {
       "id": 88,
       "name": "* Lead 8 (bass & lead)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -6507,6 +6596,7 @@
     {
       "id": 89,
       "name": "Pad 2 (warm)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 130,
       "isDualVoice": true,
@@ -6580,6 +6670,7 @@
     {
       "id": 90,
       "name": "Pad 3 (polysynth)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 130,
       "isDualVoice": true,
@@ -6653,6 +6744,7 @@
     {
       "id": 91,
       "name": "Pad 4 (choir)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 139,
       "isDualVoice": true,
@@ -6726,6 +6818,7 @@
     {
       "id": 92,
       "name": "Pad 5 (bowed glass)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -6799,6 +6892,7 @@
     {
       "id": 93,
       "name": "Pad 6 (metal)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -6872,6 +6966,7 @@
     {
       "id": 94,
       "name": "Pad 7 (halo)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 126,
       "isDualVoice": true,
@@ -6945,6 +7040,7 @@
     {
       "id": 95,
       "name": "Pad 8 (sweep)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7018,6 +7114,7 @@
     {
       "id": 96,
       "name": "FX 1 (rain)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7091,6 +7188,7 @@
     {
       "id": 97,
       "name": "FX 2 (soundtrack)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 136,
       "isDualVoice": true,
@@ -7164,6 +7262,7 @@
     {
       "id": 98,
       "name": "* FX 3 (crystal)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7237,6 +7336,7 @@
     {
       "id": 99,
       "name": "FX 4 (atmosphere)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 126,
       "isDualVoice": true,
@@ -7310,6 +7410,7 @@
     {
       "id": 100,
       "name": "FX 5 (brightness)",
+      "type": "melodic",
       "flags": 4,
       "finetune": 116,
       "isDualVoice": true,
@@ -7383,6 +7484,7 @@
     {
       "id": 101,
       "name": "FX 6 (goblin)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7456,6 +7558,7 @@
     {
       "id": 102,
       "name": "FX 7 (echo drops)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7529,6 +7632,7 @@
     {
       "id": 103,
       "name": "* FX 8 (star-theme)",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7602,6 +7706,7 @@
     {
       "id": 104,
       "name": "Sitar",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7675,6 +7780,7 @@
     {
       "id": 105,
       "name": "Banjo",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7748,6 +7854,7 @@
     {
       "id": 106,
       "name": "Shamisen",
+      "type": "melodic",
       "flags": 4,
       "finetune": 128,
       "isDualVoice": true,
@@ -7821,6 +7928,7 @@
     {
       "id": 107,
       "name": "Koto",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7894,6 +8002,7 @@
     {
       "id": 108,
       "name": "Kalimba",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -7967,6 +8076,7 @@
     {
       "id": 109,
       "name": "Bag Pipe",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8040,6 +8150,7 @@
     {
       "id": 110,
       "name": "Fiddle",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8113,6 +8224,7 @@
     {
       "id": 111,
       "name": "Shanai",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8186,6 +8298,7 @@
     {
       "id": 112,
       "name": "Tinkle Bell",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8259,6 +8372,7 @@
     {
       "id": 113,
       "name": "Agogo",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8332,6 +8446,7 @@
     {
       "id": 114,
       "name": "Steel Drums",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8405,6 +8520,7 @@
     {
       "id": 115,
       "name": "Woodblock",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8478,6 +8594,7 @@
     {
       "id": 116,
       "name": "Taiko Drum",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8551,6 +8668,7 @@
     {
       "id": 117,
       "name": "Melodic Tom",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8624,6 +8742,7 @@
     {
       "id": 118,
       "name": "Synth Drum",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8697,6 +8816,7 @@
     {
       "id": 119,
       "name": "Reverse Cymbal",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8770,6 +8890,7 @@
     {
       "id": 120,
       "name": "Guitar Fret Noise",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8843,6 +8964,7 @@
     {
       "id": 121,
       "name": "Breath Noise",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8916,6 +9038,7 @@
     {
       "id": 122,
       "name": "Seashore",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -8989,6 +9112,7 @@
     {
       "id": 123,
       "name": "Bird Tweet",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -9062,6 +9186,7 @@
     {
       "id": 124,
       "name": "Telephone Ring",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -9135,6 +9260,7 @@
     {
       "id": 125,
       "name": "Helicopter",
+      "type": "melodic",
       "flags": 1,
       "finetune": 128,
       "note": 17,
@@ -9209,6 +9335,7 @@
     {
       "id": 126,
       "name": "Applause",
+      "type": "melodic",
       "flags": 1,
       "finetune": 128,
       "note": 65,
@@ -9283,6 +9410,7 @@
     {
       "id": 127,
       "name": "Gun Shot",
+      "type": "melodic",
       "flags": 0,
       "finetune": 128,
       "isDualVoice": false,
@@ -9318,6 +9446,3528 @@
         "feedback": 7,
         "additive": false,
         "baseNote": -12
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 128,
+      "name": "Acoustic Bass Drum",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 38,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 5,
+          "release": 7,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 4,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 129,
+      "name": "Acoustic Bass Drum",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 25,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 10,
+          "sustain": 4,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 0,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 130,
+      "name": "Slide Stick",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 83,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 6,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 7,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 131,
+      "name": "Acoustic Snare",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 32,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 15,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 1,
+          "release": 4,
+          "wave": 2,
+          "ksl": 0,
+          "out": 5
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 4,
+          "release": 7,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 132,
+      "name": "Hand Clap",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 60,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": false,
+          "multi": 1,
+          "attack": 8,
+          "decay": 8,
+          "sustain": 15,
+          "release": 11,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": true,
+          "ksr": true,
+          "multi": 15,
+          "attack": 10,
+          "decay": 6,
+          "sustain": 10,
+          "release": 8,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 133,
+      "name": "Electric Snare",
+      "type": "percussion",
+      "flags": 5,
+      "finetune": 128,
+      "note": 36,
+      "isDualVoice": true,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 12,
+          "sustain": 7,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 3,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 7,
+          "release": 5,
+          "wave": 1,
+          "ksl": 3,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 12,
+          "sustain": 3,
+          "release": 6,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 6,
+        "additive": false,
+        "baseNote": 42
+      }
+    },
+    {
+      "id": 134,
+      "name": "Low Floor Tom",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 15,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 6,
+          "release": 12,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 3,
+          "release": 8,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 135,
+      "name": "Closed High-Hat",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 88,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 12,
+          "attack": 9,
+          "decay": 8,
+          "sustain": 5,
+          "release": 14,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 15,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 0,
+          "release": 6,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 136,
+      "name": "High Floor Tom",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 19,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 7,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 3,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 137,
+      "name": "Pedal High Hat",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 88,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 12,
+          "attack": 7,
+          "decay": 8,
+          "sustain": 5,
+          "release": 14,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 10,
+          "attack": 8,
+          "decay": 10,
+          "sustain": 2,
+          "release": 11,
+          "wave": 3,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 138,
+      "name": "Low Tom",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 21,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 3,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 3,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 139,
+      "name": "Open High Hat",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 79,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 12,
+          "decay": 7,
+          "sustain": 0,
+          "release": 1,
+          "wave": 2,
+          "ksl": 1,
+          "out": 5
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 11,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 3,
+          "release": 3,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 140,
+      "name": "Low-Mid Tom",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 26,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 3,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 3,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 141,
+      "name": "High-Mid Tom",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 28,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 3,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 3,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 142,
+      "name": "Crash Cymbal 1",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 60,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 4,
+          "attack": 12,
+          "decay": 2,
+          "sustain": 14,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 16
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 14,
+          "decay": 8,
+          "sustain": 4,
+          "release": 3,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 143,
+      "name": "High Tom",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 32,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 3,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 3,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 1,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 144,
+      "name": "Ride Cymbal 1",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 60,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 1,
+          "release": 2,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 0,
+          "release": 5,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 145,
+      "name": "Chinses Cymbal",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 96,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 14,
+          "decay": 4,
+          "sustain": 8,
+          "release": 5,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 13,
+          "decay": 7,
+          "sustain": 3,
+          "release": 4,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 146,
+      "name": "Ride Bell",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 72,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 4,
+          "attack": 14,
+          "decay": 2,
+          "sustain": 14,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 16
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 11,
+          "decay": 8,
+          "sustain": 4,
+          "release": 4,
+          "wave": 1,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 147,
+      "name": "Tambourine",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 79,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 7,
+          "decay": 6,
+          "sustain": 7,
+          "release": 7,
+          "wave": 2,
+          "ksl": 2,
+          "out": 7
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 9,
+          "decay": 8,
+          "sustain": 6,
+          "release": 7,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 148,
+      "name": "Splash Cymbal",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 69,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 4,
+          "attack": 9,
+          "decay": 4,
+          "sustain": 7,
+          "release": 0,
+          "wave": 2,
+          "ksl": 2,
+          "out": 1
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 7,
+          "attack": 12,
+          "decay": 6,
+          "sustain": 10,
+          "release": 3,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 149,
+      "name": "Cowbell",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 71,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 6,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 9,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 150,
+      "name": "Crash Cymbal 2",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 60,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 4,
+          "attack": 12,
+          "decay": 2,
+          "sustain": 14,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 16
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 14,
+          "decay": 8,
+          "sustain": 4,
+          "release": 3,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 151,
+      "name": "Vibraslap",
+      "type": "percussion",
+      "flags": 0,
+      "finetune": 128,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 11,
+          "release": 5,
+          "wave": 0,
+          "ksl": 0,
+          "out": 7
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 15,
+          "attack": 13,
+          "decay": 4,
+          "sustain": 5,
+          "release": 0,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 152,
+      "name": "Ride Cymbal 2",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 60,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 1,
+          "release": 2,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 2,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 0,
+          "release": 5,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 153,
+      "name": "High Bongo",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 60,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 5,
+          "release": 6,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 10,
+          "sustain": 2,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 2,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 154,
+      "name": "Low Bango",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 54,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 5,
+          "release": 6,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 10,
+          "sustain": 2,
+          "release": 6,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 2,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 155,
+      "name": "Mute High Conga",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 72,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 5,
+          "release": 6,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 156,
+      "name": "Open High Conga",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 67,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 5,
+          "release": 6,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 157,
+      "name": "Low Conga",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 60,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 5,
+          "release": 6,
+          "wave": 2,
+          "ksl": 2,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 158,
+      "name": "High Timbale",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 55,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 5,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 1
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 159,
+      "name": "Low Timbale",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 48,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 3,
+          "attack": 15,
+          "decay": 11,
+          "sustain": 5,
+          "release": 6,
+          "wave": 0,
+          "ksl": 2,
+          "out": 1
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 7,
+          "sustain": 1,
+          "release": 7,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 160,
+      "name": "High Agogo",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 77,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 6,
+          "release": 7,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 9,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 161,
+      "name": "Low Agogo",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 72,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 13,
+          "sustain": 6,
+          "release": 7,
+          "wave": 3,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 15,
+          "decay": 6,
+          "sustain": 9,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 162,
+      "name": "Cabasa",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 88,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 12,
+          "attack": 7,
+          "decay": 8,
+          "sustain": 5,
+          "release": 14,
+          "wave": 2,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 10,
+          "attack": 8,
+          "decay": 10,
+          "sustain": 2,
+          "release": 11,
+          "wave": 3,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 7,
+        "additive": true,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 163,
+      "name": "Maracas",
+      "type": "percussion",
+      "flags": 0,
+      "finetune": 128,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 5,
+          "decay": 10,
+          "sustain": 13,
+          "release": 6,
+          "wave": 2,
+          "ksl": 0,
+          "out": 14
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 15,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 164,
+      "name": "Short Whistle",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 49,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 12,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 7
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 165,
+      "name": "Long Whistle",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 49,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 12,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 7
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 166,
+      "name": "Short Guiro",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 49,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 12,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 7
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 167,
+      "name": "Long Guiro",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 49,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 12,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 7
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 168,
+      "name": "Claves",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 73,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 3,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 13,
+          "release": 1,
+          "wave": 1,
+          "ksl": 1,
+          "out": 4
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 7,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 169,
+      "name": "High Wood Block",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 68,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 3,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 13,
+          "release": 1,
+          "wave": 1,
+          "ksl": 1,
+          "out": 4
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 7,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 170,
+      "name": "Low Wood Block",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 61,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 3,
+          "attack": 15,
+          "decay": 8,
+          "sustain": 13,
+          "release": 1,
+          "wave": 1,
+          "ksl": 1,
+          "out": 4
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 2,
+          "attack": 15,
+          "decay": 5,
+          "sustain": 7,
+          "release": 8,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 3,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 171,
+      "name": "Mute Cuica",
+      "type": "percussion",
+      "flags": 0,
+      "finetune": 128,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 1,
+          "attack": 5,
+          "decay": 14,
+          "sustain": 13,
+          "release": 12,
+          "wave": 1,
+          "ksl": 0,
+          "out": 11
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": true,
+          "ksr": true,
+          "multi": 15,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 172,
+      "name": "Open Cuica",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 49,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 9,
+          "sustain": 12,
+          "release": 7,
+          "wave": 1,
+          "ksl": 0,
+          "out": 7
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 15,
+          "decay": 15,
+          "sustain": 15,
+          "release": 15,
+          "wave": 0,
+          "ksl": 3,
+          "out": 0
+        },
+        "feedback": 5,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 173,
+      "name": "Mute Triangle",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 90,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": false,
+          "multi": 5,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 6,
+          "release": 0,
+          "wave": 0,
+          "ksl": 1,
+          "out": 15
+        },
+        "car": {
+          "trem": true,
+          "vib": true,
+          "sus": false,
+          "ksr": true,
+          "multi": 4,
+          "attack": 15,
+          "decay": 4,
+          "sustain": 7,
+          "release": 10,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
+      },
+      "voice2": {
+        "mod": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "car": {
+          "trem": false,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 0,
+          "attack": 0,
+          "decay": 0,
+          "sustain": 15,
+          "release": 0,
+          "wave": 0,
+          "ksl": 0,
+          "out": 0
+        },
+        "feedback": 0,
+        "additive": false,
+        "baseNote": 0
+      }
+    },
+    {
+      "id": 174,
+      "name": "Open Triangle",
+      "type": "percussion",
+      "flags": 1,
+      "finetune": 128,
+      "note": 90,
+      "isDualVoice": false,
+      "voice1": {
+        "mod": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": false,
+          "multi": 5,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 6,
+          "release": 0,
+          "wave": 1,
+          "ksl": 1,
+          "out": 15
+        },
+        "car": {
+          "trem": true,
+          "vib": false,
+          "sus": false,
+          "ksr": true,
+          "multi": 4,
+          "attack": 15,
+          "decay": 2,
+          "sustain": 11,
+          "release": 7,
+          "wave": 0,
+          "ksl": 2,
+          "out": 0
+        },
+        "feedback": 4,
+        "additive": false,
+        "baseNote": 0
       },
       "voice2": {
         "mod": {

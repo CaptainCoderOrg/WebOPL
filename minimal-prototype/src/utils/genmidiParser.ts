@@ -156,7 +156,7 @@ function convertInstrument(inst: GENMIDIInstrument): OPLPatch {
 /**
  * Fetch and parse GENMIDI.json from public folder
  *
- * @returns Instrument bank with 128 patches
+ * @returns Instrument bank with 175 patches (128 melodic + 47 percussion)
  * @throws Error if fetch fails or JSON is invalid
  */
 export async function loadGENMIDI(): Promise<InstrumentBank> {
@@ -175,9 +175,9 @@ export async function loadGENMIDI(): Promise<InstrumentBank> {
   // Convert all instruments
   const patches = json.instruments.map(convertInstrument);
 
-  // Validate we have 128 instruments
-  if (patches.length !== 128) {
-    console.warn(`[GENMIDI] Expected 128 instruments, got ${patches.length}`);
+  // Validate we have 175 instruments (128 melodic + 47 percussion)
+  if (patches.length !== 175) {
+    console.warn(`[GENMIDI] Expected 175 instruments (128 melodic + 47 percussion), got ${patches.length}`);
   }
 
   // Count dual-voice enabled instruments

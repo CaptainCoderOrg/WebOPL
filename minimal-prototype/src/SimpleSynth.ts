@@ -21,6 +21,7 @@ export class SimpleSynth {
   private trackPatches: Map<number, OPLPatch> = new Map(); // Track/MIDI channel (0-17) -> Patch (user selections)
   private channelPatches: Map<number, OPLPatch> = new Map(); // OPL hardware channel (0-17) -> Patch (runtime state)
   private channelManager: ChannelManager = new ChannelManager(); // Channel allocation for dual-voice
+  private percussionMap: Map<number, OPLPatch> = new Map(); // MIDI note -> Percussion instrument
   private activeNotes: Map<number, {
     noteId: string;
     channels: number[];
@@ -249,6 +250,33 @@ export class SimpleSynth {
   }
 
   /**
+   * Load percussion instruments into percussion map
+   * Builds MIDI note -> percussion instrument lookup
+   * @param patches - Array of OPLPatch instruments (typically from instrument bank)
+   */
+  public loadPercussionMap(patches: OPLPatch[]): void {
+    this.percussionMap.clear();
+
+    const percussionInstruments = patches.filter(p => p.type === 'percussion' && p.noteOffset !== undefined);
+
+    for (const patch of percussionInstruments) {
+      if (patch.noteOffset !== undefined) {
+        this.percussionMap.set(patch.noteOffset, patch);
+      }
+    }
+
+    console.log(`[SimpleSynth] Loaded ${this.percussionMap.size} percussion instruments (${percussionInstruments.length} total, ${percussionInstruments.length - this.percussionMap.size} duplicates)`);
+
+    // Log the percussion map for debugging
+    const sortedNotes = Array.from(this.percussionMap.keys()).sort((a, b) => a - b);
+    console.log('[SimpleSynth] Percussion map:');
+    sortedNotes.forEach(note => {
+      const patch = this.percussionMap.get(note);
+      console.log(`  Note ${note}: ${patch?.name} (ID ${patch?.id})`);
+    });
+  }
+
+  /**
    * Set the instrument patch for a track/MIDI channel (0-17)
    * This stores the patch assignment but doesn't program hardware yet.
    * Hardware channels are dynamically allocated during playback.
@@ -390,15 +418,30 @@ export class SimpleSynth {
     }
 
     // Get patch for this MIDI channel (track)
-    const patch = this.trackPatches.get(channel);
+    let patch = this.trackPatches.get(channel);
     if (!patch) {
       console.warn(`[SimpleSynth] No patch loaded for MIDI channel/track ${channel}`);
       return;
     }
 
+    // Handle Percussion Kit: use MIDI note to select percussion sound
+    if (patch.isPercussionKit) {
+      console.log(`[SimpleSynth] 🔍 Looking up note ${midiNote} in percussion map (size: ${this.percussionMap.size})`);
+      const percussionPatch = this.percussionMap.get(midiNote);
+      if (!percussionPatch) {
+        console.warn(`[SimpleSynth] No percussion instrument for MIDI note ${midiNote}`);
+        console.warn(`[SimpleSynth] Map keys: ${Array.from(this.percussionMap.keys()).sort((a, b) => a - b).join(', ')}`);
+        return;
+      }
+      console.log(`[SimpleSynth] 🥁 Percussion Kit: Note ${midiNote} -> ${percussionPatch.name}`);
+      patch = percussionPatch;
+      // For percussion kit, use the fixed pitch from noteOffset, ignore the incoming MIDI note for pitch
+      midiNote = percussionPatch.noteOffset || midiNote;
+    }
+
     // Apply GENMIDI note offset if present (for pitch correction)
     let adjustedNote = midiNote;
-    if (patch.noteOffset !== undefined) {
+    if (patch.noteOffset !== undefined && !patch.isPercussionKit) {
       adjustedNote = midiNote - patch.noteOffset;
       adjustedNote = Math.max(0, Math.min(127, adjustedNote));
     }
