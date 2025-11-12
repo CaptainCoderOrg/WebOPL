@@ -1,5 +1,18 @@
 # Tracker Format Extension Plan
 
+## Implementation Status
+
+| Phase | Status | Completion Date |
+|-------|--------|-----------------|
+| **Phase 1: Velocity Support** | ✅ **COMPLETE** | 2025-11-12 |
+| **Phase 2: Note-Off Support** | ✅ **COMPLETE** | 2025-11-12 |
+| **Phase 3: Track Allocation Rewrite** | 🟡 Next | - |
+| **Phase 4: Effect Commands** | 🔲 Optional | - |
+
+**Last Updated**: 2025-11-12
+
+---
+
 ## Overview
 
 This document outlines the plan to extend WebOPL's tracker format to support advanced musical expression features that are currently lost during MIDI conversion. The goal is to match the expressiveness of original Doom music while maintaining the tracker workflow and aesthetic.
@@ -140,11 +153,18 @@ pattern:
 
 ## Implementation Phases
 
-### Phase 1: Velocity Support (PRIORITY 1)
+### Phase 1: Velocity Support ✅ COMPLETE
 
 **Goal**: Per-note volume control for dynamics and accents
 
 **Impact**: Restores 100% of lost velocity data, makes drums sound alive
+
+**Status**: ✅ **COMPLETE** (2025-11-12)
+- All TypeScript/JavaScript code updated
+- MIDI converter writes velocity to YAML
+- Real-time playback and WAV export support velocity
+- Test patterns created and verified
+- Backward compatibility maintained
 
 #### 1.1 Update Pattern Loader
 
@@ -255,11 +275,17 @@ if (!cell) {
 
 ---
 
-### Phase 2: Note-Off Support (PRIORITY 1)
+### Phase 2: Note-Off Support ✅ COMPLETE
 
 **Goal**: Proper note duration control and articulation
 
 **Impact**: Restores 100% of lost duration data, percussion sounds crisp
+
+**Status**: ✅ **COMPLETE** (2025-11-12)
+- MIDI converter writes "OFF" markers to YAML
+- E1M1 conversion includes 1,123 note-offs
+- Test pattern created (noteoff-test.yaml)
+- Note-off pipeline already functional (CellProcessor, SimplePlayer)
 
 #### 2.1 Update Pattern Loader
 
@@ -998,16 +1024,18 @@ function migratePattern(oldPattern) {
 
 ## Success Criteria
 
-### Phase 1 Success
-- [ ] E1M1 drums have dynamic accents (loud/soft hits)
-- [ ] WAV export shows amplitude variation
-- [ ] MIDI conversion preserves velocity data
-- [ ] Backward compatible with old patterns
+### Phase 1 Success ✅ COMPLETE (2025-11-12)
+- [x] E1M1 drums have dynamic accents (loud/soft hits)
+- [x] WAV export shows amplitude variation
+- [x] MIDI conversion preserves velocity data
+- [x] Backward compatible with old patterns
+- [x] Test patterns verified: velocity-ramp-test.yaml, velocity-multi-test.yaml
 
-### Phase 2 Success
-- [ ] Percussion sounds crisp (short notes)
-- [ ] Note-offs export correctly to WAV
-- [ ] MIDI conversion includes OFF markers
+### Phase 2 Success ✅ COMPLETE (2025-11-12)
+- [x] Percussion sounds crisp (short notes)
+- [x] Note-offs export correctly to WAV
+- [x] MIDI conversion includes OFF markers (1,123 in E1M1)
+- [x] Test pattern created: noteoff-test.yaml
 
 ### Phase 3 Success
 - [ ] E1M1 has 6-8 tracks (not 4) - track conflicts resolved

@@ -1,0 +1,58 @@
+# Note-Off Test Pattern
+# Demonstrates explicit note-off markers for articulation control
+# 120 BPM, 32 rows (4 bars)
+
+name: Note-Off Test
+description: Short vs sustained notes with explicit OFF markers
+author: WebOPL Test
+rows: 32
+tracks: 4
+bpm: 120
+rowsPerBeat: 4
+
+# Track 0: Piano - Short notes (staccato)
+# Track 1: Piano - Sustained notes (legato)
+# Track 2: Percussion - Kick drum (short)
+# Track 3: Percussion - Cymbal (sustained)
+instruments: [0, 1, 128, 129]
+
+pattern:
+  # Bar 1: Short notes (1 row duration)
+  - ["C-4", "C-4", "C-1", "F#2"]
+  - ["OFF", "---", "OFF", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["E-4", "---", "C-1", "---"]
+  - ["OFF", "---", "OFF", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+
+  # Bar 2: Medium notes (2 rows duration)
+  - ["G-4", "E-4", "C-1", "F#2"]
+  - ["---", "---", "---", "---"]
+  - ["OFF", "---", "OFF", "OFF"]
+  - ["---", "---", "---", "---"]
+  - ["E-4", "---", "C-1", "---"]
+  - ["---", "---", "---", "---"]
+  - ["OFF", "---", "OFF", "---"]
+  - ["---", "---", "---", "---"]
+
+  # Bar 3: Long notes (4 rows duration)
+  - ["C-5", "G-4", "C-1", "F#2"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["OFF", "---", "OFF", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+
+  # Bar 4: Mixed durations
+  - ["C-4", "C-5", "C-1", "F#2"]
+  - ["OFF", "---", "OFF", "---"]
+  - ["E-4", "---", "C-1", "---"]
+  - ["OFF", "---", "OFF", "---"]
+  - ["G-4", "---", "C-1", "---"]
+  - ["---", "---", "OFF", "---"]
+  - ["OFF", "OFF", "---", "OFF"]
+  - ["---", "---", "---", "---"]

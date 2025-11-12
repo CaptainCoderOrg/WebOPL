@@ -303,7 +303,17 @@ function midiToPattern(midiData, options = {}) {
       // Find the row where this note started
       const startRow = channelState[channel].activeNotes.get(event.note);
       if (startRow !== undefined) {
-        // Could add note-off marker here if needed
+        // Write note-off marker to pattern
+        // Only write if the note-off is on a different row than note-on
+        if (currentRow !== startRow && rows[currentRow][channel].note === null) {
+          rows[currentRow][channel] = {
+            note: 'OFF',
+            instrument: null,
+            volume: null,
+            effect: null,
+            effectValue: null
+          };
+        }
         channelState[channel].activeNotes.delete(event.note);
       }
     } else if (event.eventName === 'programChange') {

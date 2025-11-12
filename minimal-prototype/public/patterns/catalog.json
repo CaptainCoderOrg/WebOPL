@@ -76,5 +76,11 @@
     "name": "Multi-Track Velocity Test",
     "description": "4 tracks with different velocity patterns (up, down, triangle, constant)",
     "file": "velocity-multi-test.yaml"
+  },
+  {
+    "id": "noteoff-test",
+    "name": "Note-Off Test",
+    "description": "Short vs sustained notes with explicit OFF markers (Phase 2 test)",
+    "file": "noteoff-test.yaml"
   }
 ]
