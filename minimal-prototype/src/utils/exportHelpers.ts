@@ -87,16 +87,28 @@ export function formatDuration(seconds: number): string {
 /**
  * Validate that pattern has at least one note
  *
- * @param pattern - Pattern data (2D array of cell strings)
+ * @param pattern - Pattern data (2D array of cell strings or objects)
  * @returns true if pattern has at least one note, false if empty
  *
  * @example
  * hasNotes([['C-4', '---'], ['---', 'E-4']]) // true
  * hasNotes([['---', '---'], ['---', '---']]) // false
+ * hasNotes([[{n: 'C-4', v: 48}, '---']]) // true
  */
-export function hasNotes(pattern: string[][]): boolean {
+export function hasNotes(pattern: (string | { n: string; v?: number })[][]): boolean {
   return pattern.some(row =>
-    row.some(cell => cell !== '---' && cell.trim() !== '')
+    row.some(cell => {
+      // Handle object format (extended cells with velocity)
+      if (typeof cell === 'object' && cell !== null) {
+        const noteStr = cell.n;
+        return noteStr !== '---' && noteStr.trim() !== '';
+      }
+      // Handle string format (simple cells)
+      if (typeof cell === 'string') {
+        return cell !== '---' && cell.trim() !== '';
+      }
+      return false;
+    })
   );
 }
 

@@ -469,11 +469,29 @@ function patternToYAML(pattern, filename) {
     // Only include notes from active tracks
     for (let trackIdx = 0; trackIdx < pattern.channels; trackIdx++) {
       if (trackHasNotes[trackIdx]) {
-        notes.push(row[trackIdx].note || '---');
+        const cell = row[trackIdx];
+
+        // If cell has a note and non-default velocity, use object format
+        if (cell.note && cell.volume !== null && cell.volume !== 64) {
+          notes.push({ n: cell.note, v: cell.volume });
+        } else {
+          // Use simple string format for default velocity or empty cells
+          notes.push(cell.note || '---');
+        }
       }
     }
 
-    const notesStr = notes.map(n => `"${n}"`).join(', ');
+    // Format the row - handle both strings and objects
+    const notesStr = notes.map(n => {
+      if (typeof n === 'object') {
+        // Object format: {n: "C-4", v: 48}
+        return `{n: "${n.n}", v: ${n.v}}`;
+      } else {
+        // String format: "C-4" or "---"
+        return `"${n}"`;
+      }
+    }).join(', ');
+
     lines.push(`  - [${notesStr}]`);
   }
 

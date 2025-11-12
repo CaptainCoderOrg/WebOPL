@@ -180,7 +180,12 @@ export function Tracker({
     } else {
       // Check if pattern is completely empty
       const hasNotes = pattern.some(row =>
-        row.some(cell => cell !== '---' && cell.trim() !== '')
+        row.some(cell => {
+          if (typeof cell === 'object' && cell !== null) {
+            return cell.n !== '---' && cell.n.trim() !== '';
+          }
+          return cell !== '---' && cell.trim() !== '';
+        })
       );
 
       if (!hasNotes) {
@@ -213,10 +218,23 @@ export function Tracker({
         stepsPerBeat: 4, // 16th notes
         rows: pattern.map((row) =>
           row.map((cell) => {
-            const note = noteNameToMIDI(cell);
+            // Extract note string and velocity from cell (handle both string and object formats)
+            let noteStr: string;
+            let velocity: number | undefined;
+
+            if (typeof cell === 'object' && cell !== null) {
+              noteStr = cell.n;
+              velocity = cell.v;
+            } else {
+              noteStr = cell;
+              velocity = undefined; // Will default to 64
+            }
+
+            const note = noteNameToMIDI(noteStr);
             return {
               note: note,
               instrument: 0,
+              velocity: velocity,
             } as TrackerNote;
           })
         ),
@@ -386,6 +404,9 @@ export function Tracker({
     // Check if track has any notes
     const hasNotes = pattern.some(row => {
       const cell = row[trackIndex];
+      if (typeof cell === 'object' && cell !== null) {
+        return cell.n !== '---' && cell.n.trim() !== '';
+      }
       return cell !== '---' && cell.trim() !== '';
     });
 
@@ -447,7 +468,12 @@ export function Tracker({
     // Check if any of the rows we're removing have notes
     const rowsToRemove = pattern.slice(newNumRows);
     const hasNotes = rowsToRemove.some(row =>
-      row.some(cell => cell !== '---' && cell.trim() !== '')
+      row.some(cell => {
+        if (typeof cell === 'object' && cell !== null) {
+          return cell.n !== '---' && cell.n.trim() !== '';
+        }
+        return cell !== '---' && cell.trim() !== '';
+      })
     );
 
     if (hasNotes) {

@@ -6,43 +6,84 @@
  * interpret notes consistently.
  */
 
+import type { PatternCellData, PatternCell } from '../types/PatternFile';
+
 export type CellAction =
   | { type: 'sustain' }           // Continue playing current note
   | { type: 'note-off' }          // Stop current note
-  | { type: 'note-on', midiNote: number }  // Play new note
+  | { type: 'note-on', midiNote: number, velocity: number }  // Play new note with velocity
   | { type: 'invalid' };          // Invalid/unparseable cell
 
 export class CellProcessor {
   /**
    * Process a tracker cell and determine what action to take
    *
-   * @param cell - Cell content (e.g., "C-4", "---", "OFF", etc.)
+   * Supports both simple string format and extended object format:
+   * - Simple: "C-4" (defaults to velocity 64)
+   * - Extended: {n: "C-4", v: 48} (explicit velocity)
+   * - Extended: {n: "C-4", v: 48, fx: "EC8"} (with effects)
+   *
+   * @param cell - Cell content (string or object)
    * @returns Action to perform
    *
    * @example
-   * CellProcessor.process("C-4")  // { type: 'note-on', midiNote: 60 }
-   * CellProcessor.process("---")  // { type: 'sustain' }
-   * CellProcessor.process("OFF")  // { type: 'note-off' }
+   * CellProcessor.process("C-4")                    // { type: 'note-on', midiNote: 60, velocity: 64 }
+   * CellProcessor.process({n: "C-4", v: 48})        // { type: 'note-on', midiNote: 60, velocity: 48 }
+   * CellProcessor.process("---")                    // { type: 'sustain' }
+   * CellProcessor.process("OFF")                    // { type: 'note-off' }
    */
-  static process(cell: string | null | undefined): CellAction {
-    // Empty cell or "---" = sustain (do nothing)
-    if (!cell || cell === '---') {
-      return { type: 'sustain' };
+  static process(cell: PatternCellData | null | undefined): CellAction {
+    // Handle object format
+    if (typeof cell === 'object' && cell !== null) {
+      const objCell = cell as PatternCell;
+      const noteStr = objCell.n;
+      const velocity = objCell.v !== undefined ? objCell.v : 64; // Default to full velocity
+
+      // Empty cell or "---" = sustain
+      if (!noteStr || noteStr === '---') {
+        return { type: 'sustain' };
+      }
+
+      // "OFF" = note off
+      if (noteStr === 'OFF') {
+        return { type: 'note-off' };
+      }
+
+      // Parse note
+      const midiNote = this.parseNote(noteStr);
+      if (midiNote !== null) {
+        // Clamp velocity to 0-64 range
+        const clampedVelocity = Math.max(0, Math.min(64, velocity));
+        return { type: 'note-on', midiNote, velocity: clampedVelocity };
+      }
+
+      return { type: 'invalid' };
     }
 
-    // "OFF" = note off (stop the note)
-    if (cell === 'OFF') {
-      return { type: 'note-off' };
+    // Handle string format (backward compatibility)
+    if (typeof cell === 'string') {
+      // Empty cell or "---" = sustain (do nothing)
+      if (cell === '---') {
+        return { type: 'sustain' };
+      }
+
+      // "OFF" = note off (stop the note)
+      if (cell === 'OFF') {
+        return { type: 'note-off' };
+      }
+
+      // Try to parse as a note (e.g., "C-4", "C#4", "E-4")
+      const midiNote = this.parseNote(cell);
+      if (midiNote !== null) {
+        return { type: 'note-on', midiNote, velocity: 64 }; // Default to full velocity
+      }
+
+      // Unrecognized cell format
+      return { type: 'invalid' };
     }
 
-    // Try to parse as a note (e.g., "C-4", "C#4", "E-4")
-    const midiNote = this.parseNote(cell);
-    if (midiNote !== null) {
-      return { type: 'note-on', midiNote };
-    }
-
-    // Unrecognized cell format
-    return { type: 'invalid' };
+    // Null or undefined = sustain
+    return { type: 'sustain' };
   }
 
   /**
@@ -96,9 +137,10 @@ export class CellProcessor {
    * Convert TrackerNote format (used by SimplePlayer) to action
    *
    * @param note - Note value (null = sustain, -1 = OFF, 0+ = MIDI note)
+   * @param velocity - Velocity (0-64, defaults to 64 if not provided)
    * @returns Action to perform
    */
-  static processTrackerNote(note: number | null): CellAction {
+  static processTrackerNote(note: number | null, velocity: number = 64): CellAction {
     if (note === null) {
       return { type: 'sustain' };
     }
@@ -106,7 +148,8 @@ export class CellProcessor {
       return { type: 'note-off' };
     }
     if (note >= 0 && note <= 127) {
-      return { type: 'note-on', midiNote: note };
+      const clampedVelocity = Math.max(0, Math.min(64, velocity));
+      return { type: 'note-on', midiNote: note, velocity: clampedVelocity };
     }
     return { type: 'invalid' };
   }

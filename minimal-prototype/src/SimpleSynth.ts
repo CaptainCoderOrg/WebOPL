@@ -251,6 +251,37 @@ export class SimpleSynth {
   }
 
   /**
+   * Apply velocity scaling to carrier attenuation
+   * Velocity 64 = full volume (no additional attenuation)
+   * Velocity 0 = silent (maximum additional attenuation)
+   *
+   * @param oplChannel - OPL hardware channel
+   * @param operator - Carrier operator to scale
+   * @param velocity - Velocity value (0-64)
+   */
+  private applyVelocity(oplChannel: number, operator: OPLOperator, velocity: number): void {
+    // Clamp velocity to valid range
+    const clampedVelocity = Math.max(0, Math.min(64, velocity));
+
+    // Calculate velocity attenuation
+    // velocity 64 = 0 dB additional (full volume)
+    // velocity 32 = ~-6 dB additional (half volume)
+    // velocity 0 = ~-48 dB additional (silent)
+    const velocityAttenuation = Math.round((64 - clampedVelocity) * (63 / 64));
+
+    // Get carrier offset for this channel
+    const [_, carOffset] = this.getOperatorOffsets(oplChannel);
+
+    // Combine base attenuation with velocity attenuation
+    const baseAttenuation = operator.outputLevel;
+    const finalAttenuation = Math.min(63, baseAttenuation + velocityAttenuation);
+
+    // Write scaled attenuation to register 0x40 + carOffset
+    const reg40 = finalAttenuation | (operator.keyScaleLevel << 6);
+    this.writeOPL(0x40 + carOffset, reg40);
+  }
+
+  /**
    * Load percussion instruments into percussion map
    * Builds General MIDI percussion note -> GENMIDI percussion instrument lookup
    * @param patches - Array of OPLPatch instruments (typically from instrument bank)
@@ -410,7 +441,7 @@ export class SimpleSynth {
    * Play a note on a specific channel
    * Supports both single-voice and dual-voice instruments
    */
-  noteOn(channel: number, midiNote: number, _velocity: number = 100): void {
+  noteOn(channel: number, midiNote: number, velocity: number = 64): void {
     if (!this.isInitialized) {
       console.error('[SimpleSynth] Not initialized');
       return;
@@ -470,14 +501,18 @@ export class SimpleSynth {
       }
 
       const [ch1, ch2] = channels;
-      console.log(`[SimpleSynth] 🎵 DUAL-VOICE: ${patch.name} (${noteId}) -> OPL channels [${ch1}, ${ch2}] | V1 baseNote:${patch.voice1!.baseNote || 0} V2 baseNote:${patch.voice2!.baseNote || 0}`);
+      console.log(`[SimpleSynth] 🎵 DUAL-VOICE: ${patch.name} (${noteId}) -> OPL channels [${ch1}, ${ch2}] | V1 baseNote:${patch.voice1!.baseNote || 0} V2 baseNote:${patch.voice2!.baseNote || 0} | velocity=${velocity}`);
 
       // Program Voice 1 on channel 1
       this.programVoice(ch1, patch.voice1!, patch);
+      // Apply velocity scaling to Voice 1
+      this.applyVelocity(ch1, patch.voice1!.carrier, velocity);
 
       // Program Voice 2 on channel 2 (if we got 2 different channels)
       if (ch1 !== ch2) {
         this.programVoice(ch2, patch.voice2!, patch);
+        // Apply velocity scaling to Voice 2
+        this.applyVelocity(ch2, patch.voice2!.carrier, velocity);
       } else {
         // Degraded mode: only 1 channel available, use Voice 1 only
         console.warn(`[SimpleSynth] Dual-voice degraded to single channel for ${noteId}`);
@@ -521,10 +556,13 @@ export class SimpleSynth {
         return;
       }
 
-      console.log(`[SimpleSynth] Single-voice: ${patch.name} (${noteId}) -> OPL channel ${oplChannel} | isDualVoice=${patch.isDualVoice}`);
+      console.log(`[SimpleSynth] Single-voice: ${patch.name} (${noteId}) -> OPL channel ${oplChannel} | isDualVoice=${patch.isDualVoice} | velocity=${velocity}`);
 
       // Use backward-compatible single-voice programming
       this.loadPatch(oplChannel, patch);
+
+      // Apply velocity scaling to carrier attenuation
+      this.applyVelocity(oplChannel, patch.carrier, velocity);
 
       // Trigger note
       const { fnum, block } = getOPLParams(adjustedNote);

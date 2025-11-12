@@ -58,5 +58,17 @@
     "name": "E1M1 - At Doom's Gate (MIDI)",
     "description": "Converted from original MIDI with drums - Bobby Prince",
     "file": "e1m1-doom.yaml"
+  },
+  {
+    "id": "e1m1-velocity-test",
+    "name": "E1M1 - Velocity Test",
+    "description": "E1M1 with velocity dynamics - Phase 1 test",
+    "file": "e1m1-velocity-test.yaml"
+  },
+  {
+    "id": "velocity-ramp-test",
+    "name": "Velocity Ramp Test",
+    "description": "C-3 repeating with velocity ramp 0→64 (Phase 1 verification)",
+    "file": "velocity-ramp-test.yaml"
   }
 ]

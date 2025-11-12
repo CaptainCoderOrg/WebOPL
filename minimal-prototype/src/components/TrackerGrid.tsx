@@ -8,12 +8,13 @@ import React, { useEffect, useRef } from 'react';
 import './TrackerGrid.css';
 import { validateNote } from '../utils/patternValidation';
 import type { OPLPatch } from '../types/OPLPatch';
+import type { PatternCellData } from '../types/PatternFile';
 
 interface TrackerGridProps {
   rows: number;               // Number of rows (e.g., 16)
   tracks: number;             // Number of tracks (e.g., 4)
-  pattern: string[][];        // [row][track] = "C-4" or "---"
-  onUpdate: (pattern: string[][]) => void;
+  pattern: PatternCellData[][];        // [row][track] = "C-4" or {n: "C-4", v: 48}
+  onUpdate: (pattern: PatternCellData[][]) => void;
   currentRow?: number;        // Current playback row (for highlighting)
   trackInstruments?: number[]; // Array of patch IDs (one per track)
   instrumentBank?: OPLPatch[]; // All available patches
@@ -21,6 +22,26 @@ interface TrackerGridProps {
   onEditClick?: (trackIndex: number) => void;
   onDeleteClick?: (trackIndex: number) => void;
   compact?: boolean;          // Compact mode (narrow columns, minimal headers)
+}
+
+/**
+ * Get the note string from a cell (handles both string and object formats)
+ */
+function getCellNote(cell: PatternCellData): string {
+  if (typeof cell === 'object' && cell !== null) {
+    return cell.n;
+  }
+  return cell || '---';
+}
+
+/**
+ * Set the note string in a cell (preserves velocity if cell is an object)
+ */
+function setCellNote(cell: PatternCellData, newNote: string): PatternCellData {
+  if (typeof cell === 'object' && cell !== null) {
+    return { ...cell, n: newNote };
+  }
+  return newNote;
 }
 
 export function TrackerGrid({
@@ -136,7 +157,8 @@ export function TrackerGrid({
       normalized = '---';
     }
 
-    newPattern[row][track] = normalized;
+    // Update the cell, preserving velocity if it exists
+    newPattern[row][track] = setCellNote(pattern[row][track], normalized);
     onUpdate(newPattern);
   };
 
@@ -206,7 +228,7 @@ export function TrackerGrid({
 
       case '#': {
         // Toggle sharp on current note (no auto-advance)
-        const currentValue = pattern[row][track].trim().toUpperCase();
+        const currentValue = getCellNote(pattern[row][track]).trim().toUpperCase();
 
         // Only toggle if it's a note (not ---, OFF, or empty)
         if (currentValue && currentValue !== '---' && currentValue !== 'OFF') {
@@ -241,7 +263,7 @@ export function TrackerGrid({
       case 'g': case 'G': {
         // Change note letter or create new note
         const noteLetter = e.key.toUpperCase();
-        const currentValue = pattern[row][track].trim().toUpperCase();
+        const currentValue = getCellNote(pattern[row][track]).trim().toUpperCase();
 
         let newNote: string;
 
@@ -264,7 +286,7 @@ export function TrackerGrid({
           // Create new note - use octave from note above, or 4
           let octave = '4';
           if (row > 0) {
-            const noteAbove = pattern[row - 1][track].trim().toUpperCase();
+            const noteAbove = getCellNote(pattern[row - 1][track]).trim().toUpperCase();
             const match = noteAbove.match(/^([A-G])(#?)[-]?(\d+)$/);
             if (match) {
               octave = match[3];
@@ -282,7 +304,7 @@ export function TrackerGrid({
       case '5': case '6': case '7': case '8': case '9': {
         // Set octave on current note
         const octave = e.key;
-        const currentValue = pattern[row][track].trim().toUpperCase();
+        const currentValue = getCellNote(pattern[row][track]).trim().toUpperCase();
 
         if (currentValue && currentValue !== '---' && currentValue !== 'OFF') {
           // Modify existing note - keep letter and sharp, change octave
@@ -427,20 +449,20 @@ export function TrackerGrid({
                 <td key={track} className="note-cell">
                   <input
                     type="text"
-                    value={pattern[row][track]}
+                    value={getCellNote(pattern[row][track])}
                     onChange={(e) =>
                       handleCellChange(row, track, e.target.value)
                     }
                     onKeyDown={(e) => handleKeyDown(e, row, track)}
                     onFocus={(e) => e.target.select()}
                     maxLength={4}
-                    className={`note-input ${isInvalidNote(pattern[row][track]) ? 'invalid' : ''}`}
+                    className={`note-input ${isInvalidNote(getCellNote(pattern[row][track])) ? 'invalid' : ''}`}
                     placeholder="---"
                     data-row={row}
                     data-track={track}
                     title={
-                      isInvalidNote(pattern[row][track])
-                        ? `Invalid note: ${pattern[row][track]}`
+                      isInvalidNote(getCellNote(pattern[row][track]))
+                        ? `Invalid note: ${getCellNote(pattern[row][track])}`
                         : ''
                     }
                   />

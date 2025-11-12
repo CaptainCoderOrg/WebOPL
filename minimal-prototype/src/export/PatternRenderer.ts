@@ -10,6 +10,7 @@ export interface NoteEvent {
   time: number; // in seconds
   track: number;
   midiNote: number;
+  velocity?: number; // 0-64 (only for note-on events)
 }
 
 export interface PatternTimeline {
@@ -87,12 +88,13 @@ export class PatternRenderer {
               });
             }
 
-            // Start new note
+            // Start new note with velocity
             events.push({
               type: 'note-on',
               time,
               track: trackIndex,
               midiNote: action.midiNote,
+              velocity: action.velocity,
             });
             activeNotes.set(trackIndex, action.midiNote);
             break;

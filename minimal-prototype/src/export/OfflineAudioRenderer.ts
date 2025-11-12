@@ -108,7 +108,8 @@ export class OfflineAudioRenderer {
 
         // Trigger event
         if (event.type === 'note-on') {
-          synth.noteOn(event.track, event.midiNote, 100);
+          const velocity = event.velocity !== undefined ? event.velocity : 64;
+          synth.noteOn(event.track, event.midiNote, velocity);
         } else {
           synth.noteOff(event.track, event.midiNote);
         }

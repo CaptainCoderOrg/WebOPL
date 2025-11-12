@@ -14,6 +14,7 @@ import { CellProcessor } from './core/CellProcessor';
 export interface TrackerNote {
   note: number | null;    // MIDI note number, null = rest
   instrument: number;     // Instrument ID (unused for now)
+  velocity?: number;      // Velocity (0-64, default: 64)
 }
 
 /**
@@ -191,7 +192,8 @@ export class SimplePlayer {
 
     // Process notes in each track
     row.forEach((trackNote, trackIndex) => {
-      const action = CellProcessor.processTrackerNote(trackNote.note);
+      const velocity = trackNote.velocity !== undefined ? trackNote.velocity : 64;
+      const action = CellProcessor.processTrackerNote(trackNote.note, velocity);
 
       switch (action.type) {
         case 'sustain':
@@ -214,8 +216,8 @@ export class SimplePlayer {
             this.synth.noteOff(trackIndex, activeNoteOn);
           }
 
-          // Then play the new note
-          this.synth.noteOn(trackIndex, action.midiNote, 100);
+          // Then play the new note with velocity
+          this.synth.noteOn(trackIndex, action.midiNote, action.velocity);
           this.activeNotes.set(trackIndex, action.midiNote);
           break;
 

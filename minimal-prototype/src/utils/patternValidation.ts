@@ -18,26 +18,37 @@ export interface ValidationResult {
 
 /**
  * Validate entire pattern
- * @param pattern - 2D array of note strings
+ * @param pattern - 2D array of note strings or objects
  * @returns Validation result with errors
  */
-export function validatePattern(pattern: string[][]): ValidationResult {
+export function validatePattern(pattern: (string | { n: string; v?: number })[][]): ValidationResult {
   const errors: ValidationError[] = [];
 
   pattern.forEach((row, rowIndex) => {
     row.forEach((cell, trackIndex) => {
+      // Extract note string from cell (handle both string and object formats)
+      let noteStr: string;
+
+      if (typeof cell === 'object' && cell !== null) {
+        noteStr = cell.n;
+      } else if (typeof cell === 'string') {
+        noteStr = cell;
+      } else {
+        return; // Skip null/undefined
+      }
+
       // Skip empty cells (they're valid rests)
-      if (!cell || cell.trim() === '') {
+      if (!noteStr || noteStr.trim() === '') {
         return;
       }
 
       // Check if note is valid
-      if (!isValidNoteName(cell)) {
+      if (!isValidNoteName(noteStr)) {
         errors.push({
           row: rowIndex,
           track: trackIndex,
-          value: cell,
-          message: `Invalid note: "${cell}"`,
+          value: noteStr,
+          message: `Invalid note: "${noteStr}"`,
         });
       }
     });
