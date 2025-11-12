@@ -216,18 +216,22 @@ export function Tracker({
       const trackerPattern: TrackerPattern = {
         bpm: bpm,
         stepsPerBeat: 4, // 16th notes
+        ticksPerRow: 6,  // Default tick resolution for effect commands
         rows: pattern.map((row) =>
           row.map((cell) => {
-            // Extract note string and velocity from cell (handle both string and object formats)
+            // Extract note string, velocity, and effect from cell (handle both string and object formats)
             let noteStr: string;
             let velocity: number | undefined;
+            let effect: string | undefined;
 
             if (typeof cell === 'object' && cell !== null) {
               noteStr = cell.n;
               velocity = cell.v;
+              effect = cell.fx;
             } else {
               noteStr = cell;
               velocity = undefined; // Will default to 64
+              effect = undefined;
             }
 
             const note = noteNameToMIDI(noteStr);
@@ -235,6 +239,7 @@ export function Tracker({
               note: note,
               instrument: 0,
               velocity: velocity,
+              effect: effect,
             } as TrackerNote;
           })
         ),

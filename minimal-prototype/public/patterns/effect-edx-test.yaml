@@ -1,0 +1,59 @@
+# EDx Effect Test (Note Delay)
+# Demonstrates EDx command for delaying note starts (swing/humanization)
+# 120 BPM, 32 rows (4 bars), 6 ticks per row
+
+name: EDx Note Delay Test
+description: Testing note delay effects for swing and humanization (Phase 4 test)
+author: WebOPL Test
+rows: 32
+tracks: 4
+bpm: 120
+rowsPerBeat: 4
+ticksPerRow: 6
+
+# Track 0: No delay (on-beat)
+# Track 1: ED1 - Delay by 1 tick (slight swing)
+# Track 2: ED2 - Delay by 2 ticks (medium swing)
+# Track 3: ED3 - Delay by 3 ticks (heavy swing/shuffle)
+instruments: [0, 1, 2, 3]
+
+pattern:
+  # Bar 1: Quarter note pulse with increasing delay
+  - ["C-4", {n: "C-4", fx: "ED1"}, {n: "C-4", fx: "ED2"}, {n: "C-4", fx: "ED3"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["E-4", {n: "E-4", fx: "ED1"}, {n: "E-4", fx: "ED2"}, {n: "E-4", fx: "ED3"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+
+  # Bar 2: Eighth note pattern (swing test)
+  - ["C-4", {n: "C-4", fx: "ED2"}, "C-4", {n: "C-4", fx: "ED2"}]
+  - ["---", "---", "---", "---"]
+  - ["E-4", {n: "E-4", fx: "ED2"}, "E-4", {n: "E-4", fx: "ED2"}]
+  - ["---", "---", "---", "---"]
+  - ["G-4", {n: "G-4", fx: "ED2"}, "G-4", {n: "G-4", fx: "ED2"}]
+  - ["---", "---", "---", "---"]
+  - ["C-5", {n: "C-5", fx: "ED2"}, "C-5", {n: "C-5", fx: "ED2"}]
+  - ["---", "---", "---", "---"]
+
+  # Bar 3: Hi-hat pattern with delays (humanization)
+  - [{n: "F#2", v: 64}, {n: "F#2", v: 48, fx: "ED1"}, {n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}]
+  - [{n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}, {n: "F#2", v: 48}, {n: "F#2", v: 44, fx: "ED1"}]
+  - [{n: "F#2", v: 64}, {n: "F#2", v: 48, fx: "ED1"}, {n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}]
+  - [{n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}, {n: "F#2", v: 48}, {n: "F#2", v: 44, fx: "ED1"}]
+  - [{n: "F#2", v: 64}, {n: "F#2", v: 48, fx: "ED1"}, {n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}]
+  - [{n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}, {n: "F#2", v: 48}, {n: "F#2", v: 44, fx: "ED1"}]
+  - [{n: "F#2", v: 64}, {n: "F#2", v: 48, fx: "ED1"}, {n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}]
+  - [{n: "F#2", v: 56, fx: "ED1"}, {n: "F#2", v: 40, fx: "ED2"}, {n: "F#2", v: 48}, {n: "F#2", v: 44, fx: "ED1"}]
+
+  # Bar 4: Combination with velocity
+  - [{n: "C-4", v: 64}, {n: "E-4", v: 48, fx: "ED2"}, {n: "G-4", v: 56, fx: "ED1"}, {n: "C-5", v: 40, fx: "ED3"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["OFF", "OFF", "OFF", "OFF"]
+  - [{n: "D-4", v: 64}, {n: "F-4", v: 48, fx: "ED2"}, {n: "A-4", v: 56, fx: "ED1"}, {n: "D-5", v: 40, fx: "ED3"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["OFF", "OFF", "OFF", "OFF"]

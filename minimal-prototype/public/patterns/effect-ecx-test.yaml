@@ -1,0 +1,59 @@
+# ECx Effect Test (Note Cut)
+# Demonstrates ECx command for cutting notes early
+# 120 BPM, 32 rows (4 bars), 6 ticks per row
+
+name: ECx Note Cut Test
+description: Testing note cut effects at different tick positions (Phase 4 test)
+author: WebOPL Test
+rows: 32
+tracks: 4
+bpm: 120
+rowsPerBeat: 4
+ticksPerRow: 6
+
+# Track 0: Normal notes (no cut) - sustain for 4 rows
+# Track 1: EC3 - Cut after 3 ticks (half row)
+# Track 2: EC5 - Cut after 5 ticks (almost full row)
+# Track 3: EC1 - Cut after 1 tick (very short)
+instruments: [0, 1, 2, 3]
+
+pattern:
+  # Bar 1: Demonstrate different cut lengths
+  - ["C-4", {n: "C-4", fx: "EC3"}, {n: "C-4", fx: "EC5"}, {n: "C-4", fx: "EC1"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["E-4", {n: "E-4", fx: "EC3"}, {n: "E-4", fx: "EC5"}, {n: "E-4", fx: "EC1"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+
+  # Bar 2: Same pattern, higher notes
+  - ["G-4", {n: "G-4", fx: "EC3"}, {n: "G-4", fx: "EC5"}, {n: "G-4", fx: "EC1"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["C-5", {n: "C-5", fx: "EC3"}, {n: "C-5", fx: "EC5"}, {n: "C-5", fx: "EC1"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+
+  # Bar 3: Fast sequence with EC2
+  - ["C-4", {n: "C-4", fx: "EC2"}, {n: "C-4", fx: "EC4"}, {n: "C-4", fx: "EC1"}]
+  - ["D-4", {n: "D-4", fx: "EC2"}, {n: "D-4", fx: "EC4"}, {n: "D-4", fx: "EC1"}]
+  - ["E-4", {n: "E-4", fx: "EC2"}, {n: "E-4", fx: "EC4"}, {n: "E-4", fx: "EC1"}]
+  - ["F-4", {n: "F-4", fx: "EC2"}, {n: "F-4", fx: "EC4"}, {n: "F-4", fx: "EC1"}]
+  - ["G-4", {n: "G-4", fx: "EC2"}, {n: "G-4", fx: "EC4"}, {n: "G-4", fx: "EC1"}]
+  - ["A-4", {n: "A-4", fx: "EC2"}, {n: "A-4", fx: "EC4"}, {n: "A-4", fx: "EC1"}]
+  - ["B-4", {n: "B-4", fx: "EC2"}, {n: "B-4", fx: "EC4"}, {n: "B-4", fx: "EC1"}]
+  - ["C-5", {n: "C-5", fx: "EC2"}, {n: "C-5", fx: "EC4"}, {n: "C-5", fx: "EC1"}]
+
+  # Bar 4: Chord with cuts
+  - [{n: "C-4", v: 64}, {n: "E-4", v: 64, fx: "EC3"}, {n: "G-4", v: 64, fx: "EC4"}, {n: "C-5", v: 64, fx: "EC2"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - [{n: "F-4", v: 64}, {n: "A-4", v: 64, fx: "EC3"}, {n: "C-5", v: 64, fx: "EC4"}, {n: "F-5", v: 64, fx: "EC2"}]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]
+  - ["---", "---", "---", "---"]

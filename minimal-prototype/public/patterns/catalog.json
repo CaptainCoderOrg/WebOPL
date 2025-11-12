@@ -88,5 +88,17 @@
     "name": "E1M1 - At Doom's Gate (Polyphony)",
     "description": "E1M1 with full polyphony preserved - 10 tracks, 2,332 notes (Phase 3 test)",
     "file": "e1m1-polyphony.yaml"
+  },
+  {
+    "id": "effect-ecx-test",
+    "name": "ECx Note Cut Test",
+    "description": "Testing note cut effects at different tick positions (Phase 4 test)",
+    "file": "effect-ecx-test.yaml"
+  },
+  {
+    "id": "effect-edx-test",
+    "name": "EDx Note Delay Test",
+    "description": "Testing note delay effects for swing and humanization (Phase 4 test)",
+    "file": "effect-edx-test.yaml"
   }
 ]
