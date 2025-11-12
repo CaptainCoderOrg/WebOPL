@@ -99,12 +99,17 @@ async function renderPatternToBuffers(
 
   onProgress?.(10, 'Loading instruments...');
 
+  // Load percussion map for Percussion Kit support
+  synth.loadPercussionMap(instrumentBank);
+  console.log('[exportPattern] Percussion map loaded');
+
   // Load patches for each track
   for (let trackIndex = 0; trackIndex < trackInstruments.length; trackIndex++) {
     const patchIndex = trackInstruments[trackIndex];
     const patch = instrumentBank[patchIndex];
     if (patch) {
       synth.setTrackPatch(trackIndex, patch);
+      console.log(`[exportPattern] Track ${trackIndex} → Patch ${patchIndex}: ${patch.name}`);
     }
   }
 

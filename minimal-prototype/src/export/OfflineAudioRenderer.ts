@@ -56,13 +56,20 @@ export class OfflineAudioRenderer {
     await synth.init(directChip);
     console.log('[OfflineAudioRenderer] SimpleSynth initialized');
 
+    // Load percussion map for Percussion Kit support
+    synth.loadPercussionMap(patches);
+    console.log('[OfflineAudioRenderer] Percussion map loaded');
+
     // Set track patches
     for (let trackIndex = 0; trackIndex < pattern.instruments.length; trackIndex++) {
-      const patchIndex = pattern.instruments[trackIndex];
-      const patch = patches[patchIndex];
+      const patchId = pattern.instruments[trackIndex];
+      // Find patch by ID (not array index) to support instrument ID 999 (Percussion Kit)
+      const patch = patches.find(p => p.id === patchId);
       if (patch) {
         synth.setTrackPatch(trackIndex, patch);
-        console.log(`[OfflineAudioRenderer] Track ${trackIndex} → Patch ${patchIndex}: ${patch.name}`);
+        console.log(`[OfflineAudioRenderer] Track ${trackIndex} → Patch ${patchId}: ${patch.name}`);
+      } else {
+        console.warn(`[OfflineAudioRenderer] Patch ID ${patchId} not found in patches array`);
       }
     }
 

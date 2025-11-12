@@ -138,10 +138,14 @@ export function Tracker({
     if (!synth || !bankLoaded) return;
 
     console.log('[Tracker] Initializing track patches...');
-    trackInstruments.forEach((patchId, trackIndex) => {
-      if (instrumentBank[patchId]) {
-        synth.setTrackPatch(trackIndex, instrumentBank[patchId]);
-        console.log(`[Tracker] Track ${trackIndex} -> Patch ${patchId}: ${instrumentBank[patchId].name}`);
+    trackInstruments.forEach((patchIndex, trackIndex) => {
+      // trackInstruments contains array indices (not IDs)
+      const patch = instrumentBank[patchIndex];
+      if (patch) {
+        synth.setTrackPatch(trackIndex, patch);
+        console.log(`[Tracker] Track ${trackIndex} -> Patch ${patchIndex}: ${patch.name}`);
+      } else {
+        console.warn(`[Tracker] Patch index ${patchIndex} not found in instrument bank`);
       }
     });
   }, [synth, bankLoaded, instrumentBank, trackInstruments]);
@@ -278,14 +282,28 @@ export function Tracker({
       // Set pattern data
       setPattern(patternFile.pattern);
 
-      // Set instrument assignments
-      setTrackInstruments(patternFile.instruments);
+      // Convert instrument IDs to array indices for dropdown
+      const instrumentIndices = patternFile.instruments.map((patchId) => {
+        const index = instrumentBank.findIndex(p => p.id === patchId);
+        if (index === -1) {
+          console.warn(`[Tracker] Patch ID ${patchId} not found in instrument bank`);
+          return 0; // Default to first instrument
+        }
+        return index;
+      });
+
+      // Set instrument assignments (as array indices for dropdown)
+      setTrackInstruments(instrumentIndices);
 
       // Initialize patches for tracks
       if (synth && bankLoaded) {
         patternFile.instruments.forEach((patchId, trackIndex) => {
-          if (instrumentBank[patchId]) {
-            synth.setTrackPatch(trackIndex, instrumentBank[patchId]);
+          // Find instrument by ID (not array index)
+          const patch = instrumentBank.find(p => p.id === patchId);
+          if (patch) {
+            synth.setTrackPatch(trackIndex, patch);
+          } else {
+            console.warn(`[Tracker] Patch ID ${patchId} not found when loading pattern`);
           }
         });
       }

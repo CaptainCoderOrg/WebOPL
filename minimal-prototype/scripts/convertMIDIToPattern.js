@@ -12,6 +12,8 @@
  * - Convert to tracker rows with appropriate note strings
  * - Map MIDI channels to tracker tracks
  * - Calculate timing based on MIDI ticks and tempo
+ * - Detect MIDI channel 10 as percussion and assign Percussion Kit (ID 999)
+ * - Support pitched percussion instruments on other channels
  */
 
 import fs from 'fs';
@@ -212,7 +214,9 @@ function midiToPattern(midiData, options = {}) {
   const {
     rowsPerBeat = 4,
     maxChannels = 16,
-    defaultTempo = 120
+    defaultTempo = 120,
+    percussionChannel = 9, // MIDI channel 10 (0-indexed as 9)
+    percussionKitId = 999  // ID of the Percussion Kit instrument
   } = options;
 
   // Merge all tracks into a single timeline
@@ -271,10 +275,18 @@ function midiToPattern(midiData, options = {}) {
 
     // Initialize channel state
     if (!channelState[channel]) {
+      // Check if this is a percussion channel (MIDI channel 10)
+      const isPercussionChannel = (channel === percussionChannel);
+
       channelState[channel] = {
-        instrument: 0,
-        activeNotes: new Map()
+        instrument: isPercussionChannel ? percussionKitId : 0,
+        activeNotes: new Map(),
+        isPercussionChannel: isPercussionChannel
       };
+
+      if (isPercussionChannel) {
+        console.log(`🥁 Detected percussion on MIDI channel ${channel + 1} (0-indexed: ${channel})`);
+      }
     }
 
     // Process event
@@ -295,7 +307,15 @@ function midiToPattern(midiData, options = {}) {
         channelState[channel].activeNotes.delete(event.note);
       }
     } else if (event.eventName === 'programChange') {
+      // Percussion channels (MIDI channel 10) ignore program changes in General MIDI
+      if (channelState[channel].isPercussionChannel) {
+        console.log(`🥁 Ignoring program change ${event.program} on percussion channel ${channel + 1}`);
+        continue;
+      }
+
+      // For non-percussion channels, update instrument
       channelState[channel].instrument = event.program;
+
       // Add program change command to current row
       if (rows[currentRow][channel].note === null) {
         rows[currentRow][channel] = {
@@ -315,6 +335,7 @@ function midiToPattern(midiData, options = {}) {
     tempo: globalTempo,
     rowsPerBeat: rowsPerBeat,
     channels: maxChannels,
+    channelState: channelState, // Include channel state for instrument detection
     rows: rows.filter(row => row !== undefined)
   };
 }
@@ -391,11 +412,16 @@ function patternToYAML(pattern, filename) {
 
     let instrument = 0; // Default to instrument 0 (Acoustic Grand Piano)
 
-    // Search through all rows to find the first instrument used on this track
-    for (const row of pattern.rows) {
-      if (row[trackIdx].instrument !== null) {
-        instrument = row[trackIdx].instrument;
-        break;
+    // Use channelState if available (has instrument info including percussion)
+    if (pattern.channelState && pattern.channelState[trackIdx]) {
+      instrument = pattern.channelState[trackIdx].instrument;
+    } else {
+      // Fallback: search through all rows to find the first instrument used on this track
+      for (const row of pattern.rows) {
+        if (row[trackIdx].instrument !== null) {
+          instrument = row[trackIdx].instrument;
+          break;
+        }
       }
     }
 
@@ -412,6 +438,23 @@ function patternToYAML(pattern, filename) {
   lines.push('');
 
   lines.push('# Instrument assignments (patch indices)');
+
+  // Add comment showing percussion tracks
+  if (pattern.channelState) {
+    const percussionTracks = [];
+    let outputTrackIdx = 0;
+    for (let trackIdx = 0; trackIdx < pattern.channels; trackIdx++) {
+      if (!trackHasNotes[trackIdx]) continue;
+      if (pattern.channelState[trackIdx]?.isPercussionChannel) {
+        percussionTracks.push(outputTrackIdx);
+      }
+      outputTrackIdx++;
+    }
+    if (percussionTracks.length > 0) {
+      lines.push(`# Note: Track(s) ${percussionTracks.join(', ')} use Percussion Kit (ID 999)`);
+    }
+  }
+
   lines.push(`instruments: [${trackInstruments.join(', ')}]`);
   lines.push('');
 

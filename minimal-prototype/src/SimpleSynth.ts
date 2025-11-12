@@ -10,6 +10,7 @@ import { getOPLParams } from './constants/midiToOPL';
 import { ChannelManager } from './utils/ChannelManager';
 import type { IOPLChip } from './interfaces/IOPLChip';
 import { WorkletOPLChip } from './adapters/WorkletOPLChip';
+import { getGENMIDIPercussionId } from './utils/gmPercussionMap';
 
 export class SimpleSynth {
   private audioContext: AudioContext | null = null;
@@ -251,28 +252,36 @@ export class SimpleSynth {
 
   /**
    * Load percussion instruments into percussion map
-   * Builds MIDI note -> percussion instrument lookup
+   * Builds General MIDI percussion note -> GENMIDI percussion instrument lookup
    * @param patches - Array of OPLPatch instruments (typically from instrument bank)
    */
   public loadPercussionMap(patches: OPLPatch[]): void {
     this.percussionMap.clear();
 
-    const percussionInstruments = patches.filter(p => p.type === 'percussion' && p.noteOffset !== undefined);
+    const percussionInstruments = patches.filter(p => p.type === 'percussion');
 
-    for (const patch of percussionInstruments) {
-      if (patch.noteOffset !== undefined) {
-        this.percussionMap.set(patch.noteOffset, patch);
+    // Build GM note -> GENMIDI patch mapping
+    // For each GM percussion note (35-81), find the corresponding GENMIDI instrument
+    let mappedCount = 0;
+    for (let gmNote = 35; gmNote <= 81; gmNote++) {
+      const genmidiId = getGENMIDIPercussionId(gmNote);
+      if (genmidiId !== undefined) {
+        const patch = percussionInstruments.find(p => p.id === genmidiId);
+        if (patch) {
+          this.percussionMap.set(gmNote, patch);
+          mappedCount++;
+        }
       }
     }
 
-    console.log(`[SimpleSynth] Loaded ${this.percussionMap.size} percussion instruments (${percussionInstruments.length} total, ${percussionInstruments.length - this.percussionMap.size} duplicates)`);
+    console.log(`[SimpleSynth] Loaded ${mappedCount} GM percussion mappings (${percussionInstruments.length} GENMIDI percussion instruments available)`);
 
     // Log the percussion map for debugging
     const sortedNotes = Array.from(this.percussionMap.keys()).sort((a, b) => a - b);
-    console.log('[SimpleSynth] Percussion map:');
+    console.log('[SimpleSynth] GM Percussion map:');
     sortedNotes.forEach(note => {
       const patch = this.percussionMap.get(note);
-      console.log(`  Note ${note}: ${patch?.name} (ID ${patch?.id})`);
+      console.log(`  GM Note ${note}: ${patch?.name} (GENMIDI ID ${patch?.id})`);
     });
   }
 
@@ -424,16 +433,14 @@ export class SimpleSynth {
       return;
     }
 
-    // Handle Percussion Kit: use MIDI note to select percussion sound
+    // Handle Percussion Kit: use GM MIDI note to select GENMIDI percussion sound
     if (patch.isPercussionKit) {
-      console.log(`[SimpleSynth] 🔍 Looking up note ${midiNote} in percussion map (size: ${this.percussionMap.size})`);
       const percussionPatch = this.percussionMap.get(midiNote);
       if (!percussionPatch) {
-        console.warn(`[SimpleSynth] No percussion instrument for MIDI note ${midiNote}`);
-        console.warn(`[SimpleSynth] Map keys: ${Array.from(this.percussionMap.keys()).sort((a, b) => a - b).join(', ')}`);
+        console.warn(`[SimpleSynth] No percussion instrument for GM note ${midiNote}`);
         return;
       }
-      console.log(`[SimpleSynth] 🥁 Percussion Kit: Note ${midiNote} -> ${percussionPatch.name}`);
+      console.log(`[SimpleSynth] 🥁 Percussion Kit: GM Note ${midiNote} -> ${percussionPatch.name} (GENMIDI ID ${percussionPatch.id})`);
       patch = percussionPatch;
       // For percussion kit, use the fixed pitch from noteOffset, ignore the incoming MIDI note for pitch
       midiNote = percussionPatch.noteOffset || midiNote;
